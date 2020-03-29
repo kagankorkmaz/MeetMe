@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<title>Meet Me - Login</title>
+	<link rel="shortcut icon" type= image  href="main_page/images/favicon2.png">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!--===============================================================================================-->
+
+	<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="login_page/vendor/bootstrap/css/bootstrap.min.css">
+	<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="login_page/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+	<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="login_page/fonts/Linearicons-Free-v1.0.0/icon-font.min.css">
+	<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="login_page/vendor/animate/animate.css">
+	<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="login_page/vendor/css-hamburgers/hamburgers.min.css">
+	<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="login_page/vendor/select2/select2.min.css">
+	<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="login_page/css/util.css">
+	<link rel="stylesheet" type="text/css" href="login_page/css/main.css">
+
+	<meta name="google-signin-scope" content="profile email">
+							<meta name="google-signin-client_id"
+								content="566241715158-1n8a4fslf8qg0p1isan0g3kiqrud60ta.apps.googleusercontent.com">
+							<script src="https://apis.google.com/js/platform.js" async defer></script>
+	<!--===============================================================================================-->
+</head>
+
+<body>
+
+	<div class="limiter">
+		<div class="container-login100">
+			<div class="wrap-login100 p-l-50 p-r-50 p-t-77 p-b-30">
+				<form class="login100-form validate-form">
+					<span class="login100-form-title p-b-55">
+						Login
+					</span>
+					<div class="wrap-input100 validate-input m-b-16"
+						data-validate="Valid email is required: ex@abc.xyz">
+						<input class="input100" type="text" name="email" placeholder="Email">
+						<span class="focus-input100"></span>
+						<span class="symbol-input100">
+							<span class="lnr lnr-envelope"></span>
+						</span>
+					</div>
+
+					<div class="wrap-input100 validate-input m-b-16" data-validate="Password is required">
+						<input class="input100" type="password" name="pass" placeholder="Password">
+						<span class="focus-input100"></span>
+						<span class="symbol-input100">
+							<span class="lnr lnr-lock"></span>
+						</span>
+					</div>
+
+					<div class="contact100-form-checkbox m-l-4">
+						<input class="input-checkbox100" id="ckb1" type="checkbox" name="remember-me">
+						<label class="label-checkbox100" for="ckb1">
+							Remember me
+						</label>
+					</div>
+
+					<div class="container-login100-form-btn p-t-25">
+						<button type="submit" class="login100-form-btn"> 
+							Login
+						</button>
+					</div>
+
+					<div class="text-center w-full p-t-50 p-b-0">
+						<span class="txt1">
+							Or login with
+						</span>
+					</div>
+
+					<div class="container-login100-form-btn p-t-15">
+						<div id="fb-root"></div>
+						<script async defer crossorigin="anonymous"
+							src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&autoLogAppEvents=1&version=v6.0&appId=690160711519774">
+							window.location.replace("logged.html");
+						</script>
+
+						
+							<div class="fb-login-button" data-width="350" data-size="large" data-button-type="login_with"
+								data-layout="default" data-auto-logout-link="true" data-use-continue-as="true"></div>
+
+
+							<div id="status" >
+								
+							</div>
+
+						
+
+					</div>
+					
+					<div class="container-login100-form-btn p-t-15">
+					
+							<div class="g-signin2" data-onsuccess="onSignIn" data-theme="light" data-width="350"  data-longtitle="true"></div>
+							<div class="data">
+								<!--<p>Profile Details</p>
+								<img id="pic" class="img-circle" width="100" height="100" />
+								<p>Email Address</p>
+								<p id="email" class="alert alert-danger"></p>-->
+
+								<!--<button onclick="signOut()" class="btn btn-danger">SignOut</button>-->
+							</div>
+						
+
+					</div>
+
+
+					<div class="text-center w-full p-t-115">
+						<span class="txt1">
+							Not a member?
+						</span>
+
+						<a class="txt1 bo1 hov1" href="/register">
+							Sign up now
+						</a>
+					</a>
+					<span class="txt1">
+						__Wanna retun to home page?
+					</span>
+					<a class="txt1 bo1 hov1" href="/">
+						Click Here
+					</a>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+
+
+
+
+	<!--===============================================================================================-->
+	<script src="login_page/vendor/jquery/jquery-3.2.1.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	<!--===============================================================================================-->
+	<script src="login_page/vendor/bootstrap/js/popper.js"></script>
+	<script src="login_page/vendor/bootstrap/js/bootstrap.min.js"></script>
+	<!--===============================================================================================-->
+	<script src="login_page/vendor/select2/select2.min.js"></script>
+	<!--===============================================================================================-->
+	<script src="login_page/js/main.js"></script>
+	<!--===============================================================================================-->
+	<script src="login_page/js/glogin.js"></script>
+
+
+
+
+</body>
+
+</html>
