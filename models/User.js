@@ -17,6 +17,26 @@ const userSchema = new Schema({
         required: true
     },
 
+    about:{
+        type: String
+    },
+
+    phone:{
+        type: String
+    }, 
+
+    professsion:{
+        type: String
+    },
+
+    totalMeetings:{
+        type: Number,
+        default: 0,
+    },
+
+    bio:{
+        type: String
+    }
 });
 
 
