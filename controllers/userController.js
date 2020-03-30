@@ -57,7 +57,7 @@ module.exports.postUserRegister = (req, res, next) => {
         if (user) {
             console.log('email already exists.')
             errors.push({ message: "email already taken." })        // HATA MESAJI EKLENECEK!!!!!!!!!!!!!!!!!!!!!!!!!1
-            return res.sendFile(path.join(__dirname, '../public', 'signup.html'));
+            return res.sendFile(path.join(__dirname, '../public', 'signup.html') );
             username,
                 email,
                 pass,
