@@ -17,24 +17,33 @@ const userController = require('../controllers/userController');
 const router = express.Router();
 
 
-router.get("/profile", (req, res, next) => {
-    res.sendFile(path.join(__dirname, '../public', 'profile.html'));
-})
+// router.get("/profile", (req, res, next) => {
+//     res.sendFile(path.join(__dirname, '../public', 'profile.html'));
+// })
+
+
+router.get('/google', passport.authenticate('google', {
+    scope: ['profile']
+}));
+
+router.get('/google/redirect', passport.authenticate('google'), (req, res) => {
+    res.redirect('/profile/');
+});
 
 
 
 
-
-
-
-router.get("/register",  userController.getUserRegister)
-router.get("/login",  userController.getUserLogin);
+router.get("/register", userController.getUserRegister)
+router.get("/login", userController.getUserLogin);
 
 router.post("/register", urlencodedParser, userController.postUserRegister);
 
 
-router.post("/login", urlencodedParser ,userController.postUserLogin);
+//router.post("/login", urlencodedParser ,userController.postUserLogin);
 
+router.post('/login', urlencodedParser, passport.authenticate('local'), (req, res) => {
+    res.redirect('/profile/');
+})
 
 // router.post('/login', (req, res, next) => {
 //     console.log("users.js works");

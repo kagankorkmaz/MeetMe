@@ -74,6 +74,7 @@ module.exports.postUserRegister = (req, res, next) => {
         username: username,
         email: email,
         pass: pass,
+        googleıd: '',
         about: '',
         phone: '',
         profession: '',
