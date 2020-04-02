@@ -12,7 +12,8 @@ const authCheck = (req,res,next) => {
 };
 
 router.get('/', authCheck, (req,res) => {
-    res.send('You are logged in - ' + req.user.username);
+    //res.send('You are logged inasd asd - ' + req.user.username);
+    res.render('profile',{user:req.user});
 });
 
 

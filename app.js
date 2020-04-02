@@ -29,12 +29,15 @@ const app = express();
 const PORT = 3000 || process.env.PORT;
 
 
+
 app.use(cookieSession({
  maxAge:24 * 60 * 60 * 1000,
  keys: [keys.session.cookieKey]
 }));
 
 
+//Render TRY
+app.set('view engine', 'ejs');
 
 
 //Flash Mİddlewares

@@ -90,11 +90,11 @@
               </div>
               <div class="col-md-6">
                   <div class="profile-head">
-                              <h5 style="margin-top: 28px;">
-                                  MY FULL NAME
+                              <h5 style="margin-top: 28px;", id="myname">
+                                  <%= user.name %> <%= user.surname %> 
                               </h5>
                               <h6 style="margin-bottom: 34px; margin-top: 20px;">
-                                  Job Description
+                                  <%= user.jobDescription %> 
                               </h6>
                       <ul class="nav nav-tabs" id="myTab" role="tablist">
                           <li class="nav-item">
@@ -114,12 +114,12 @@
               <div class="col-md-4">
                   <div class="profile-work">
                       <p>WORK LINK</p>
-                      <a href="">Website</a><br/>
+                      <a href=""><%= user.website %></a><br/>
                       <ul class="ul-social-circle">
                         <div style="margin-top: 20px;"></div>
-                        <li><a href="https://twitter.com/LilAyds"><span class="icon-twitter"></span></a></li>
-                        <li><a href="https://www.linkedin.com/in/ilayda-beg%C3%BCm-izci-bba999133/"><span class="icon-linkedin"></span></a></li>
-                        <li><a href="https://www.instagram.com/ilaydabegum/"><span class="icon-instagram"></span></a></li>
+                        <li><a href=<%= user.twitter %></a>><span class="icon-twitter"></span></a></li>
+                        <li><a href=<%= user.linkedin %></a>><span class="icon-linkedin"></span></a></li>
+                        <li><a href=<%= user.instagram %></a>><span class="icon-instagram"></span></a></li>
                       </ul>
                      
                   </div>
@@ -132,7 +132,7 @@
                                           <label>User Id</label> 
                                       </div>
                                       <div class="col-md-6">
-                                          <p>Username</p>
+                                          <p><%= user.username %></p>
                                       </div>
                                   </div>
                                   <div class="row">
@@ -140,7 +140,7 @@
                                           <label>Name</label>
                                       </div>
                                       <div class="col-md-6">
-                                          <p>name</p>
+                                          <p><%= user.name %></p>
                                       </div>
                                   </div>
                                   <div class="row">
@@ -148,7 +148,7 @@
                                           <label>Email</label>
                                       </div>
                                       <div class="col-md-6">
-                                          <p>thisismymail@gmail.com</p>
+                                          <p><%= user.email %></p>
                                       </div>
                                   </div>
                                   <div class="row">
@@ -156,7 +156,7 @@
                                           <label>Phone</label>
                                       </div>
                                       <div class="col-md-6">
-                                          <p>+123 456 7890</p>
+                                          <p><%= user.phone %></p>
                                       </div>
                                   </div>
                                   <div class="row">
@@ -164,7 +164,7 @@
                                           <label>Profession</label>
                                       </div>
                                       <div class="col-md-6">
-                                          <p>My Job Description</p>
+                                          <p><%= user.profession %></p>
                                       </div>
                                   </div>
                       </div>
@@ -196,7 +196,7 @@
                           <div class="row">
                               <div class="col-md-12">
                                   <label>Your Bio</label><br/>
-                                  <p>Your detail description</p>
+                                  <p><%= user.bio %></p>
                               </div>
                           </div>
                       </div>

@@ -42,7 +42,7 @@ router.post("/register", urlencodedParser, userController.postUserRegister);
 //router.post("/login", urlencodedParser ,userController.postUserLogin);
 
 router.post('/login', urlencodedParser, passport.authenticate('local'), (req, res) => {
-    res.redirect('/profile/');
+    res.redirect('/profile');
 })
 
 // router.post('/login', (req, res, next) => {

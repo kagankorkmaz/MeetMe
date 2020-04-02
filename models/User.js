@@ -17,11 +17,6 @@ const userSchema = new Schema({
         default: ''
     },
 
-    about: {
-        type: String,
-        default: ''
-    },
-
     phone: {
         type: String,
         default: ''
@@ -45,8 +40,43 @@ const userSchema = new Schema({
     googleId: {
         type: String,
         default: ''
+    },
 
+    jobDescription: {
+        type: String,
+        default: ''
+    },
+
+    name: {
+        type: String,
+        default: ''
+    },
+
+    surname: {
+        type: String,
+        default: ''
+    },
+
+    linkedin: {
+        type: String,
+        default: ''
+    },
+
+    twitter: {
+        type: String,
+        default: ''
+    },
+
+    instagram: {
+        type: String,
+        default: ''
+    },
+ 
+    website: {
+        type: String,
+        default: ''
     }
+
 });
 
 
