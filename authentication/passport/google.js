@@ -19,7 +19,7 @@ passport.use(
         clientID: '805012118741-vvgvhls19vs9d10boh9k156qe6k08h3e.apps.googleusercontent.com',
         clientSecret: 'IvdjL5wmHFDPNFa4YXElPPLJ'
     }, (accessToken, refreshToken, profile, done) => {
-        //passport callback function
+        console.log(profile.emails[0].value)
         console.log('passport callback function called');
         //Check if user exists in db
         User.findOne({ googleId: profile.id }).then((currentUser) => {
@@ -33,17 +33,15 @@ passport.use(
                 //Add User
                 new User({
                     username: profile.displayName,
-                    googleId: profile.id
+                    googleId: profile.id,
+                    name: profile.name.givenName,
+                    surname: profile.name.familyName,
+                    email: profile.emails[0].value
                 }).save().then((newUser) => {
                     console.log('new user created' + newUser)
                     done(null, newUser);
                 })
             }
-
-
         });
-
-
-
     }
     ));
