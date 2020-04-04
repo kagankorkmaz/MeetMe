@@ -1,4 +1,10 @@
 const router = require('express').Router();
+var bodyParser = require('body-parser')
+var jsonParser = bodyParser.json()
+
+var urlencodedParser = bodyParser.urlencoded({ extended: false })
+
+const userController = require('../controllers/userController');
 
 
 const authCheck = (req,res,next) => {
@@ -17,8 +23,14 @@ router.get('/', authCheck, (req,res) => {
 });
 
 router.get('/editProfile', (req,res) => {
+    //console.log(req.user);
     res.render('editprofile');
 })
 
+router.get('/logout', (req,res) => {
+    res.send("logging out");
+})
+
+router.post('/editProfile', urlencodedParser, userController.postUserEdit);
 
 module.exports = router;

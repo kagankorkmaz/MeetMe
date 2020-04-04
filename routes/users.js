@@ -43,5 +43,9 @@ router.post('/login', urlencodedParser, passport.authenticate('local'), (req, re
     res.redirect('/profile');
 })
 
+router.get('/logout', (req,res) => {
+    req.logOut();
+    res.redirect('/')
+})
 
 module.exports = router;

@@ -23,7 +23,7 @@ module.exports.postUserLogin = (req, res, next) => {
         failureRedirect: "/login",
         failureFlash: true,                     // DİKKAT
         successFlash: true                    // DİKKAT
-    })(req, res, next); 
+    })(req, res, next);
 };
 
 
@@ -57,18 +57,13 @@ module.exports.postUserRegister = (req, res, next) => {
         if (user) {
             console.log('email already exists.')
             errors.push({ message: "email already taken." })        // HATA MESAJI EKLENECEK!!!!!!!!!!!!!!!!!!!!!!!!!1
-            return res.sendFile(path.join(__dirname, '../public', 'signup.html') );
+            return res.sendFile(path.join(__dirname, '../public', 'signup.html'));
             username,
                 email,
                 pass,
                 errors
         }
     }).catch(err => console.log(err));
-
-    /////////////////////////////////////////////
-
-
-
 
     const newUser = new User({
         username: username,
@@ -77,6 +72,7 @@ module.exports.postUserRegister = (req, res, next) => {
         googleıd: '',
         about: '',
         phone: '',
+        jobDescription: '',
         profession: '',
         totalMeetings: 0,
         bio: ''
@@ -88,4 +84,27 @@ module.exports.postUserRegister = (req, res, next) => {
 
         res.redirect("/login",)
     }).catch(err => console.log(err));
+};
+
+module.exports.postUserEdit = (req, res, next) => {
+    
+
+    let updatedValues = {
+        name: req.body.name,
+        surname: req.body.surname,
+        phone: req.body.phone,
+        jobDescription: req.body.jobDescription,
+        profession: req.body.profession,
+        bio: req.body.bio
+    };
+
+    for (let prop in updatedValues) if (!updatedValues[prop]) delete updatedValues[prop];//it will remove fields who are undefined or null 
+    
+    User.updateOne({ _id: req.user.id }, updatedValues)
+        .then(User => {
+            if(!User){return res.status(404).end();}
+        })
+        .catch(err => next(err));
+
+    res.redirect("/profile")
 };

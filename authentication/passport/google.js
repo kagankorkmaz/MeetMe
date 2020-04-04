@@ -19,7 +19,7 @@ passport.use(
         clientID: '805012118741-vvgvhls19vs9d10boh9k156qe6k08h3e.apps.googleusercontent.com',
         clientSecret: 'IvdjL5wmHFDPNFa4YXElPPLJ'
     }, (accessToken, refreshToken, profile, done) => {
-        console.log(profile.emails[0].value)
+        //console.log(accessToken)
         console.log('passport callback function called');
         //Check if user exists in db
         User.findOne({ googleId: profile.id }).then((currentUser) => {

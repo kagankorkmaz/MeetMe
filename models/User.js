@@ -22,7 +22,7 @@ const userSchema = new Schema({
         default: ''
     },
 
-    professsion: {
+    profession: {
         type: String,
         default: ''
     },

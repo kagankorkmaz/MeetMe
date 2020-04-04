@@ -80,7 +80,8 @@ a:hover {
 
 /*---------------------------------------------*/
 h1,h2,h3,h4,h5,h6 {
-	margin: 0px;
+  margin: 0px;
+  font-family: Raleway-Bold;
 }
 
 p {
@@ -410,6 +411,7 @@ iframe {
   line-height: 1.5;
   color: rgb(0, 0, 0);
   text-transform: uppercase;
+  
 
   width: 100%;
   height: 62px;
@@ -430,8 +432,71 @@ iframe {
   transition: all 0.4s;
 }
 
+
+.login1001-form-btn {
+  font-family: Raleway-Bold;
+  font-size: 15px;
+  line-height: 1.5;
+  color: rgb(0, 0, 0);
+  text-transform: uppercase;
+  
+
+  width: 80%;
+  height: 20%;
+  border-radius: 3px;
+  background: #ffffff;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0px;
+
+  -webkit-transition: all 0.4s;
+  -o-transition: all 0.4s;
+  -moz-transition: all 0.4s;
+  transition: all 0.4s;
+}
+
+.login1002-form-btn {
+  font-family: Raleway-Bold;
+  font-size: 15px;
+  line-height: 1.5;
+  color: rgb(0, 0, 0);
+  text-transform: uppercase;
+  
+
+  width: 80%;
+  height: 20%;
+  border-radius: 3px;
+  background: #ffffff;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0px;
+
+  -webkit-transition: all 0.4s;
+  -o-transition: all 0.4s;
+  -moz-transition: all 0.4s;
+  transition: all 0.4s;
+}
 .login100-form-btn:hover {
   background: #252525;
+  color:#fff
+}
+
+.login1001-form-btn:hover {
+  background: #252525;
+  color:#fff
+}
+.login1002-form-btn:hover {
+  background: #ff0000b0;
   color:#fff
 }
 
