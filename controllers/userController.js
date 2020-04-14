@@ -1,6 +1,7 @@
 var path = require("path");
 const User = require("../models/User");
 const passport = require('passport');
+const { update } = require("../models/User");
 require('../authentication/passport/local');
 
 
@@ -75,7 +76,14 @@ module.exports.postUserRegister = (req, res, next) => {
         jobDescription: '',
         profession: '',
         totalMeetings: 0,
-        bio: ''
+        bio: '',
+        twitter: '',
+        instagram:'',
+        website:'',
+        linkedin:'',
+        calender:[],
+        poll:{},
+        meeting:[]
     })
 
     newUser.save().then(() => {
@@ -98,6 +106,8 @@ module.exports.postUserEdit = (req, res, next) => {
         bio: req.body.bio
     };
 
+    //console.log(updatedValues);
+
     for (let prop in updatedValues) if (!updatedValues[prop]) delete updatedValues[prop];//it will remove fields who are undefined or null 
     
     User.updateOne({ _id: req.user.id }, updatedValues)
@@ -108,3 +118,22 @@ module.exports.postUserEdit = (req, res, next) => {
 
     res.redirect("/profile")
 };
+
+
+module.exports.postCalender = (req, res, next) => {
+    
+
+    let updatedValues = {
+        calender: req.body.calender
+    };
+    
+    User.updateOne({ email: req.user.email }, updatedValues)
+        .then(User => {
+            if(!User){return res.status(404).end();}
+        })
+        .catch(err => next(err));
+
+    res.redirect("/profile/calender");
+};
+
+

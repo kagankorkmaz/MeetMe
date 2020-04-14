@@ -4,6 +4,8 @@ const Schema = mongoose.Schema;
 
 const userSchema = new Schema({
 
+    
+    
     username: {
         type: String,
         required: true
@@ -75,7 +77,23 @@ const userSchema = new Schema({
     website: {
         type: String,
         default: ''
+    },
+
+    calender: {
+        type: JSON,
+        default: ''
+    },
+
+    poll: {
+        type: JSON,
+        default: ''
+    },
+
+    meeting: {
+        type: JSON,
+        default: ''
     }
+
 
 });
 
