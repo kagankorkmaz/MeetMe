@@ -18,10 +18,12 @@ const router = express.Router();
 
 
 
-
+// , 'https://www.googleapis.com/auth/userinfo.profile', 'https://www.googleapis.com/auth/userinfo.email', 'https://www.googleapis.com/auth/gmail.readonly'
 
 router.get('/google', passport.authenticate('google', {
-    scope: ['profile', 'email']
+    scope: ['profile', 'email'],
+    accessType: 'offline',
+    prompt: 'consent'
 }));
 
 router.get('/google/redirect', passport.authenticate('google'), (req, res) => {
@@ -43,7 +45,7 @@ router.post('/login', urlencodedParser, passport.authenticate('local'), (req, re
     res.redirect('/profile');
 })
 
-router.get('/logout', (req,res) => {
+router.get('/logout', (req, res) => {
     req.logOut();
     res.redirect('/')
 })

@@ -71,6 +71,8 @@ module.exports.postUserRegister = (req, res, next) => {
         email: email,
         pass: pass,
         googleıd: '',
+        accessToken: '',
+        refreshToken: '',
         about: '',
         phone: '',
         jobDescription: '',
@@ -127,7 +129,7 @@ module.exports.postCalender = (req, res, next) => {
         calender: req.body.calender
     };
     
-    User.updateOne({ email: req.user.email }, updatedValues)
+     User.updateOne({ email: req.user.email }, updatedValues)
         .then(User => {
             if(!User){return res.status(404).end();}
         })

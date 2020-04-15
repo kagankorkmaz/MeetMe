@@ -37,7 +37,6 @@ router.post('/editProfile', urlencodedParser, userController.postUserEdit);
 
 router.get('/calender', (req,res) => {
     //console.log(req.user);
-    //console.log(req.user);
     
     res.render('calender',{user:req.user});
 })

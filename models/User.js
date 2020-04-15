@@ -44,6 +44,18 @@ const userSchema = new Schema({
         default: ''
     },
 
+    accessToken: {
+        type: String,
+        default: ''
+    },
+
+    refreshToken: {
+        type: String,
+        default: ''
+    },
+
+
+
     jobDescription: {
         type: String,
         default: ''
@@ -93,6 +105,7 @@ const userSchema = new Schema({
         type: JSON,
         default: ''
     }
+
 
 
 });
