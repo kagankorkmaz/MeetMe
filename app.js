@@ -29,6 +29,10 @@ const app = express();
 const PORT = 3000 || process.env.PORT;
 
 
+//BodyOarser MiddleWare
+app.use(bodyParser.urlencoded({extended : false}));
+app.use(bodyParser.json()); 
+
 
 app.use(cookieSession({
  maxAge:24 * 60 * 60 * 1000,
@@ -71,9 +75,7 @@ app.use(express.static("public"));
 app.use(userRouter);
 app.use('/profile', profileRouter);
 
-//BodyOarser MiddleWare
-app.use(bodyParser.urlencoded({extended : false}));
-app.use(bodyParser.json()); 
+
 
 
 

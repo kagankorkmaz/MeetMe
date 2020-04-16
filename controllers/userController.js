@@ -80,12 +80,12 @@ module.exports.postUserRegister = (req, res, next) => {
         totalMeetings: 0,
         bio: '',
         twitter: '',
-        instagram:'',
-        website:'',
-        linkedin:'',
-        calender:[],
-        poll:{},
-        meeting:[]
+        instagram: '',
+        website: '',
+        linkedin: '',
+        calender: [],
+        poll: {},
+        meeting: []
     })
 
     newUser.save().then(() => {
@@ -97,45 +97,89 @@ module.exports.postUserRegister = (req, res, next) => {
 };
 
 module.exports.postUserEdit = (req, res, next) => {
-    
 
-    let updatedValues = {
-        name: req.body.name,
-        surname: req.body.surname,
-        phone: req.body.phone,
-        jobDescription: req.body.jobDescription,
-        profession: req.body.profession,
-        bio: req.body.bio
-    };
+    async function main() {
+        let updatedValues = {
+            name: req.body.name,
+            surname: req.body.surname,
+            phone: req.body.phone,
+            jobDescription: req.body.jobDescription,
+            profession: req.body.profession,
+            bio: req.body.bio
+        };
 
-    //console.log(updatedValues);
+        //console.log(updatedValues);
 
-    for (let prop in updatedValues) if (!updatedValues[prop]) delete updatedValues[prop];//it will remove fields who are undefined or null 
-    
-    User.updateOne({ _id: req.user.id }, updatedValues)
-        .then(User => {
-            if(!User){return res.status(404).end();}
-        })
-        .catch(err => next(err));
+        for (let prop in updatedValues) if (!updatedValues[prop]) delete updatedValues[prop];//it will remove fields who are undefined or null 
 
-    res.redirect("/profile")
+        await User.updateOne({ _id: req.user.id }, updatedValues)
+            .then(User => {
+                if (!User) { return res.status(404).end(); }
+            })
+            .catch(err => next(err));
+
+        res.redirect("/profile")
+    }
+
+    main();
+
 };
 
 
 module.exports.postCalender = (req, res, next) => {
-    
 
-    let updatedValues = {
-        calender: req.body.calender
-    };
-    
-     User.updateOne({ email: req.user.email }, updatedValues)
-        .then(User => {
-            if(!User){return res.status(404).end();}
-        })
-        .catch(err => next(err));
+    async function updateCalender() {
+        let updatedValues = {
+            calender: req.body.calender
+        };
+
+        await User.updateOne({ email: req.user.email }, updatedValues)
+            .then(User => {
+                if (!User) { return res.status(404).end(); }
+            })
+            .catch(err => next(err));
+
+        res.redirect("/profile/calender");
+    }
+
+    updateCalender();
+
+
+
+};
+
+module.exports.postCalenderMeet = (req, res, next) => {
+    console.log("POST CALENDAR MEEEET")
+
+    async function main() {
+
+        var userCalendars = [];
+
+        for (email of req.body.mails) {
+            await User.findOne({
+                email: email
+            }).then(user => {
+                if (user) {
+                    //console.log(user.name);
+                    //console.log(user.calender);
+                    userCalendars.push(user.calender)
+                }
+            }).catch(err => console.log(err));
+        }
+
+        userCalendars.push(req.user.calender);
+
+        console.log("1");
+        console.log(userCalendars);
+        console.log("2");
+
+        return userCalendars;
+
+    }
+
+    main();
+
 
     res.redirect("/profile/calender");
 };
-
 

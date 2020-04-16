@@ -104,7 +104,19 @@ function moveon(){  // Bu fonksiyon da dataları toplaman lazım !!
 
   var stuff = {title: Title, decription: desc, mails:mailler}
   console.log(stuff);
+  console.log(JSON.stringify(stuff));
 
+  var stuff2 = {title : "alex", description: "de souza"};
+  options = {
+    method : 'POST',
+    redirect: 'follow',
+    body: JSON.stringify(stuff),
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  };
+
+  fetch('/profile/addcalender', options);
   
 }
 

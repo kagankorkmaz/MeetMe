@@ -51,4 +51,6 @@ router.get('/addcalender', (req,res) => {
     res.render('calendermeet',{user:req.user});
 })
 
+router.post('/addcalender', userController.postCalenderMeet);
+
 module.exports = router;
