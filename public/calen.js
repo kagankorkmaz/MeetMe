@@ -18,10 +18,19 @@ window.addEventListener("DOMContentLoaded", function () {
     var json_string = scheduler.toJSON();
     //console.log(json_string);
     let Json_st = JSON.parse(json_string);
+    var afterLoop = [];
 
+    for (var i = 0; i < Json_st.length; i++) {
+      var a = { "start_date": Json_st[i].start_date, "end_date": Json_st[i].end_date, "text": Json_st[i].text }
+      afterLoop.push(a);
+    }
+
+
+    //alert(afterLoop);
     //console.log("heyoo");
     //console.log(Json_st);
-    calenderID.value = json_string;
+    //calenderID.value = json_string;
+    calenderID.value = JSON.stringify(afterLoop);
   }
 
   document.getElementById('crpol').onclick = reply

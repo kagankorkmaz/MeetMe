@@ -1,7 +1,7 @@
 var path = require("path");
 const User = require("../models/User");
 const passport = require('passport');
-const { update } = require("../models/User");
+const { update, base } = require("../models/User");
 const { func } = require("prop-types");
 const { merge } = require("lodash");
 const arrayUniq = require('array-uniq');
@@ -373,7 +373,7 @@ module.exports.googleCalendarSync = (req, res) => {
 
     //refreshtoken = '1//03oCU9m0IkeOyCgYIARAAGAMSNwF-L9IrF5QxABzVJoBhtMDuLkXpCBxX1wjRDMoQqVaEo8Y-piQQ5MsCeg6TcCdJ1iUDFHbl9Xs';       //'1//04feqEs2iq-kACgYIARAAGAQSNwF-L9IraPqETH1LKl8RUjgqt7F6X4GgmG-IMwO6fTxHlLuGIjpMqslN221uaeE5FNT2fr6ahmE';
     refreshtoken = req.user.refreshToken;
-    console.log(refreshtoken);
+    //console.log(refreshtoken);
     async function updateDatabase(mergedCalender) {
 
         let updatedValues = {
@@ -415,9 +415,25 @@ module.exports.googleCalendarSync = (req, res) => {
             const events = res.data.items;
             if (events.length) {
                 events.map((event, i) => {
-                    const start = event.start.dateTime || event.start.date;
-                    const end = event.end.dateTime || event.end.date;
+                    var start = event.start.dateTime || event.start.date;
+                    var end = event.end.dateTime || event.end.date;
+                    
+                    //////MODIFY GOOGLE CALENDAR TIME //////
+
+                    start = start.slice(0,16);
+                    if(start.search("T")){
+                        start = start.replace("T"," ");
+                    }
+
+                    end = end.slice(0,16);
+                    if(end.search("T")){
+                        end = end.replace("T"," ");
+                    }
+
+                    ///////////
                     item = { "start_date": start, "end_date": end, "text": event.summary };
+                    console.log("item");
+                    console.log(item);
                     toDB.push(item);
                 });
 
@@ -426,12 +442,14 @@ module.exports.googleCalendarSync = (req, res) => {
                 //console.log(toDB);
 
                 if (req.user.calender != '') {
+                    console.log("IFICICICICIC");
                     var baseCalender = req.user.calender;
+                    console.log(baseCalender);
                     toDB = JSON.parse(toDB);
                     console.log(typeof req.user.calender);
                     console.log(req.user.calender);
                     var baseCalender = JSON.parse(baseCalender);
-
+                    console.log(baseCalender);
                     //console.log(typeof toDB);
                     console.log("basecalender");
                     console.log(baseCalender);

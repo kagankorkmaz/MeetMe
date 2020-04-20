@@ -30,6 +30,7 @@
 
 
 
+
 </head>
 
 <body data-spy="scroll" data-target=".site-navbar-target" data-offset="300">
@@ -64,12 +65,12 @@
                 </ul>
               </li>
               <li><a href="/#contact-section" class="nav-link">Contact</a></li>
-              
-              <li><a class="input1001" style="width: 110%;"  href="/profile/addcalender">Create a Calendar</a></li>
 
-              <li><a class="input1001" style="width: 110%;"  href="/logout">Logout</a></li>
-              
-             
+              <li><a class="input1001" style="width: 110%;" href="/profile/addcalender">Create a Calendar</a></li>
+
+              <li><a class="input1001" style="width: 110%;" href="/logout">Logout</a></li>
+
+
             </ul>
           </nav>
         </div>
@@ -130,9 +131,9 @@
               <a href=""><%= user.website %></a><br />
               <ul class="ul-social-circle">
                 <div style="margin-top: 20px;"></div>
-                <li><a href= "<%= user.twitter %>" ></a><span class="icon-twitter"></span></a></li>
-                <li><a href= "<%= user.linkedin %>" ></a><span class="icon-linkedin"></span></a></li>
-                <li><a href= "<%= user.instangram %>" ></a><span class="icon-instagram"></span></a></li>
+                <li><a href="<%= user.twitter %>"></a><span class="icon-twitter"></span></a></li>
+                <li><a href="<%= user.linkedin %>"></a><span class="icon-linkedin"></span></a></li>
+                <li><a href="<%= user.instangram %>"></a><span class="icon-instagram"></span></a></li>
               </ul>
             </div>
           </div>
@@ -221,7 +222,8 @@
             <i class="material-icons nav__icon">person</i>
             <span class="nav__text">Profile</span>
           </a>
-          <a href="/profile/calender" class="nav__link" style="border-top-left-radius: 7px; border-top-right-radius: 7px;">
+          <a href="/profile/calender" class="nav__link"
+            style="border-top-left-radius: 7px; border-top-right-radius: 7px;">
             <svg class="bi bi-calendar-fill" width="1.5em" height="1.5em" viewBox="0 0 16 16" fill="currentColor"
               xmlns="http://www.w3.org/2000/svg">
               <path d="M0 2a2 2 0 012-2h12a2 2 0 012 2H0z" />
@@ -320,7 +322,6 @@
         </div>
       </div>
     </footer>
-
     </div> <!-- .site-wrap -->
 
     <script src="/main_page/js/jquery-3.3.1.min.js"></script>
@@ -353,6 +354,9 @@
     <script src="/main_page/js/main.js"></script>
 
 
+    
+
+    
 
 </body>
 
