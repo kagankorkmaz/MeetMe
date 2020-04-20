@@ -19,6 +19,8 @@ const authCheck = (req,res,next) => {
 
 router.get('/', authCheck, (req,res) => {
     //res.send('You are logged inasd asd - ' + req.user.username);
+    //console.log(req.user);
+    userController.googleCalendarSync(req,res);
     res.render('profile',{user:req.user});
 });
 
@@ -37,6 +39,8 @@ router.post('/editProfile', urlencodedParser, userController.postUserEdit);
 
 router.get('/calender', (req,res) => {
     //console.log(req.user);
+    
+    console.log(req.user);
     
     res.render('calender',{user:req.user});
 })

@@ -10,6 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "array-uniq": "^2.1.0",
     "body-parser": "^1.19.0",
     "connect-flash": "^0.1.1",
     "cookie-parser": "^1.4.5",
@@ -18,11 +19,15 @@
     "ejs": "^3.0.2",
     "express": "^4.17.1",
     "express-session": "^1.17.0",
+    "googleapis": "^39.2.0",
     "jade": "^1.11.0",
+    "lodash": "^4.17.15",
     "mongoose": "^5.9.6",
     "passport": "^0.4.1",
     "passport-google-oauth20": "^2.0.0",
     "passport-local": "^1.0.0",
-    "passport-oauth2-refresh": "^2.0.0"
+    "passport-oauth2-refresh": "^2.0.0",
+    "underscore": "^1.10.2",
+    "uniq": "^1.0.1"
   }
 }

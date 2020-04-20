@@ -93,7 +93,35 @@ function check(){
 
 }
 
+// function moveon(){  // Bu fonksiyon da dataları toplaman lazım !!
+//   var mailler = mails; // tüm mailler
+//   var Title = document.getElementById("title").value; // Meeting Title
+//   var desc = document.getElementById("description").value; // Meeting Description
+
+//   if(!Title){alert("Cannot Submit without title"); return;}
+//   if(!desc){alert("Description is mandatory"); return;}
+//   if(mails.length < 1){alert("You need AT LEAST one attendee"); return;}
+
+//   var stuff = {title: Title, decription: desc, mails:mailler}
+//   console.log(stuff);
+//   console.log(JSON.stringify(stuff));
+
+//   var stuff2 = {title : "alex", description: "de souza"};
+//   options = {
+//     method : 'POST',
+//     redirect: 'follow',
+//     body: JSON.stringify(stuff),
+//     headers: {
+//       'Content-Type': 'application/json'
+//     }
+//   };
+
+//   fetch('/profile/addcalender', options);
+  
+// }
+
 function moveon(){  // Bu fonksiyon da dataları toplaman lazım !!
+
   var mailler = mails; // tüm mailler
   var Title = document.getElementById("title").value; // Meeting Title
   var desc = document.getElementById("description").value; // Meeting Description
@@ -102,22 +130,24 @@ function moveon(){  // Bu fonksiyon da dataları toplaman lazım !!
   if(!desc){alert("Description is mandatory"); return;}
   if(mails.length < 1){alert("You need AT LEAST one attendee"); return;}
 
-  var stuff = {title: Title, decription: desc, mails:mailler}
-  console.log(stuff);
-  console.log(JSON.stringify(stuff));
 
-  var stuff2 = {title : "alex", description: "de souza"};
-  options = {
-    method : 'POST',
-    redirect: 'follow',
-    body: JSON.stringify(stuff),
-    headers: {
-      'Content-Type': 'application/json'
-    }
-  };
+    let form = document.createElement('form');
+    form.method= 'POST'
+    var stuff2 = document.createElement("input"); 
+    stuff2.name = 'myData';
 
-  fetch('/profile/addcalender', options);
-  
+    var stuff = { MTitle: Title , Mdesc: desc, Mails: mails }
+
+    stuff2.value=JSON.stringify(stuff);
+    form.appendChild(stuff2);
+    cot.appendChild(form);
+
+    form.submit();
+
+
+
+
+
 }
 
 addbutt.addEventListener('click', check);
