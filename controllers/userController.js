@@ -6,10 +6,16 @@ const { func } = require("prop-types");
 const { merge } = require("lodash");
 const arrayUniq = require('array-uniq');
 const _ = require('underscore');
+const { google } = require('googleapis');
+const { OAuth2 } = google.auth
 require('../authentication/passport/local');
 
+var globBusyTimes = "";
+var globMTitle = "";
+var globMDesc = "koko";
+var globMails = "";
 
-async function updateDatabase2(mergedCalender) {
+async function updateDatabase2(mergedCalender, myUser) {
 
     let updatedValues = {
         calender: mergedCalender
@@ -18,13 +24,120 @@ async function updateDatabase2(mergedCalender) {
     //console.log("heyoho");
     //console.log(updatedValues);
 
-    await User.updateOne({ email: req.user.email }, updatedValues)
+    await User.updateOne({ email: myUser.email }, updatedValues)
         .then(User => {
             if (!User) { return res.status(404).end(); }
         })
         .catch(err => next(err));
 
     return updatedValues;
+
+}
+
+async function listEvent2(oAuth2Client, refreshtoken, myUser) {
+
+    oAuth2Client.setCredentials({
+        refresh_token: refreshtoken,
+    })
+
+    const calendar = google.calendar({ version: 'v3', auth: oAuth2Client })
+    var toDB = [];
+    var item = [];
+
+    await calendar.events.list({
+        calendarId: 'primary',
+        timeMin: (new Date()).toISOString(),
+        singleEvents: true,
+        orderBy: 'startTime',
+    }, (err, res) => {
+        if (err) return console.log('The API returned an error: ' + err);
+        const events = res.data.items;
+        if (events.length) {
+            events.map((event, i) => {
+                var start = event.start.dateTime || event.start.date;
+                var end = event.end.dateTime || event.end.date;
+
+                //////MODIFY GOOGLE CALENDAR TIME //////
+
+                start = start.slice(0, 16);
+                if (start.search("T")) {
+                    start = start.replace("T", " ");
+                }
+
+                end = end.slice(0, 16);
+                if (end.search("T")) {
+                    end = end.replace("T", " ");
+                }
+
+                ///////////
+                item = { "start_date": start, "end_date": end, "text": event.summary };
+                console.log("item");
+                console.log(item);
+                toDB.push(item);
+            });
+
+            //console.log(toDB);
+            toDB = JSON.stringify(toDB);
+            //console.log(toDB);
+
+            if (myUser.calender != '') {
+                console.log("IFICICICICIC");
+                var baseCalender = myUser.calender;
+                console.log(baseCalender);
+                toDB = JSON.parse(toDB);
+                console.log(typeof myUser.calender);
+                console.log(myUser.calender);
+                var baseCalender = JSON.parse(baseCalender);
+                console.log(baseCalender);
+                //console.log(typeof toDB);
+                console.log("basecalender");
+                console.log(baseCalender);
+                console.log(typeof baseCalender);
+
+                var temp = toDB.concat(baseCalender);
+
+                //temp = _.uniq(temp);
+
+
+                var temp2 = Array.from(new Set(temp.map(JSON.stringify))).map(JSON.parse);
+                console.log("temp2")
+                console.log(temp2);
+                console.log(typeof temp2);
+
+
+                console.log("temp");
+                console.log(temp);
+
+
+
+                var mergedCalender = JSON.stringify(temp2);
+                //console.log(mergedCalender);
+                //res.redirect("/profile/calender");
+                console.log("merged calender");
+                console.log(mergedCalender);
+
+                console.log(_.uniq([2, 1, 2, 7]));
+
+
+                updateDatabase2(mergedCalender, myUser);
+                return mergedCalender;
+            }
+
+            else {
+                var mergedCalender = toDB;
+                updateDatabase2(mergedCalender, myUser);
+                return mergedCalender
+            }
+
+
+            //burda toDB 'yi database'e yazmamız gerekli
+        } else {
+            console.log('No upcoming events found.');
+            return -1;
+        }
+    });
+
+
 
 }
 
@@ -177,28 +290,58 @@ module.exports.postCalender = (req, res, next) => {
 
 module.exports.postCalenderMeet = (req, res, next) => {
     console.log("POST CALENDAR MEEEET");
+    console.log(req.body);
     console.log(req.body.myData);
+
+
+
 
     //console.log(req);
     const { google } = require('googleapis');
     const { OAuth2 } = google.auth
 
-    const oAuth2Client = new OAuth2(
-        '805012118741-vvgvhls19vs9d10boh9k156qe6k08h3e.apps.googleusercontent.com',
-        'IvdjL5wmHFDPNFa4YXElPPLJ'
-    )
-
-    refreshtoken = req.user.refreshToken;
 
     //listEvent(oAuth2Client, refreshtoken)
 
 
 
     async function main() {
+        const oAuth2Client = new OAuth2(
+            '805012118741-vvgvhls19vs9d10boh9k156qe6k08h3e.apps.googleusercontent.com',
+            'IvdjL5wmHFDPNFa4YXElPPLJ'
+        )
+
+        // globMTitle = await req.body.myData.Mtitle;
+        // globMDesc = await req.body.myData.MDesc;
+        // globMails = await req.body.myData.Mails;
+
 
         mails = JSON.parse(req.body.myData);
         mails = mails.Mails;
         var userCalendars = [];
+        mails.push(req.user.email);
+        console.log("susus");
+        console.log(typeof (mails));
+        console.log(mails);
+
+        for (email of mails) {
+            await User.findOne({
+                email: email
+            }).then(user => {
+                if (user) {
+                    //console.log(user.name);
+                    //console.log(user.calender);
+                    //userCalendars.push(user.calender)
+                    console.log("aaaaaaaaaaaaaaer");
+                    console.log(user)
+                    listEvent2(oAuth2Client, user.refreshToken, user);
+                    console.log(user.name);
+                    console.log(user.calender);
+                }
+            }).catch(err => console.log(err));
+        }
+
+
 
         for (email of mails) {
             await User.findOne({
@@ -214,7 +357,7 @@ module.exports.postCalenderMeet = (req, res, next) => {
             }).catch(err => console.log(err));
         }
 
-        userCalendars.push(req.user.calender);
+
         console.log(req.user);
 
         //console.log("1");
@@ -329,7 +472,9 @@ module.exports.postCalenderMeet = (req, res, next) => {
             busyTime.slots.push(slot);
         }
 
-        console.log(JSON.stringify(busyTime));
+
+
+        //console.log(JSON.stringify(busyTime));
         console.log()
         var fs = require('fs');
 
@@ -344,8 +489,18 @@ module.exports.postCalenderMeet = (req, res, next) => {
 
         console.log("Busy times calculated");
 
-        res.redirect("/profile/calender");
+        //res.redirect("/profile/addcalender2");
+        console.log(JSON.parse(req.body.myData));
+        var parsedData = JSON.parse(req.body.myData);
+        console.log(parsedData.MTitle);
+        console.log("kokorec");
+        console.log(busyTime);
+        console.log(busyTime.slots);
+        console.log(mails);
+        console.log(typeof (mails));
 
+
+        res.render("calendermeet2", { data: { title: parsedData.MTitle, desc: parsedData.Mdesc, busyTimes: JSON.stringify(busyTime.slots), mails: JSON.stringify(mails) } });
         return userCalendars;
     }
 
@@ -363,25 +518,21 @@ module.exports.googleCalendarSync = (req, res) => {
 
     const fs = require('fs');
     const readline = require('readline');
-    const { google } = require('googleapis');
-    const { OAuth2 } = google.auth
+
 
     const oAuth2Client = new OAuth2(
         '805012118741-vvgvhls19vs9d10boh9k156qe6k08h3e.apps.googleusercontent.com',
         'IvdjL5wmHFDPNFa4YXElPPLJ'
     )
 
-    //refreshtoken = '1//03oCU9m0IkeOyCgYIARAAGAMSNwF-L9IrF5QxABzVJoBhtMDuLkXpCBxX1wjRDMoQqVaEo8Y-piQQ5MsCeg6TcCdJ1iUDFHbl9Xs';       //'1//04feqEs2iq-kACgYIARAAGAQSNwF-L9IraPqETH1LKl8RUjgqt7F6X4GgmG-IMwO6fTxHlLuGIjpMqslN221uaeE5FNT2fr6ahmE';
     refreshtoken = req.user.refreshToken;
-    //console.log(refreshtoken);
+
     async function updateDatabase(mergedCalender) {
 
         let updatedValues = {
             calender: mergedCalender
         };
 
-        //console.log("heyoho");
-        //console.log(updatedValues);
 
         await User.updateOne({ email: req.user.email }, updatedValues)
             .then(User => {
@@ -394,122 +545,20 @@ module.exports.googleCalendarSync = (req, res) => {
 
     }
 
+    var myUser = req.user;
 
-    async function listEvent(oAuth2Client, refreshtoken) {
+    listEvent2(oAuth2Client, refreshtoken, myUser);
+}
 
-        oAuth2Client.setCredentials({
-            refresh_token: refreshtoken,
-        })
+module.exports.getAddCalender2 = (req, res) => {
+    console.log("getaddcalener2");
+    console.log(JSON.stringify(globMTitle));
+    console.log(globMDesc);
+    console.log("globMtitle");
+    var title = globMTitle;
+    var desc = globMDesc;
+    var busyTimes = globBusyTimes;
+    var mails = globMails;
 
-        const calendar = google.calendar({ version: 'v3', auth: oAuth2Client })
-        var toDB = [];
-        var item = [];
-
-        await calendar.events.list({
-            calendarId: 'primary',
-            timeMin: (new Date()).toISOString(),
-            singleEvents: true,
-            orderBy: 'startTime',
-        }, (err, res) => {
-            if (err) return console.log('The API returned an error: ' + err);
-            const events = res.data.items;
-            if (events.length) {
-                events.map((event, i) => {
-                    var start = event.start.dateTime || event.start.date;
-                    var end = event.end.dateTime || event.end.date;
-                    
-                    //////MODIFY GOOGLE CALENDAR TIME //////
-
-                    start = start.slice(0,16);
-                    if(start.search("T")){
-                        start = start.replace("T"," ");
-                    }
-
-                    end = end.slice(0,16);
-                    if(end.search("T")){
-                        end = end.replace("T"," ");
-                    }
-
-                    ///////////
-                    item = { "start_date": start, "end_date": end, "text": event.summary };
-                    console.log("item");
-                    console.log(item);
-                    toDB.push(item);
-                });
-
-                //console.log(toDB);
-                toDB = JSON.stringify(toDB);
-                //console.log(toDB);
-
-                if (req.user.calender != '') {
-                    console.log("IFICICICICIC");
-                    var baseCalender = req.user.calender;
-                    console.log(baseCalender);
-                    toDB = JSON.parse(toDB);
-                    console.log(typeof req.user.calender);
-                    console.log(req.user.calender);
-                    var baseCalender = JSON.parse(baseCalender);
-                    console.log(baseCalender);
-                    //console.log(typeof toDB);
-                    console.log("basecalender");
-                    console.log(baseCalender);
-                    console.log(typeof baseCalender);
-
-                    var temp = toDB.concat(baseCalender);
-
-                    //temp = _.uniq(temp);
-
-
-                    var temp2 = Array.from(new Set(temp.map(JSON.stringify))).map(JSON.parse);
-                    console.log("temp2")
-                    console.log(temp2);
-                    console.log(typeof temp2);
-
-                    // for(var i = 0; i< temp.length; i++){
-                    //     for(var j = 1; j<temp.length; j++){
-                    //         if(temp[i] === temp[j]){
-                    //             console.log("find a same");
-                    //         }
-
-                    //         else{ console.log("not same");}
-                    //     }
-                    // }
-
-                    console.log("temp");
-                    console.log(temp);
-
-
-
-                    var mergedCalender = JSON.stringify(temp2);
-                    //console.log(mergedCalender);
-                    //res.redirect("/profile/calender");
-                    console.log("merged calender");
-                    console.log(mergedCalender);
-
-                    console.log(_.uniq([2, 1, 2, 7]));
-
-
-                    updateDatabase(mergedCalender);
-                    return mergedCalender;
-                }
-
-                else {
-                    var mergedCalender = toDB;
-                    updateDatabase(mergedCalender);
-                    return mergedCalender
-                }
-
-                
-                //burda toDB 'yi database'e yazmamız gerekli
-            } else {
-                console.log('No upcoming events found.');
-                return -1;
-            }
-        });
-
-
-
-    }
-
-    listEvent(oAuth2Client, refreshtoken);
+    res.render("calendermeet2", { data: { title: req.body.myData.Mtitle, desc: req.body.myData.MDesc, busyTimes: busyTimes, mails: req.body.myData.mails } });
 }
