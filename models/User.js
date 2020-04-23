@@ -97,12 +97,12 @@ const userSchema = new Schema({
     },
 
     poll: {
-        type: JSON,
+        type: String,
         default: ''
     },
 
     meeting: {
-        type: JSON,
+        type: String,
         default: ''
     }
 
@@ -111,6 +111,6 @@ const userSchema = new Schema({
 });
 
 
-const User = mongoose.model("User", userSchema);
+const User = mongoose.model("users", userSchema);
 
 module.exports = User;

@@ -136,7 +136,7 @@ function moveon(){  // Bu fonksiyon da dataları toplaman lazım !!
     var stuff2 = document.createElement("input"); 
     stuff2.name = 'myData';
 
-    var stuff = { MTitle: Title , Mdesc: desc, Mails: mails }
+    var stuff = { MTitle: Title , Mdesc: desc, Mails: mails, dummyBool:"1"}
 
     stuff2.value=JSON.stringify(stuff);
     form.appendChild(stuff2);

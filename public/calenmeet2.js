@@ -64,12 +64,15 @@ window.addEventListener("DOMContentLoaded", function () {
 
 
     }
-    var finalpoll = { pollid: input.id, votercount: size, voters: 0, polls: POll }; //final poll information
+    //var finalpoll = { pollid: input.id, votercount: size, voters: 0, polls: POll, dummyBool:"2"}; //final poll information
+    var finalpoll = {votercount: size, voters: 0, polls: POll, dummyBool:"2"}; //final poll information
+
 
     let form = document.createElement('form');
     form.method = 'POST'
     var stuff2 = document.createElement("input");
-    stuff2.value = finalpoll;
+    stuff2.value = JSON.stringify(finalpoll);
+    //stuff2.value = finalpoll;
     stuff2.name = "myData";
     form.appendChild(stuff2);
 
@@ -77,7 +80,7 @@ window.addEventListener("DOMContentLoaded", function () {
 
     console.log(finalpoll);
     formplace.appendChild(form);
-    //form.submit();
+    form.submit();
 
 
 
