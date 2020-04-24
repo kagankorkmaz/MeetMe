@@ -185,7 +185,7 @@ async function listEvent2(oAuth2Client, refreshtoken, myUser) {
                 console.log("gugıl");
                 //////MODIFY GOOGLE CALENDAR TIME //////
 
-                
+
 
                 start = start.slice(0, 16);
                 if (start.search("T")) {
@@ -198,15 +198,15 @@ async function listEvent2(oAuth2Client, refreshtoken, myUser) {
                 }
 
                 ///////////
-                var summary ="";
+                var summary = "";
 
-                if(event.summary){
+                if (event.summary) {
                     item = { "start_date": start, "end_date": end, "text": event.summary };
                 }
-                else{
+                else {
                     item = { "start_date": start, "end_date": end, "text": "No title from Google" };
                 }
-                
+
                 //console.log("item");
                 //console.log(item);
                 toDB.push(item);
@@ -508,7 +508,19 @@ module.exports.postCalenderMeet = (req, res, next) => {
             var endEv = new Date();
             var i, k;
             for (k = 0; k < userCalendars.length; k++) {
-                var JSON_array = JSON.parse(userCalendars[k]);
+                var JSON_array = [];
+                console.log(userCalendars[k]);
+                console.log(typeof(userCalendars[k]));
+
+                console.log(JSON.stringify(userCalendars[k]));
+                console.log(typeof(JSON.stringify(userCalendars[k])));
+                // EDITED BY KK
+                if(JSON.stringify(userCalendars[k]) != "[]"){
+                    console.log("NOT empty calender");
+                    var JSON_array = JSON.parse(userCalendars[k]);
+                }
+                //
+               
                 for (i = 0; i < JSON_array.length; i++) {
                     currEv = new Date(JSON_array[i].start_date);
                     if (datesGMT.map(Number).indexOf(+currEv) == -1) {
@@ -563,7 +575,13 @@ module.exports.postCalenderMeet = (req, res, next) => {
             var arr = Array(userCalendars.length).fill(null).map(() => Array(datesGMT.length).fill(0));
 
             for (k = 0; k < userCalendars.length; k++) {
-                var JSON_array = JSON.parse(userCalendars[k]);
+                //var JSON_array = JSON.parse(userCalendars[k]);
+                var JSON_array = [];
+                if(JSON.stringify(userCalendars[k]) != "[]"){
+                    console.log("NOT empty calender");
+                    var JSON_array = JSON.parse(userCalendars[k]);
+                }
+                
                 for (i = 0; i < JSON_array.length; i++) {
                     for (j = dict[new Date(JSON_array[i].start_date)]; j < dict[new Date(JSON_array[i].end_date)] + 1; j++) {
                         arr[k][j] = 1;
@@ -719,13 +737,14 @@ module.exports.postCalenderMeet = (req, res, next) => {
 
                                 for (item of userPoll2) {
                                     arr2.poll.push(item);
+                                    arr2.poll = [...new Set(arr2.poll)];
                                 }
 
                                 console.log(arr2);
                                 updatedValues2 = {
                                     poll: JSON.stringify(arr2)
                                 }
-                                User.updateOne({ email: myUser.email }, updatedValues2).then(User => {
+                                await User.updateOne({ email: myUser.email }, updatedValues2).then(User => {
                                     if (!User) { return res.status(404).end(); }
                                 })
                                     .catch(err => next(err));
@@ -827,11 +846,22 @@ module.exports.getpolls = (req, res, next) => {
     // console.log(typeof(x));
 
     async function main() {
-        userPoll = JSON.parse(req.user.poll);
-        userPolls = userPoll.poll;
-
         pollsArr = [];
         idArr = [];
+        
+        if (!req.user.poll) {
+            console.log("yeni user poll");
+            pollsArr.push("");
+            idArr.push("");
+            res.render('poll', { data: { pollsArr: JSON.stringify(pollsArr), idArr: idArr } });
+            return -1;
+        }
+
+        userPoll = JSON.parse(req.user.poll);
+
+
+        userPolls = userPoll.poll;
+       
 
         for (pollID of userPolls) {
             //Her bir pollID string olarak alınıyo
@@ -860,9 +890,9 @@ module.exports.getpolls = (req, res, next) => {
             item.polls = JSON.parse(item.polls);
         }
 
-        console.log(pollsArr[0].polls)
+        //console.log(pollsArr[0].polls)
 
-        console.log(typeof (pollsArr[0].polls));
+        //console.log(typeof (pollsArr[0].polls));
 
         res.render('poll', { data: { pollsArr: JSON.stringify(pollsArr), idArr: idArr } });
     }
@@ -987,13 +1017,14 @@ module.exports.postpolls = (req, res, next) => {
 
                                 for (item of userMeeting2) {
                                     arrM2.meeting.push(item);
+                                    arrM2.meeting = [...new Set(arrM2.meeting)];
                                 }
 
                                 console.log(arrM2);
                                 updatedValues2 = {
                                     meeting: JSON.stringify(arrM2)
                                 }
-                                User.updateOne({ email: myUser.email }, updatedValues2).then(User => {
+                                await User.updateOne({ email: myUser.email }, updatedValues2).then(User => {
                                     if (!User) { return res.status(404).end(); }
                                 })
                                     .catch(err => next(err));
@@ -1060,11 +1091,20 @@ module.exports.getmeetings = (req, res, next) => {
 
     async function main() {
         console.log(req.user.meeting);
+        meetingsArr = [];
+        if (!req.user.meeting) {
+            console.log("yeni user meeting");
+            meetingsArr.push("");
+           
+            res.render('meet', { data: { meetingsArr: JSON.stringify(meetingsArr) } });
+            return -1;
+        }
+        
         userMeeting = JSON.parse(req.user.meeting);
         userMeetings = userMeeting.meeting;
 
-        meetingsArr = [];
-        
+       
+
 
         for (meetingID of userMeetings) {
             //Her bir pollID string olarak alınıyo
@@ -1097,7 +1137,7 @@ module.exports.getmeetings = (req, res, next) => {
 
         console.log(typeof (meetingsArr[0]));
 
-        res.render('meet', { data: { meetingsArr: JSON.stringify(meetingsArr)}});
+        res.render('meet', { data: { meetingsArr: JSON.stringify(meetingsArr) } });
     }
 
     main();
