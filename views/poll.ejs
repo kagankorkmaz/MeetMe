@@ -7,14 +7,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <link href="https://fonts.googleapis.com/css?family=Quicksand:300,400,500,700,900" rel="stylesheet">
+    <link rel="stylesheet" href="/Pollsandmeetings/materialize/css/materializ.css">
+
     <link rel="stylesheet" href="/main_page/fonts/icomoon/style.css">
 
     <link rel="stylesheet" href="/main_page/css/bootstrap.min.css">
     
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
 
 
-
-    <link rel="stylesheet" href="/main_page/fonts/flaticon/font/flaticon.css">
+    <link rel="stylesheet" href="/main_page/fonts/flaticon/font/flaticon.css"> 
 
     <link rel="stylesheet" href="/main_page/css/aos.css">
 
@@ -23,9 +25,11 @@
     
     <link rel="stylesheet" type="text/css" href="/Makemeet/css/util.css">
     <link rel="stylesheet" type="text/css" href="/Makemeet/css/main.css">
-    <link rel="stylesheet" href="/path/to/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
     <script src="https://kit.fontawesome.com/a81368914c.js"></script>
-    <link rel="stylesheet" href="/path/to/font-awesome/css/font-awesome.min.css">
+
+    <script id="accordio" pollsArr="<%= data.pollsArr %>" idArr="<%= data.idArr %>"  src="/Pollsandmeetings/accordio.js"></script>
+    <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
 
   
        
@@ -48,7 +52,7 @@
           <div class="col-12 col-md-10 d-none d-xl-block">
             <nav class="site-navigation position-relative text-right" role="navigation">
 
-              <ul class="site-menu main-menu js-clone-nav mr-auto d-none d-lg-block">
+              <ul class="site-menu main-menu js-clone-nav mr-auto d-none d-lg-block" style="box-shadow: none; block-size: 0;">
                 <li><a href="/#home-section" class="nav-link">Home</a></li>
                 <li><a href="/#work-section" class="nav-link">Mission</a></li>
                 <li>
@@ -64,8 +68,9 @@
                   </ul>
                 </li>
                 <li><a href="/#contact-section" class="nav-link">Contact</a></li>
-                <li><a class="input1001" style="width: 110%;"  href="/logout">Logout</a></li>
-             
+                <li><a class="input1001" style="width: 110%;"  href="/profile/addcalender">Create a Calendar</a></li>
+
+            <li><a class="input1001" style="width: 110%;"  href="/logout">Logout</a></li>
               </ul>
               
             </nav>
@@ -152,60 +157,32 @@
       </style>
   
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-
-       <body>
-
-       <div style="padding-left: 30%; padding-right: 30%; padding-top: 100px; padding-bottom: 100px; background-color: rgb(255, 255, 255); ">
-         
-           <div style="font-family: Raleway-Bold; padding-bottom: 10px;">MEETING TITLE</div>
-           <div class="wrap-input100 validate-input m-b-16">
-          
-             <input class="input100" type="text" id="title" placeholder="Title" style="background-color: rgb(214, 214, 214); border: none;">
-             <span class="focus-input100"></span>
-             <span class="symbol-input100">
-                <span class="lnr lnr-envelope"></span>
-             </span>        
-           </div>
-
-           <div style="font-family: Raleway-Bold; padding-bottom: 10px;padding-top: 10px ">MEETING  DESCRIPTON</div>
-           <div class="wrap-input100 validate-input m-b-16">          
-           <input class="input100" type="text" id="description" placeholder="Description" style="background-color: rgb(214, 214, 214); border: none;">
-           <span class="focus-input100"></span>
-           <span class="symbol-input100">
-              <span class="lnr lnr-envelope"></span>
-            </span>        
-            </div>
-
-
-            <div style="font-family: Raleway-Bold; padding-bottom: 10px;padding-top: 10px ">ATTENDEES</div>
-            <div class="inputDiv" style="padding-bottom: 50px;">
-            <input type="text" class="inputt input100" id="emails" style="background-color: rgb(214, 214, 214); border: none; float: left; width: 90%; z-index: -1;" placeholder="Enter Emails">
-            <li><button class="contact1001"  id='add' style="float: right; width: 10%; height: 55px;"> <span>ADD</span></button></li>
-            
-            </div>
-            
-            <div id="cont"> 
-            <!--
-              <div class="item">
-                <input type="text" class="item_input" disabled>
-                <button class="editButton contact100" style="width: 20%; float: right;">edit</button>
-                <button class="removeButton contact100" style="width: 20%; float: right;">remove</button>
-              </div>
-            -->
-            </div>            
-            
-            
-        </div>
-      </body>
-
-       
+ 
+    <div style="padding-left: 20%; padding-right: 20%;" id="meetings">
+     <!-- <ul class="collapsible expandable">
+    <li>
+      <div class="collapsible-header"><i class="material-icons">filter_drama</i>First</div>
+      <div class="collapsible-body">
+        <h5>Jİmjombob</h5>
+        <button class="contact100">Button</button>
+      </div>
+    </li>
+    <li>
+      <div class="collapsible-header"><i class="material-icons">place</i>Second</div>
+      <div class="collapsible-body"><span>Lorem ipsum dolor sit amet.</span></div>
+    </li>
+    <li>
+      <div class="collapsible-header"><i class="material-icons">whatshot</i>Third</div>
+      <div class="collapsible-body"><span>Lorem ipsum dolor sit amet.</span></div>
+    </li>
+  </ul>  -->
+    </div>
+  
 
    
 
     <body>
-      <!-- <li><a class="contact100" href="#" id='nextstp' style="width: 100%; height: 100px; font-size: larger; padding-bottom: 0px;"> <span>SCHEDULE</span></a></li> -->
-      <li><button class="contact100"  id='nextstp' style="width: 100%; height: 100px; font-size: larger; padding-bottom: 0px;"> <span>SCHEDULE</span></button></li>
-
+      
       <!-- partial:index.partial.html -->
       <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
       <meta charset="UTF-8">
@@ -229,7 +206,7 @@
           <i class="material-icons nav__icon">devices</i>
           <span class="nav__text">Meetings</span>
         </a>
-        <a href="/profile/polls" class="nav__link" style="border-top-left-radius: 7px; border-top-right-radius: 7px;">
+        <a href="#" class="nav__link" style="border-top-left-radius: 7px; border-top-right-radius: 7px;">
           <svg class="bi bi-file-post" width="1.7em" height="1.7em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
             <path fill-rule="evenodd" d="M4 1h8a2 2 0 012 2v10a2 2 0 01-2 2H4a2 2 0 01-2-2V3a2 2 0 012-2zm0 1a1 1 0 00-1 1v10a1 1 0 001 1h8a1 1 0 001-1V3a1 1 0 00-1-1H4z" clip-rule="evenodd"/>
             <path d="M4 5.5a.5.5 0 01.5-.5h7a.5.5 0 01.5.5v7a.5.5 0 01-.5.5h-7a.5.5 0 01-.5-.5v-7z"/>
@@ -289,7 +266,7 @@
         </div>
         <div class="row pt-5 mt-5 text-center">
           <div class="col-md-12">
-            <div class="border-top pt-5">
+            <div class="border-top pt-5" id="tempform">
             <p>
             <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
             Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="icon-heart text-danger" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank" >Colorlib</a>
@@ -318,22 +295,11 @@
   <script src="/main_page/js/aos.js"></script>
   <script src="/main_page/js/jquery.fancybox.min.js"></script>
   <script src="/main_page/js/jquery.sticky.js"></script>
+  <script type="text/javascript" src="/Pollsandmeetings/materialize/js/materialize.js"></script>
 
-  <script src="/main_page/js/typed.js"></script>
-            <script>
-            var typed = new Typed('.typed-words', {
-            strings: [" Meetings"," Events"," Life"],
-            typeSpeed: 80,
-            backSpeed: 80,
-            backDelay: 4000,
-            startDelay: 1000,
-            loop: true,
-            showCursor: true
-            });
-            </script>
+
 
   <script src="/main_page/js/main.js"></script>
-  <script type="text/javascript" src="/calenmeet.js" ></script>
 
   
 

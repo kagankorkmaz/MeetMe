@@ -1,6 +1,7 @@
 var path = require("path");
 const User = require("../models/User");
 const Poll = require("../models/Poll");
+const Meeting = require("../models/Meeting");
 const passport = require('passport');
 const { update, base } = require("../models/User");
 const { func } = require("prop-types");
@@ -12,11 +13,132 @@ const { searchconsole } = require("googleapis/build/src/apis/searchconsole");
 const { surveys } = require("googleapis/build/src/apis/surveys");
 const { OAuth2 } = google.auth
 require('../authentication/passport/local');
+// MAILER
+const mailComposer = require('nodemailer/lib/mail-composer');
+const readline = require('readline');
+const fs = require('fs');
+//MAILER
 
-var globBusyTimes = "";
-var globMTitle = "";
-var globMDesc = "koko";
-var globMails = "";
+class CreateMail {
+
+    constructor(auth, to, sub, body, task, attachmentSrc) {
+        this.me = 'meet308me@gmail.com';
+        this.task = task;
+        this.auth = auth;
+        this.to = to;
+        this.sub = sub;
+        this.body = body;
+        this.gmail = google.gmail({ version: 'v1', auth });
+        this.attachment = attachmentSrc;
+
+    }
+
+    //Creates the mail body and encodes it to base64 format.
+    makeBody() {
+
+        let mail = new mailComposer({
+            to: this.to,
+            text: this.body,
+            subject: this.sub,
+            textEncoding: "base64"
+        });
+
+        //Compiles and encodes the mail.
+        mail.compile().build((err, msg) => {
+            if (err) {
+                return console.log('Error compiling email ' + error);
+            }
+
+            const encodedMessage = Buffer.from(msg)
+                .toString('base64')
+                .replace(/\+/g, '-')
+                .replace(/\//g, '_')
+                .replace(/=+$/, '');
+
+            if (this.task === 'mail') {
+                this.sendMail(encodedMessage);
+            }
+            else {
+                this.saveDraft(encodedMessage);
+            }
+        });
+    }
+
+    //Send the message to specified receiver.
+    sendMail(encodedMessage) {
+        this.gmail.users.messages.send({
+            userId: this.me,
+            resource: {
+                raw: encodedMessage,
+            }
+        }, (err, result) => {
+            if (err) {
+                return console.log('NODEMAILER - The API returned an error: ' + err);
+            }
+
+            console.log("NODEMAILER - Sending email reply from server:", result.data);
+        });
+    }
+
+    //Saves the draft.
+    saveDraft(encodedMessage) {
+        this.gmail.users.drafts.create({
+            'userId': this.me,
+            'resource': {
+                'message': {
+                    'raw': encodedMessage
+                }
+            }
+        })
+    }
+
+    //Deletes the draft.
+    deleteDraft(id) {
+        this.attachment.gmail.users.drafts.delete({
+            id: id,
+            userId: this.me
+        });
+    }
+
+    //Lists all drafts.
+    listAllDrafts() {
+        this.gmail.users.drafts.list({
+            userId: this.me
+        }, (err, res) => {
+            if (err) {
+                console.log(err);
+            }
+            else {
+                console.log(res.data);
+            }
+        });
+    }
+}
+
+function mail(recipients, condition) {
+    const oAuth2Client = new OAuth2( //bunu dışardan mı alsak
+        '805012118741-vvgvhls19vs9d10boh9k156qe6k08h3e.apps.googleusercontent.com',
+        'IvdjL5wmHFDPNFa4YXElPPLJ'
+    )
+
+    refreshtoken = '1//04GUdlB-716d6CgYIARAAGAQSNwF-L9IrRpaqFxMPR_eyRyucfqCSW2vEL_ueA-qamcQ5lR7A4GG5H5-oHt3iL6DwUDsfWaHYwiI';
+
+    oAuth2Client.setCredentials({ refresh_token: refreshtoken });
+
+    if (condition == 0) {
+        var subject = "Vote to Set a Meeting!";
+        var mailBody = "A new poll has been opened! Vote to set the meeting time.";
+    }
+    if (condition == 1) {
+        var subject = "New Meeting in Your Calendar!";
+        var mailBody = "You have a new meeting in your calendar. Check details.";
+    }
+
+    var obj = new CreateMail(oAuth2Client, recipients, subject, mailBody, 'mail');
+    //'mail' is the task, if not passed it will save the message as draft.
+    obj.makeBody();
+    //This will send the mail to the recipent.
+}
 
 async function updateDatabase2(mergedCalender, myUser) {
 
@@ -59,8 +181,11 @@ async function listEvent2(oAuth2Client, refreshtoken, myUser) {
             events.map((event, i) => {
                 var start = event.start.dateTime || event.start.date;
                 var end = event.end.dateTime || event.end.date;
-
+                console.log(event.summary);
+                console.log("gugıl");
                 //////MODIFY GOOGLE CALENDAR TIME //////
+
+                
 
                 start = start.slice(0, 16);
                 if (start.search("T")) {
@@ -73,7 +198,15 @@ async function listEvent2(oAuth2Client, refreshtoken, myUser) {
                 }
 
                 ///////////
-                item = { "start_date": start, "end_date": end, "text": event.summary };
+                var summary ="";
+
+                if(event.summary){
+                    item = { "start_date": start, "end_date": end, "text": event.summary };
+                }
+                else{
+                    item = { "start_date": start, "end_date": end, "text": "No title from Google" };
+                }
+                
                 //console.log("item");
                 //console.log(item);
                 toDB.push(item);
@@ -307,7 +440,7 @@ module.exports.postCalenderMeet = (req, res, next) => {
 
     //listEvent(oAuth2Client, refreshtoken)
 
-
+    // Calculating busy times
     if (dummyBool == "1") {
         async function main() {
             const oAuth2Client = new OAuth2(
@@ -511,6 +644,7 @@ module.exports.postCalenderMeet = (req, res, next) => {
         main();
     }
 
+    //Create poll
     else {
         console.log("elseteyiz");
         myData = JSON.parse(req.body.myData);
@@ -561,41 +695,53 @@ module.exports.postCalenderMeet = (req, res, next) => {
                         if (userPoll == "") {
                             console.log("bos userpoll")
                             console.log(arr2);
-                            var updatedValues = {
-                                poll: JSON.stringify(arr2)
+
+
+                            async function updateBos() {
+                                var updatedValues = {
+                                    poll: JSON.stringify(arr2)
+                                }
+                                await User.updateOne({ email: myUser.email }, updatedValues).then(User => {
+                                    if (!User) { return res.status(404).end(); }
+                                })
+                                    .catch(err => next(err));
                             }
-                            User.updateOne({ email: myUser.email }, updatedValues).then(User => {
-                                if (!User) { return res.status(404).end(); }
-                            })
-                                .catch(err => next(err));
+
+                            updateBos();
                         }
 
                         else {
                             console.log("dolu userpoll");
-                            var userPoll2 = JSON.parse(userPoll);
-                            userPoll2 = userPoll2.poll;
 
-                            for (item of userPoll2) {
-                                arr2.poll.push(item);
+                            async function updateDolu() {
+                                var userPoll2 = JSON.parse(userPoll);
+                                userPoll2 = userPoll2.poll;
+
+                                for (item of userPoll2) {
+                                    arr2.poll.push(item);
+                                }
+
+                                console.log(arr2);
+                                updatedValues2 = {
+                                    poll: JSON.stringify(arr2)
+                                }
+                                User.updateOne({ email: myUser.email }, updatedValues2).then(User => {
+                                    if (!User) { return res.status(404).end(); }
+                                })
+                                    .catch(err => next(err));
                             }
 
-                            console.log(arr2);
-                            updatedValues2 = {
-                                poll: JSON.stringify(arr2)
-                            }
-                            User.updateOne({ email: myUser.email }, updatedValues2).then(User => {
-                                if (!User) { return res.status(404).end(); }
-                            })
-                                .catch(err => next(err));
+                            updateDolu();
                         }
 
-                        res.redirect("/profile/calender");
+                        mail(myUser.email, 0);
+
 
                     }
                 })
             }
 
-            
+            res.redirect("/profile/polls");
         }
 
 
@@ -662,15 +808,298 @@ module.exports.googleCalendarSync = (req, res) => {
     listEvent2(oAuth2Client, refreshtoken, myUser);
 }
 
-module.exports.getAddCalender2 = (req, res) => {
-    console.log("getaddcalener2");
-    console.log(JSON.stringify(globMTitle));
-    console.log(globMDesc);
-    console.log("globMtitle");
-    var title = globMTitle;
-    var desc = globMDesc;
-    var busyTimes = globBusyTimes;
-    var mails = globMails;
 
-    res.render("calendermeet2", { data: { title: req.body.myData.Mtitle, desc: req.body.myData.MDesc, busyTimes: busyTimes, mails: req.body.myData.mails } });
-}
+
+module.exports.getpolls = (req, res, next) => {
+
+    console.log("In the polls");
+    // console.log(req.user.poll);
+    // console.log(typeof(req.user.poll))
+
+    // //console.log(JSON.parse(req.user.poll));
+
+    // userPoll = JSON.parse(req.user.poll);
+    // console.log(typeof(userPoll));
+    // console.log(userPoll.poll)
+
+    // var x = userPoll.poll[1];
+    // console.log(x);
+    // console.log(typeof(x));
+
+    async function main() {
+        userPoll = JSON.parse(req.user.poll);
+        userPolls = userPoll.poll;
+
+        pollsArr = [];
+        idArr = [];
+
+        for (pollID of userPolls) {
+            //Her bir pollID string olarak alınıyo
+            await Poll.findOne({
+                _id: pollID
+            }).then(Poll => {
+                if (Poll) {
+                    console.log("poll found");
+                    pollsArr.push(Poll);
+                    idArr.push(pollID);
+                }
+
+                else {
+                    console.log("poll not found")
+                }
+            }).catch(err => console.log(err));
+        }
+
+        console.log(pollsArr);
+
+
+
+        console.log("kokoretto");
+
+        for (item of pollsArr) {
+            item.polls = JSON.parse(item.polls);
+        }
+
+        console.log(pollsArr[0].polls)
+
+        console.log(typeof (pollsArr[0].polls));
+
+        res.render('poll', { data: { pollsArr: JSON.stringify(pollsArr), idArr: idArr } });
+    }
+
+    main();
+};
+
+
+
+module.exports.postpolls = (req, res, next) => {
+
+    console.log("In the post polls");
+
+
+    async function main() {
+        myData = JSON.parse(req.body.myData);
+        console.log(myData);
+        console.log(req.user);
+
+
+        //Delete from user's poll
+        var deleteID = myData._id;
+        console.log(deleteID);
+
+        userPoll = JSON.parse(req.user.poll);
+        console.log(userPoll);
+        console.log(userPoll.poll);
+
+        var index = userPoll.poll.indexOf(deleteID);
+        if (index !== -1) userPoll.poll.splice(index, 1);
+
+        console.log(userPoll.poll);
+
+        toDBPoll = { poll: userPoll.poll }
+
+        updatedValues = {
+            poll: JSON.stringify(toDBPoll)
+        }
+
+        await User.updateOne({ email: req.user.email }, updatedValues)
+            .then(User => {
+                if (!User) { return res.status(404).end(); }
+            })
+            .catch(err => next(err));
+
+        console.log("TUTUU");
+        console.log(myData.polls[0]);
+
+
+        //Deletin poll object if it is completed and adding it to meeting database
+        if (myData.voterCount == myData.voters) {
+
+            var highest = 0;
+            var high;
+            for (var i = 0; i < myData.polls.length; i++) {
+                if (myData.polls[i].vote > highest) {
+                    high = i;
+                    highest = myData.polls[i].vote;
+                }
+            }
+
+
+
+            const newMeeting = new Meeting({
+                title: myData.polls[high].title,
+                description: myData.polls[high].description,
+                attendees: myData.polls[high].attendees,
+                start_date: myData.polls[high].start_date,
+                end_date: myData.polls[high].end_date,
+                vote: myData.polls[high].vote
+            })
+
+            //console.log(newMeeting._id);
+            await newMeeting.save().then(() => {
+                console.log("DB save meeting Succesful");
+                req.flash("flashSuccess", "Succesfully Registered");
+
+            }).catch(err => console.log(err));
+
+            //////////////// ADD TO USER MEETİNGD ////////
+
+            for (email of myData.polls[high].attendees) {
+                let arrM = [];
+                arrM.push(newMeeting._id);
+
+                arrM2 = { meeting: arrM };
+
+                await User.findOne({ email: email }).then(myUser => {
+                    if (!myUser) {
+                        return res.status(404).end();
+                    }
+
+                    else {
+                        var userMeeting = myUser.meeting;
+
+                        // console.log(typeof(JSON.parse(userPoll)));
+
+                        if (userMeeting == "") {
+                            console.log("bos usermeeting")
+                            console.log(arrM2);
+
+
+                            async function updateBosMeeting() {
+                                var updatedValues = {
+                                    meeting: JSON.stringify(arrM2)
+                                }
+                                await User.updateOne({ email: myUser.email }, updatedValues).then(User => {
+                                    if (!User) { return res.status(404).end(); }
+                                })
+                                    .catch(err => next(err));
+                            }
+
+                            updateBosMeeting();
+                        }
+
+                        else {
+                            console.log("dolu usermeeting");
+
+                            async function updateDoluMeeting() {
+                                var userMeeting2 = JSON.parse(userMeeting);
+                                userMeeting2 = userMeeting2.meeting;
+
+                                for (item of userMeeting2) {
+                                    arrM2.meeting.push(item);
+                                }
+
+                                console.log(arrM2);
+                                updatedValues2 = {
+                                    meeting: JSON.stringify(arrM2)
+                                }
+                                User.updateOne({ email: myUser.email }, updatedValues2).then(User => {
+                                    if (!User) { return res.status(404).end(); }
+                                })
+                                    .catch(err => next(err));
+                            }
+
+                            updateDoluMeeting();
+                        }
+
+                        mail(myUser.email, 1);
+
+
+                    }
+                })
+            }
+
+
+
+
+
+            /////////////////////////////////////////////
+
+
+            await Poll.deleteOne({ _id: deleteID }, function (err, result) {
+                if (err) {
+                    console.log("Error on deleting from Polls");
+                }
+                else {
+                    console.log("Deleting from polls Successfull")
+                }
+            });
+
+        }
+
+
+        else {
+            updatedValues2 = {
+                voters: myData.voters,
+                polls: JSON.stringify(myData.polls)
+            }
+
+            await Poll.updateOne({ _id: deleteID }, updatedValues2)
+                .then(Poll => {
+                    if (!Poll) { return res.status(404).end(); }
+                    else {
+                        console.log("poll buldu");
+                    }
+                })
+                .catch(err => next(err));
+        }
+
+
+
+
+        res.redirect("/profile/polls");
+
+    }
+
+    main();
+};
+
+module.exports.getmeetings = (req, res, next) => {
+
+    console.log("Get Meetings")
+
+    async function main() {
+        console.log(req.user.meeting);
+        userMeeting = JSON.parse(req.user.meeting);
+        userMeetings = userMeeting.meeting;
+
+        meetingsArr = [];
+        
+
+        for (meetingID of userMeetings) {
+            //Her bir pollID string olarak alınıyo
+            await Meeting.findOne({
+                _id: meetingID
+            }).then(Meeting => {
+                if (Meeting) {
+                    console.log("Meeting found");
+                    meetingsArr.push(Meeting);
+                    //idArr.push(pollID);
+                }
+
+                else {
+                    console.log("meeting not found")
+                }
+            }).catch(err => console.log(err));
+        }
+
+        console.log(meetingsArr);
+
+
+
+        console.log("kokoretto");
+
+        // for (item of meetingsArr) {
+        //     item.meetings = JSON.parse(item.meetings);
+        // }
+
+        console.log(meetingsArr[0])
+
+        console.log(typeof (meetingsArr[0]));
+
+        res.render('meet', { data: { meetingsArr: JSON.stringify(meetingsArr)}});
+    }
+
+    main();
+
+};

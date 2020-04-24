@@ -63,7 +63,12 @@ router.post('/addcalender', userController.postCalenderMeet);
 //     res.render('calendermeet2',{user:req.user});
 // })
 
-router.get('/addcalender2', userController.getAddCalender2);
+router.get('/polls', userController.getpolls);
+
+router.post('/polls', userController.postpolls);
+
+router.get('/meetings', userController.getmeetings);
+
 
 
 module.exports = router;
