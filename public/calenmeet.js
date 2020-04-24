@@ -19,6 +19,7 @@ class item{
     input.disabled = true;
     input.classList.add('item_input');
     input.type = "text";
+    input.style.width = "80%";
 
     let itembox = document.createElement('div');
     itembox.classList.add('item');
