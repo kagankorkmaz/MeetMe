@@ -22,9 +22,6 @@ passport.use(
         clientSecret: 'IvdjL5wmHFDPNFa4YXElPPLJ'
     }, (accessToken, refreshToken, profile, done) => {
         //console.log(accessToken)
-        console.log('passport callback function called');
-        console.log(accessToken);
-        console.log(refreshToken);
         //Check if user exists in db
         User.findOne({ googleId: profile.id }).then((currentUser) => {
             if (currentUser) {

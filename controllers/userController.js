@@ -109,7 +109,7 @@ class CreateMail {
                 console.log(err);
             }
             else {
-                console.log(res.data);
+                //console.log(res.data);
             }
         });
     }
@@ -181,8 +181,7 @@ async function listEvent2(oAuth2Client, refreshtoken, myUser) {
             events.map((event, i) => {
                 var start = event.start.dateTime || event.start.date;
                 var end = event.end.dateTime || event.end.date;
-                console.log(event.summary);
-                console.log("gugıl");
+                
                 //////MODIFY GOOGLE CALENDAR TIME //////
 
 
@@ -217,44 +216,19 @@ async function listEvent2(oAuth2Client, refreshtoken, myUser) {
             //console.log(toDB);
 
             if (myUser.calender != '') {
-                //console.log("IFICICICICIC");
+                
                 var baseCalender = myUser.calender;
-                //console.log(baseCalender);
+               
                 toDB = JSON.parse(toDB);
-                //console.log(typeof myUser.calender);
-                //console.log(myUser.calender);
+                
                 var baseCalender = JSON.parse(baseCalender);
-                //console.log(baseCalender);
-                //console.log(typeof toDB);
-                //console.log("basecalender");
-                //console.log(baseCalender);
-                //console.log(typeof baseCalender);
-
+                
                 var temp = toDB.concat(baseCalender);
 
-                //temp = _.uniq(temp);
-
-
                 var temp2 = Array.from(new Set(temp.map(JSON.stringify))).map(JSON.parse);
-                //console.log("temp2")
-                //console.log(temp2);
-                //console.log(typeof temp2);
-
-
-                //console.log("temp");
-                //console.log(temp);
-
-
-
+                
                 var mergedCalender = JSON.stringify(temp2);
-                //console.log(mergedCalender);
-                //res.redirect("/profile/calender");
-                //console.log("merged calender");
-                //console.log(mergedCalender);
-
-                //console.log(_.uniq([2, 1, 2, 7]));
-
-
+                
                 updateDatabase2(mergedCalender, myUser);
                 return mergedCalender;
             }
@@ -290,8 +264,7 @@ module.exports.getUserRegister = (req, res, next) => {
 
 
 module.exports.postUserLogin = (req, res, next) => {
-    console.log("user controller works");
-    console.log("body parsing", req.body);
+   
     passport.authenticate("local", {
         successRedirect: "/profile",                        //DEĞİŞECEK ///////////////////////////////
         failureRedirect: "/login",
@@ -303,7 +276,6 @@ module.exports.postUserLogin = (req, res, next) => {
 
 
 module.exports.postUserRegister = (req, res, next) => {
-    console.log(req.body)
     const username = req.body.username;
     const email = req.body.email;
     const pass = req.body.pass;
@@ -406,9 +378,7 @@ module.exports.postCalender = (req, res, next) => {
             calender: req.body.calender
         };
 
-        console.log("post calender");
-        console.log(req.body.calender);
-        console.log(typeof (req.body.calender));
+        
 
         await User.updateOne({ email: req.user.email }, updatedValues)
             .then(User => {
@@ -426,13 +396,10 @@ module.exports.postCalender = (req, res, next) => {
 };
 
 module.exports.postCalenderMeet = (req, res, next) => {
-    console.log("POST CALENDAR MEEEET");
-    console.log(req.body);
-    console.log(req.body.myData);
+    
     dummyBool = JSON.parse(req.body.myData);
     dummyBool = dummyBool.dummyBool;
-    console.log(dummyBool);
-    console.log(typeof (dummyBool));
+   
     //console.log(req);
     const { google } = require('googleapis');
     const { OAuth2 } = google.auth
@@ -655,7 +622,18 @@ module.exports.postCalenderMeet = (req, res, next) => {
             //console.log(typeof (mails));
 
 
-            res.render("calendermeet2", { data: { title: parsedData.MTitle, desc: parsedData.Mdesc, busyTimes: JSON.stringify(busyTime.slots), mails: JSON.stringify(mails) } });
+            res.render("calendermeet2",
+             { data: { 
+                 title: parsedData.MTitle,
+                  desc: parsedData.MDesc, 
+                  busyTimes: JSON.stringify(busyTime.slots), 
+                  mails: JSON.stringify(mails), 
+                  host: parsedData.host,
+                  medium: parsedData.medium,
+                  location: parsedData.location,
+                  recurance: parsedData.recurance,
+                  link: parsedData.link
+                } });
             return userCalendars;
         }
 
@@ -664,17 +642,9 @@ module.exports.postCalenderMeet = (req, res, next) => {
 
     //Create poll
     else {
-        console.log("elseteyiz");
+        
         myData = JSON.parse(req.body.myData);
-        console.log(myData);
-        console.log(myData.polls[0].attendees);
-
-        console.log("xxx");
-        console.log(typeof (myData.polls[0].attendees));
-        console.log("bosluk");
-
-
-
+        
         async function savePoll() {
             //Adding to Poll Collection
             const newPoll = new Poll({
@@ -683,7 +653,7 @@ module.exports.postCalenderMeet = (req, res, next) => {
                 polls: JSON.stringify(myData.polls)
             })
 
-            console.log(newPoll._id);
+           
             await newPoll.save().then(() => {
                 console.log("DB save poll Succesful");
                 req.flash("flashSuccess", "Succesfully Registered");
@@ -694,7 +664,7 @@ module.exports.postCalenderMeet = (req, res, next) => {
 
 
             //Adding to users' polls
-            for (email of myData.polls[0].attendees) {
+            for (email of myData.polls[0].mails) {
                 let arr = [];
                 arr.push(newPoll._id);
 
@@ -708,13 +678,7 @@ module.exports.postCalenderMeet = (req, res, next) => {
                     else {
                         var userPoll = myUser.poll;
 
-                        // console.log(typeof(JSON.parse(userPoll)));
-
                         if (userPoll == "") {
-                            console.log("bos userpoll")
-                            console.log(arr2);
-
-
                             async function updateBos() {
                                 var updatedValues = {
                                     poll: JSON.stringify(arr2)
@@ -729,18 +693,13 @@ module.exports.postCalenderMeet = (req, res, next) => {
                         }
 
                         else {
-                            console.log("dolu userpoll");
-
                             async function updateDolu() {
                                 var userPoll2 = JSON.parse(userPoll);
                                 userPoll2 = userPoll2.poll;
-
                                 for (item of userPoll2) {
                                     arr2.poll.push(item);
                                     arr2.poll = [...new Set(arr2.poll)];
                                 }
-
-                                console.log(arr2);
                                 updatedValues2 = {
                                     poll: JSON.stringify(arr2)
                                 }
@@ -749,48 +708,20 @@ module.exports.postCalenderMeet = (req, res, next) => {
                                 })
                                     .catch(err => next(err));
                             }
-
                             updateDolu();
                         }
-
                         mail(myUser.email, 0);
-
-
                     }
                 })
             }
-
             res.redirect("/profile/polls");
         }
-
-
-
         savePoll();
-
-
-
-        // newPoll.save(function (err, result) {
-        //     if (err) {
-        //         console.log("Error addind Poll")
-        //     }
-        //     else {
-        //         console.log(result._id);
-        //         console.log(result);
-        //         console.log("DB save Poll Sucessful");
-
-        //     }
-        // })
-
     }
-
-    //res.redirect("/profile/calender");
-
-
 };
 
 module.exports.googleCalendarSync = (req, res) => {
-    console.log("GOOOOOOGLE SYNC");
-    console.log(req.user);
+    
 
 
     const fs = require('fs');
@@ -831,70 +762,43 @@ module.exports.googleCalendarSync = (req, res) => {
 
 module.exports.getpolls = (req, res, next) => {
 
-    console.log("In the polls");
-    // console.log(req.user.poll);
-    // console.log(typeof(req.user.poll))
-
-    // //console.log(JSON.parse(req.user.poll));
-
-    // userPoll = JSON.parse(req.user.poll);
-    // console.log(typeof(userPoll));
-    // console.log(userPoll.poll)
-
-    // var x = userPoll.poll[1];
-    // console.log(x);
-    // console.log(typeof(x));
+    
 
     async function main() {
         pollsArr = [];
         idArr = [];
         
         if (!req.user.poll) {
-            console.log("yeni user poll");
             pollsArr.push("");
             idArr.push("");
-            res.render('poll', { data: { pollsArr: JSON.stringify(pollsArr), idArr: idArr } });
+            res.render('poll', { data: { pollsArr: JSON.stringify(pollsArr), idArr: idArr, user:req.user } });
             return -1;
         }
 
         userPoll = JSON.parse(req.user.poll);
-
-
         userPolls = userPoll.poll;
-       
-
         for (pollID of userPolls) {
             //Her bir pollID string olarak alınıyo
             await Poll.findOne({
                 _id: pollID
             }).then(Poll => {
                 if (Poll) {
-                    console.log("poll found");
+                    //console.log("poll found");
                     pollsArr.push(Poll);
                     idArr.push(pollID);
                 }
 
                 else {
-                    console.log("poll not found")
+                    //console.log("poll not found")
                 }
             }).catch(err => console.log(err));
         }
 
-        console.log(pollsArr);
-
-
-
-        console.log("kokoretto");
-
         for (item of pollsArr) {
             item.polls = JSON.parse(item.polls);
         }
-
-        //console.log(pollsArr[0].polls)
-
-        //console.log(typeof (pollsArr[0].polls));
-
-        res.render('poll', { data: { pollsArr: JSON.stringify(pollsArr), idArr: idArr } });
+        
+        res.render('poll', { data: { pollsArr: JSON.stringify(pollsArr), idArr: idArr, user:req.user } });
     }
 
     main();
@@ -904,27 +808,22 @@ module.exports.getpolls = (req, res, next) => {
 
 module.exports.postpolls = (req, res, next) => {
 
-    console.log("In the post polls");
-
-
     async function main() {
         myData = JSON.parse(req.body.myData);
         console.log(myData);
-        console.log(req.user);
 
 
         //Delete from user's poll
         var deleteID = myData._id;
-        console.log(deleteID);
+        
 
         userPoll = JSON.parse(req.user.poll);
-        console.log(userPoll);
-        console.log(userPoll.poll);
+        
 
         var index = userPoll.poll.indexOf(deleteID);
         if (index !== -1) userPoll.poll.splice(index, 1);
 
-        console.log(userPoll.poll);
+       
 
         toDBPoll = { poll: userPoll.poll }
 
@@ -938,15 +837,14 @@ module.exports.postpolls = (req, res, next) => {
             })
             .catch(err => next(err));
 
-        console.log("TUTUU");
-        console.log(myData.polls[0]);
+        
 
 
         //Deletin poll object if it is completed and adding it to meeting database
         if (myData.voterCount == myData.voters) {
 
             var highest = 0;
-            var high;
+            var high=0;
             for (var i = 0; i < myData.polls.length; i++) {
                 if (myData.polls[i].vote > highest) {
                     high = i;
@@ -955,26 +853,38 @@ module.exports.postpolls = (req, res, next) => {
             }
 
 
-
+            console.log(myData);
+            console.log(high);
             const newMeeting = new Meeting({
                 title: myData.polls[high].title,
                 description: myData.polls[high].description,
-                attendees: myData.polls[high].attendees,
+                mails: myData.polls[high].mails,
+                medium: myData.polls[high].medium,
+                location: myData.polls[high].location,
+                link: myData.polls[high].link,
+                recurrance: myData.polls[high].recurrance,
+                host: myData.polls[high].host,
                 start_date: myData.polls[high].start_date,
                 end_date: myData.polls[high].end_date,
                 vote: myData.polls[high].vote
             })
 
-            //console.log(newMeeting._id);
+            const newToCalender ={
+                start_date: myData.polls[high].start_date,
+                end_date: myData.polls[high].end_date,
+                title: myData.polls[high].title
+            }
+
+            
             await newMeeting.save().then(() => {
                 console.log("DB save meeting Succesful");
                 req.flash("flashSuccess", "Succesfully Registered");
 
             }).catch(err => console.log(err));
 
-            //////////////// ADD TO USER MEETİNGD ////////
+            //////////////// ADD TO USER MEETİNGs ////////
 
-            for (email of myData.polls[high].attendees) {
+            for (email of myData.polls[high].mails) {
                 let arrM = [];
                 arrM.push(newMeeting._id);
 
@@ -987,14 +897,7 @@ module.exports.postpolls = (req, res, next) => {
 
                     else {
                         var userMeeting = myUser.meeting;
-
-                        // console.log(typeof(JSON.parse(userPoll)));
-
                         if (userMeeting == "") {
-                            console.log("bos usermeeting")
-                            console.log(arrM2);
-
-
                             async function updateBosMeeting() {
                                 var updatedValues = {
                                     meeting: JSON.stringify(arrM2)
@@ -1004,13 +907,9 @@ module.exports.postpolls = (req, res, next) => {
                                 })
                                     .catch(err => next(err));
                             }
-
                             updateBosMeeting();
                         }
-
                         else {
-                            console.log("dolu usermeeting");
-
                             async function updateDoluMeeting() {
                                 var userMeeting2 = JSON.parse(userMeeting);
                                 userMeeting2 = userMeeting2.meeting;
@@ -1020,7 +919,6 @@ module.exports.postpolls = (req, res, next) => {
                                     arrM2.meeting = [...new Set(arrM2.meeting)];
                                 }
 
-                                console.log(arrM2);
                                 updatedValues2 = {
                                     meeting: JSON.stringify(arrM2)
                                 }
@@ -1029,20 +927,36 @@ module.exports.postpolls = (req, res, next) => {
                                 })
                                     .catch(err => next(err));
                             }
-
                             updateDoluMeeting();
                         }
 
+                        async function updateCalender(){
+                            var newCalender;
+                            if(myUser.calender == "" || myUser.calender == "[]"){
+                                newCalender= [];
+                                newCalender.push(newToCalender)
+                            }
+                            else{
+                                userCalender = JSON.parse(myUser.calender);
+                                userCalender.push(newToCalender);
+                                newCalender= userCalender;
+                
+                            }
+                            let updatedValues = {
+                                calender: JSON.stringify(newCalender)
+                            };
+                
+                            await User.updateOne({email: myUser.email}, updatedValues)
+                                .then(User => {
+                                    if (!User) { return res.status(404).end(); }
+                                })
+                                .catch(err => next(err));
+                        }
+                        updateCalender();
                         mail(myUser.email, 1);
-
-
                     }
                 })
             }
-
-
-
-
 
             /////////////////////////////////////////////
 
@@ -1052,7 +966,7 @@ module.exports.postpolls = (req, res, next) => {
                     console.log("Error on deleting from Polls");
                 }
                 else {
-                    console.log("Deleting from polls Successfull")
+                    //console.log("Deleting from polls Successfull")
                 }
             });
 
@@ -1069,7 +983,7 @@ module.exports.postpolls = (req, res, next) => {
                 .then(Poll => {
                     if (!Poll) { return res.status(404).end(); }
                     else {
-                        console.log("poll buldu");
+                        //console.logconsole.log("poll buldu");
                     }
                 })
                 .catch(err => next(err));
@@ -1087,13 +1001,13 @@ module.exports.postpolls = (req, res, next) => {
 
 module.exports.getmeetings = (req, res, next) => {
 
-    console.log("Get Meetings")
+   
 
     async function main() {
-        console.log(req.user.meeting);
+      
         meetingsArr = [];
         if (!req.user.meeting) {
-            console.log("yeni user meeting");
+            
             meetingsArr.push("");
            
             res.render('meet', { data: { meetingsArr: JSON.stringify(meetingsArr) } });
@@ -1103,42 +1017,139 @@ module.exports.getmeetings = (req, res, next) => {
         userMeeting = JSON.parse(req.user.meeting);
         userMeetings = userMeeting.meeting;
 
-       
-
-
         for (meetingID of userMeetings) {
             //Her bir pollID string olarak alınıyo
             await Meeting.findOne({
                 _id: meetingID
             }).then(Meeting => {
                 if (Meeting) {
-                    console.log("Meeting found");
+                    //console.log("Meeting found");
                     meetingsArr.push(Meeting);
                     //idArr.push(pollID);
                 }
-
                 else {
-                    console.log("meeting not found")
+                    //console.log("meeting not found")
                 }
             }).catch(err => console.log(err));
         }
 
-        console.log(meetingsArr);
-
-
-
-        console.log("kokoretto");
-
-        // for (item of meetingsArr) {
-        //     item.meetings = JSON.parse(item.meetings);
-        // }
-
-        console.log(meetingsArr[0])
-
-        console.log(typeof (meetingsArr[0]));
 
         res.render('meet', { data: { meetingsArr: JSON.stringify(meetingsArr) } });
     }
+
+    main();
+
+};
+
+module.exports.getHosted = (req, res, next) => {
+    async function main() {
+        hostedMeetingsArr=[];
+        hostedPollsArr=[];
+        hostedIdArr=[];
+        
+        // Getting meetings
+        meetingsArr = [];
+        userMeeting = JSON.parse(req.user.meeting);
+        userMeetings = userMeeting.meeting;
+        for (meetingID of userMeetings) {
+            //Her bir pollID string olarak alınıyo
+            await Meeting.findOne({
+                _id: meetingID
+            }).then(Meeting => {
+                if (Meeting) {
+                    //console.log("Meeting found");
+                    meetingsArr.push(Meeting);
+                    //idArr.push(pollID);
+                }
+                else {
+                    //console.log("meeting not found")
+                }
+            }).catch(err => console.log(err));
+        }
+
+        for (item of meetingsArr){
+            if(req.user.email == item.host)
+                hostedMeetingsArr.push(item);
+        }
+        //Getting Polls
+        pollsArr = [];
+        idArr = [];
+        userPoll = JSON.parse(req.user.poll);
+        userPolls = userPoll.poll;
+        for (pollID of userPolls) {
+            //Her bir pollID string olarak alınıyo
+            await Poll.findOne({
+                _id: pollID
+            }).then(Poll => {
+                if (Poll) {
+                    //console.log("poll found");
+                    pollsArr.push(Poll);
+                    idArr.push(pollID);
+                }
+
+                else {
+                    //console.log("poll not found")
+                }
+            }).catch(err => console.log(err));
+        }
+
+        for (item of pollsArr) {
+            item.polls = JSON.parse(item.polls);
+        }
+
+        for(let i =0; i< pollsArr.length; i++){
+            if(req.user.email == pollsArr[i].polls[0].host){
+                hostedPollsArr.push(pollsArr[i])
+                hostedIdArr.push(idArr[i]);
+            }
+        }
+        
+        // console.log(hostedMeetingsArr);
+        // console.log(hostedPollsArr);
+        // console.log(hostedIdArr);
+        
+
+        // userCalender = JSON.parse(req.user.calender)
+        // userCalender.push({
+        //     start_date: '2020-05-31 07:40',
+        //     end_date: '2020-05-31 09:30',
+        //     text: 'New event'})
+        //console.log(userCalender);
+        
+        
+
+        async function updateTemp(){
+            var newCalender;
+            if(req.user.calender == "" || req.user.calender == "[]"){
+                newCalender= [];
+                newCalender.push({
+                        start_date: '2020-05-31 07:40',
+                        end_date: '2020-05-31 09:30',
+                        text: 'New event'})
+            }
+            else{
+                userCalender = JSON.parse(req.user.calender);
+                userCalender.push({
+                    start_date: '2020-05-31 05:40',
+                    end_date: '2020-05-31 07:30',
+                    text: 'New event'});
+                newCalender= userCalender;
+
+            }
+            let updatedValues = {
+                calender: JSON.stringify(newCalender)
+            };
+
+            await User.updateOne({email: req.user.email}, updatedValues)
+                .then(User => {
+                    if (!User) { return res.status(404).end(); }
+                })
+                .catch(err => next(err));
+        }
+
+        updateTemp();
+        
+        res.render('hosted', { data: { pollsArr: JSON.stringify(hostedPollsArr), meetingsArr: JSON.stringify(hostedMeetingsArr) , idArr: hostedIdArr, user:req.user } });    }
 
     main();
 

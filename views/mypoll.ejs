@@ -7,36 +7,44 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <link href="https://fonts.googleapis.com/css?family=Quicksand:300,400,500,700,900" rel="stylesheet">
-    <link rel="stylesheet" href="/Pollsandmeetings/materialize/css/materializ.css">
-
     <link rel="stylesheet" href="/main_page/fonts/icomoon/style.css">
 
     <link rel="stylesheet" href="/main_page/css/bootstrap.min.css">
-    
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/main_page/css/jquery-ui.css">
+    <link rel="stylesheet" href="/main_page/css/owl.carousel.min.css">
+    <link rel="stylesheet" href="/main_page/css/owl.theme.default.min.css">
+    <link rel="stylesheet" href="/main_page/css/owl.theme.default.min.css">
 
+    <link rel="stylesheet" href="/main_page/css/jquery.fancybox.min.css">
 
-    <link rel="stylesheet" href="/main_page/fonts/flaticon/font/flaticon.css"> 
+    <link rel="stylesheet" href="/main_page/css/bootstrap-datepicker.css">
+
+    <link rel="stylesheet" href="/main_page/fonts/flaticon/font/flaticon.css">
 
     <link rel="stylesheet" href="/main_page/css/aos.css">
 
     <link rel="stylesheet" href="/main_page/css/style.css">
+    <link rel="stylesheet" href="/login_page/css/main.css">
     <link rel="stylesheet" href="/stylee.css">
     
-    <link rel="stylesheet" type="text/css" href="/Makemeet/css/util.css">
-    <link rel="stylesheet" type="text/css" href="/Makemeet/css/main.css">
-    <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
-    <script src="https://kit.fontawesome.com/a81368914c.js"></script>
+    <link rel="stylesheet" href="/Pollsandmeetings/materialize/css/materializ.css">
 
-    <script src="/Pollsandmeetings/meeting.js"></script>
-    <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
-
+    <script src="/cal/codebase/dhtmlxscheduler.js?v=5.3.6" charset="utf-8"></script>
+    <script src="/cal/codebase/ext/dhtmlxscheduler_multiselect.js?v=5.3.6"></script>	
+    <script src="/cal/codebase/ext/dhtmlxscheduler_editors.js?v=5.3.6"></script>
+    <script src="/cal/codebase/ext/dhtmlxscheduler_recurring.js?v=5.3.6" charset="utf-8"></script>
+    <link rel="stylesheet" href="/cal/codebase/dhtmlxscheduler_material.css?111" type="text/css" charset="utf-8">
   
-       
+    <!-- Quick info extension -->
+    <script src="/cal/codebase/script.js"></script>
+    <script src="/calende copy.js"></script>
+  
+    <script src="/cal/codebase/ext/dhtmlxscheduler_readonly.js" charset="utf-8"></script>
+    
   </head>
 
 
-  <body data-spy="scroll" data-target=".site-navbar-target" data-offset="300" style="z-index: -1;">
+  <body data-spy="scroll" data-target=".site-navbar-target" data-offset="300">
   
  
     <header class="site-navbar py-4 bg-white site-navbar-target" role="banner">
@@ -68,7 +76,7 @@
                   </ul>
                 </li>
                 <li><a href="/#contact-section" class="nav-link">Contact</a></li>
-                <li><a class="input1001" style="width: 110%;"  href="/profile/addcalender">Create a Meeting</a></li>
+                <li><a class="input1001" style="width: 110%;"  href="/profile/addcalender">Create a Calendar</a></li>
 
             <li><a class="input1001" style="width: 110%;"  href="/logout">Logout</a></li>
               </ul>
@@ -85,108 +93,48 @@
 
       
     </header>
-  </body>
 
-
-    <style>
-       .contact100{
-              font-family: Raleway-Bold;
-        font-size: 15px;
-        line-height: 1.5;
-        color: rgb(0, 0, 0);
-        text-transform: uppercase;
-        
-
-        width: 80%;
-        height: 20%;
-        border-radius: 3px;
-        background: #ffffff;
-        display: -webkit-box;
-        display: -webkit-flex;
-        display: -moz-box;
-        display: -ms-flexbox;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        padding: 0px;
-
-        -webkit-transition: all 0.4s;
-        -o-transition: all 0.4s;
-        -moz-transition: all 0.4s;
-        transition: all 0.4s;
-       }
-
-       .contact100:hover{
-        background: #252525;
-        color:#fff;
-        
-       }
-
-       .contact1001{
-              font-family: Raleway-Bold;
-        font-size: 15px;
-        line-height: 1.5;
-        color: rgb(0, 0, 0);
-        text-transform: uppercase;
-        
-
-        width: 80%;
-        height: 20%;
-        border-radius: 3px;
-        background: rgb(214, 214, 214);
-        display: -webkit-box;
-        display: -webkit-flex;
-        display: -moz-box;
-        display: -ms-flexbox;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        padding: 0px;
-
-        -webkit-transition: all 0.4s;
-        -o-transition: all 0.4s;
-        -moz-transition: all 0.4s;
-        transition: all 0.4s;
-       }
-
-       .contact1001:hover{
-        background: #252525;
-        color:#fff;
-        
-       }    
-      </style>
-  
+    
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="/cal/codebase/ext/dhtmlxscheduler_serialize.js"></script>
+    
  
-    <div style="padding-left: 20%; padding-right: 20%;" id="meetings">
-     <!-- <ul class="collapsible expandable">
-    <li>
-      <div class="collapsible-header"><i class="material-icons">filter_drama</i>First</div>
-      <div class="collapsible-body">
-        <h5>Jİmjombob</h5>
-        <button class="contact100">Button</button>
-      </div>
-    </li>
-    <li>
-      <div class="collapsible-header"><i class="material-icons">place</i>Second</div>
-      <div class="collapsible-body"><span>Lorem ipsum dolor sit amet.</span></div>
-    </li>
-    <li>
-      <div class="collapsible-header"><i class="material-icons">whatshot</i>Third</div>
-      <div class="collapsible-body"><span>Lorem ipsum dolor sit amet.</span></div>
-    </li>
-  </ul>  -->
-    </div>
-  
+    
 
+      
+    <body>
+      <div style="float: left; margin-left: 5%;" >
+        <div id="pollshere" ></div>
+
+
+      </div>
+      <div id="scheduler_here" class="dhx_cal_container" style='width:70%; float: right; height:70%'>
+        
+        <div class="dhx_cal_navline">
+          <div class="dhx_cal_prev_button">&nbsp;</div>
+          <div class="dhx_cal_next_button">&nbsp;</div>
+          <div class="dhx_cal_today_button"></div>
+          <div class="dhx_cal_date"></div>
+          <div class="dhx_cal_tab" name="day_tab" style="right:204px;"></div>
+          <div class="dhx_cal_tab" name="week_tab" style="right:140px;"></div>
+          <div class="dhx_cal_tab" name="month_tab" style="right:76px;"></div>
+        </div>
+        <div class="dhx_cal_header">
+        </div>
+        <div class="dhx_cal_data">
+        </div>
+      </div>
+    </body>
+</div>
    
 
+   
     <body>
+        
       
       <!-- partial:index.partial.html -->
       <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
       <meta charset="UTF-8">
-
   <link rel="stylesheet" href="/profile/naavbar.css">
       <nav class="nav">
         <a href="/profile" class="nav__link" style="border-top-left-radius: 7px; border-top-right-radius: 7px;">
@@ -202,11 +150,11 @@
           <span class="nav__text">Calender</span>
         </a>
         
-        <a href="/profile/meetings" class="nav__link nav__link--active" style="border-top-left-radius: 7px; border-top-right-radius: 7px;">
+        <a href="/profile/meetings" class="nav__link" style="border-top-left-radius: 7px; border-top-right-radius: 7px;">
           <i class="material-icons nav__icon">devices</i>
           <span class="nav__text">Meetings</span>
         </a>
-        <a href="/profile/polls" class="nav__link" style="border-top-left-radius: 7px; border-top-right-radius: 7px;">
+        <a href="/profile/polls" class="nav__link  nav__link--active" style="border-top-left-radius: 7px; border-top-right-radius: 7px;">
           <svg class="bi bi-file-post" width="1.7em" height="1.7em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
             <path fill-rule="evenodd" d="M4 1h8a2 2 0 012 2v10a2 2 0 01-2 2H4a2 2 0 01-2-2V3a2 2 0 012-2zm0 1a1 1 0 00-1 1v10a1 1 0 001 1h8a1 1 0 001-1V3a1 1 0 00-1-1H4z" clip-rule="evenodd"/>
             <path d="M4 5.5a.5.5 0 01.5-.5h7a.5.5 0 01.5.5v7a.5.5 0 01-.5.5h-7a.5.5 0 01-.5-.5v-7z"/>
@@ -220,12 +168,16 @@
         </a>
       </nav>
       <!-- partial -->
-        
+      
       </body>
 
   </div>
     
+    
     <footer class="site-footer">
+      <input name="email" type="text" style="opacity: 0;" placeholder="<%= user.name %>">
+      <input name="calender" type="text" style="opacity: 0;" placeholder="<%= user.name %>">
+    </form>
       <div class="container">
         <div class="row">
           <div class="col-md-9">
@@ -295,15 +247,15 @@
   <script src="/main_page/js/aos.js"></script>
   <script src="/main_page/js/jquery.fancybox.min.js"></script>
   <script src="/main_page/js/jquery.sticky.js"></script>
-  <script type="text/javascript" src="/Pollsandmeetings/materialize/js/materialize.js"></script>
 
-
+ 
 
   <script src="/main_page/js/main.js"></script>
-  <script id="meeto" meetingsArr="<%= data.meetingsArr %>" src="/Pollsandmeetings/meeting.js"></script>
-
+  <script type="text/javascript" src="/Pollsandmeetings/materialize/js/materialize.js"></script>
+  <script src="/profile.js"></script>
+  <script src="/mypol.js"></script>
   
 
 
- 
+  </body>
 </html>

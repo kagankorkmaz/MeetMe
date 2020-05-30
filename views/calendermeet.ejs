@@ -12,6 +12,8 @@
     <link rel="stylesheet" href="/main_page/css/bootstrap.min.css">
     
 
+    <link rel="stylesheet" href="/Pollsandmeetings/materialize/css/materialize.css">
+    <link rel="stylesheet" href="/Pollsandmeetings/materialize/css/materializ.css">
 
 
     <link rel="stylesheet" href="/main_page/fonts/flaticon/font/flaticon.css">
@@ -23,9 +25,10 @@
     
     <link rel="stylesheet" type="text/css" href="/Makemeet/css/util.css">
     <link rel="stylesheet" type="text/css" href="/Makemeet/css/main.css">
-    <link rel="stylesheet" href="/path/to/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
     <script src="https://kit.fontawesome.com/a81368914c.js"></script>
-    <link rel="stylesheet" href="/path/to/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
+    <!-- <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBrfskxC-brmWFedSnCdrbLuiuurP8Vvsk&libraries=places"></script> -->
 
   
        
@@ -48,7 +51,7 @@
           <div class="col-12 col-md-10 d-none d-xl-block">
             <nav class="site-navigation position-relative text-right" role="navigation">
 
-              <ul class="site-menu main-menu js-clone-nav mr-auto d-none d-lg-block">
+              <ul class="site-menu main-menu js-clone-nav mr-auto d-none d-lg-block" style="box-shadow: none; block-size: 0;">
                 <li><a href="/#home-section" class="nav-link">Home</a></li>
                 <li><a href="/#work-section" class="nav-link">Mission</a></li>
                 <li>
@@ -64,8 +67,9 @@
                   </ul>
                 </li>
                 <li><a href="/#contact-section" class="nav-link">Contact</a></li>
-                <li><a class="input1001" style="width: 110%;"  href="/logout">Logout</a></li>
-             
+                <!-- <li><a class="input1001" style="width: 110%;"  href="profile/addcalender">Create a Meeting</a></li> -->
+
+            <li><a class="input1001" style="width: 110%;"  href="/logout">Logout</a></li>
               </ul>
               
             </nav>
@@ -152,37 +156,70 @@
       </style>
   
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-
+ 
        <body>
-
+      
        <div style="padding-left: 30%; padding-right: 30%; padding-top: 100px; padding-bottom: 100px; background-color: rgb(255, 255, 255); ">
          
-           <div style="font-family: Raleway-Bold; padding-bottom: 10px;">MEETING TITLE</div>
-           <div class="wrap-input100 validate-input m-b-16">
           
-             <input class="input100" type="text" id="title" placeholder="Title" style="background-color: rgb(214, 214, 214); border: none;">
-             <span class="focus-input100"></span>
-             <span class="symbol-input100">
-                <span class="lnr lnr-envelope"></span>
-             </span>        
-           </div>
-
-           <div style="font-family: Raleway-Bold; padding-bottom: 10px;padding-top: 10px ">MEETING  DESCRIPTON</div>
-           <div class="wrap-input100 validate-input m-b-16">          
-           <input class="input100" type="text" id="description" placeholder="Description" style="background-color: rgb(214, 214, 214); border: none;">
-           <span class="focus-input100"></span>
-           <span class="symbol-input100">
-              <span class="lnr lnr-envelope"></span>
-            </span>        
+            <div class="input-field col s12">
+              <i class="material-icons prefix">title</i>
+              <input id="title" type="text">
+              <label for="title">Meeting Title*</label>
             </div>
 
+          
 
-            <div style="font-family: Raleway-Bold; padding-bottom: 10px;padding-top: 10px ">ATTENDEES</div>
-            <div class="inputDiv" style="padding-bottom: 50px;">
-            <input type="text" class="inputt input100" id="emails" style="background-color: rgb(214, 214, 214); border: none; float: left; width: 90%; z-index: -1;" placeholder="Enter Emails">
-            <li><button class="contact1001"  id='add' style="float: right; width: 10%; height: 55px;"> <span>ADD</span></button></li>
+            <div class="input-field col s12">
+              <i class="material-icons prefix">subtitles</i>
+              <input id="description" type="text">
+              <label for="description">Meeting Description</label>
+            </div>
+
+            <div class="input-field col s12">            
+            <p>
+              <label>
+                <input type="checkbox" id="recurring" onclick="recurring(this)"/>
+                <span>Recurring</span>
+              </label>
+            </p>
+            </div>
             
+            <div class="input-field col s12" id="recurrplace">            
             </div>
+
+
+            
+            <div class="input-field col s12" style="margin-top: 25px; margin-bottom: 20px;">
+              <i class="material-icons prefix">view_list</i>
+              <select id="select1">                
+                <option value="0" disabled selected>Choose your option</option>
+                <option value="1">Offline</option>
+                <option value="2">Online</option>
+              </select>
+              <label>Choose a Medium</label>
+            </div>
+            
+            <div id="choicestuff">
+               <!-- <i class="material-icons prefix">location_on</i>
+              <input id="searchTextField" type="text" size="50">  -->
+            </div>
+
+            <div class="input-field col s12">
+              <i class="material-icons prefix">account_circle</i>
+              <input id="emails" type="text">
+              <label for="emails">Enter Emails*</label>
+            </div>
+
+            
+            <a class="waves-effect waves-light btn-small" style="float:right; color:white" id="add"><i class="material-icons right">add</i>ADD</a>
+
+            
+
+
+
+          
+
             
             <div id="cont"> 
             <!--
@@ -203,9 +240,8 @@
    
 
     <body>
-      <!-- <li><a class="contact100" href="#" id='nextstp' style="width: 100%; height: 100px; font-size: larger; padding-bottom: 0px;"> <span>SCHEDULE</span></a></li> -->
-      <li><button class="contact100"  id='nextstp' style="width: 100%; height: 100px; font-size: larger; padding-bottom: 0px;"> <span>SCHEDULE</span></button></li>
-
+      <li><button class="contact100" id='nextstp' style="width: 100%; height: 100px; font-size: larger; padding-bottom: 0px;"> <span>SCHEDULE</span></button></li>
+      
       <!-- partial:index.partial.html -->
       <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
       <meta charset="UTF-8">
@@ -268,10 +304,10 @@
               </div>
               <div class="col-md-3">
                 <h2 class="footer-heading mb-4">Follow Us</h2>
-                <a href="comingsoon.html" class="pl-0 pr-3"><span class="icon-facebook"></span></a>
-                <a href="comingsoon.html" class="pl-3 pr-3"><span class="icon-twitter"></span></a>
-                <a href="comingsoon.html" class="pl-3 pr-3"><span class="icon-instagram"></span></a>
-                <a href="comingsoon.html" class="pl-3 pr-3"><span class="icon-linkedin"></span></a>
+                <a href="/comingsoon.html" class="pl-0 pr-3"><span class="icon-facebook"></span></a>
+                <a href="/comingsoon.html" class="pl-3 pr-3"><span class="icon-twitter"></span></a>
+                <a href="/comingsoon.html" class="pl-3 pr-3"><span class="icon-instagram"></span></a>
+                <a href="/comingsoon.html" class="pl-3 pr-3"><span class="icon-linkedin"></span></a>
               </div>
             </div>
           </div>
@@ -319,22 +355,13 @@
   <script src="/main_page/js/jquery.fancybox.min.js"></script>
   <script src="/main_page/js/jquery.sticky.js"></script>
 
-  <script src="/main_page/js/typed.js"></script>
-            <script>
-            var typed = new Typed('.typed-words', {
-            strings: [" Meetings"," Events"," Life"],
-            typeSpeed: 80,
-            backSpeed: 80,
-            backDelay: 4000,
-            startDelay: 1000,
-            loop: true,
-            showCursor: true
-            });
-            </script>
+
 
   <script src="/main_page/js/main.js"></script>
   <script type="text/javascript" src="/calenmeet.js" ></script>
-
+  <script type="text/javascript" src="/Pollsandmeetings/materialize/js/materialize.js"></script>
+   
+  <script id="calenmeet" data-name="<%= user.email %>" data-name2="<%= user.calender %>" src="/calenmeet.js"></script>
   
 
 

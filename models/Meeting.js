@@ -14,7 +14,32 @@ const meetingSchema = new Schema({
         default:''
     },
 
-    attendees:{
+    mails:{
+        type: JSON,
+        default:''
+    },
+    
+    medium:{
+        type: JSON,
+        default:''
+    },
+
+    location:{
+        type: JSON,
+        default:''
+    },
+
+    link:{
+        type: JSON,
+        default:''
+    },
+
+    recurrance:{
+        type: JSON,
+        default:''
+    },
+
+    host:{
         type: JSON,
         default:''
     },

@@ -10,7 +10,7 @@ passport.use(
         //Öyle bir email varsa bize user içinde gelecek.
         console.log(email,pass);
         User.findOne({ email }, (err, user) => {
-            console.log("içerdeyiz");
+            
             if (err) return done(err, null, "There is an error(local.js)");
 
             if (!user) {
@@ -20,7 +20,6 @@ passport.use(
 
             if (pass == user.pass) {
                 // req.user
-                console.log("succesfully logged in");
                 return done(null, user, "Succesfully logged in:)")
 
             }

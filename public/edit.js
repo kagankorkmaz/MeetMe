@@ -1,8 +1,10 @@
 
 var inputt = document.getElementById("emails");
+var input;
       
 
 var mails =[];
+var type = "";
 var index;
 var jim = false;
 
@@ -122,67 +124,7 @@ function initialize() {
 
 
 
-function moveon(){  // Bu fonksiyon da dataları toplaman lazım !!
-  
-  var mailler = mails; // tüm mailler
-  var Title = document.getElementById("title").value; // Meeting Title
-  var desc = document.getElementById("description").value; // Meeting Description
-  var recur = document.getElementById("recurring"); // Meeting Description
-  var location; // location of event
-  var link;  // link if online
-  var email = document.getElementById("calenmeet").getAttribute("data-name"); 
-  console.log(email);
-  var medium;
 
-  if(!Title){alert("Cannot Submit without title"); return;}
-  if(!desc){alert("Description is mandatory"); return;}
-  if($('#select1').val() == "1"){ location = document.getElementById("searchTextField").value; link = ""; medium="Offline"}
-  else if($('#select1').val() == "2"){ location = document.getElementById("autocomplete-input").value; link = document.getElementById("link").value; medium="Online";}
-  else{alert("Please Choose a meeting Medium");  return;}
-
-  if(recur.checked){
-    if(document.getElementById("DailyDaily").checked){recur = "daily";}
-    else if(document.getElementById("WeeklyWeekly").checked){recur = "weekly";}
-    else if(document.getElementById("MonthlyMonthly").checked){recur = "monthly";}
-    else{recur = "yearly";}
-  }
-  else{
-    recur = "single";
-  }
-  if(mails.length < 1){alert("You need AT LEAST one attendee"); return;}
-
-
-    let form = document.createElement('form');
-    form.method= 'POST'
-    var stuff2 = document.createElement("input"); 
-    stuff2.name = 'myData';
-
-    stuff = { 
-              MTitle: Title , 
-              MDesc: desc, 
-              Mails: mails,
-              medium:medium,
-              location: location, 
-              link: link,
-              recurance: recur,
-              host: email,
-              dummyBool:"1"
-             }
-
-    stuff2.value=JSON.stringify(stuff);
-    
-    console.log(stuff);
-    form.appendChild(stuff2);
-    
-    cot.appendChild(form);
-
-    form.submit();
-    
-
-  
-
-  
-}
 
 function createradio(span,parent)
 {
@@ -238,11 +180,68 @@ function recurring(checkbox){
 
 function loadScript() {
   var script = document.createElement("script");
-  console.log("success");
   script.id = "googleapi";
   script.src = "https://maps.googleapis.com/maps/api/js?key=AIzaSyBrfskxC-brmWFedSnCdrbLuiuurP8Vvsk&libraries=places";
   document.body.appendChild(script);
   //google.maps.event.addDomListener(window, 'load', initialize);
+
+}
+
+function initializer(data) {
+
+  var dtitle = data.title; //meeting title
+  var ddesc = data.description; //meeting description
+  var drec = data.recurrence; // meeting recurrance
+  var dmed = data.medium; //meeting meedium
+  var dlink = data.link; //meeting link
+  var dloc = data.location; //meeting Location
+  var stt = data.start_date; // meeting start date
+  var endd = data.end_date; // meeting end Date
+  var dmails = data.mails; // meeting attnedee mails
+
+  var title = document.getElementById("title");
+  title.value = dtitle;
+
+  var desc = document.getElementById("description");
+  desc.value = ddesc;  
+
+  var recurrence = document.getElementById("recurring");
+  if(drec  != 'single'){
+    recurrence.click();
+    
+    if(drec == "daily"){document.getElementById("DailyDaily").click()}
+    else if(drec == "weekly"){document.getElementById("WeeklyWeekly").click();}
+    else if(drec == "monthly"){document.getElementById("MonthlyMonthly").click();}
+    else{document.getElementById("YearlyYearly").click();}
+
+  }
+
+  if(dmed == "Offline")
+  {
+    $("#select1").val(1).trigger("change"); 
+    $('#searchTextField').val(dloc); 
+  }
+  else
+  {
+    $("#select1").val(2).trigger("change");
+    $('#autocomplete-input').val(dloc);
+    $('#link').val(dlink);
+  }
+
+
+for (var i=0;i<dmails.length;i++)
+{
+  new item(dmails[i]);
+  mails.push(dmails[i]);
+
+}
+  
+  
+
+
+
+
+  
 
 }
 
@@ -255,6 +254,38 @@ document.addEventListener('DOMContentLoaded', function() {
   var elems = document.querySelectorAll('select');
   var options = document.querySelectorAll('option');
   var instances = M.FormSelect.init(elems, options);
+
+  var data =  {"title":"This is a meeting",
+  "description":"its desc",
+  "mails":["mails","mm","jjj","kjhkh","ll","lkjoıj","klkj"],
+  "medium":"Offline",
+  "location":"Antalya",
+  "link": "",
+  "recurrence":"weekly",
+  "start_date":"2020-04-22 02:55",
+  "end_date":"2020-04-22 03:00",
+  "vote":5}
+
+  var data2 = {"title":"is a meeting",
+  "description":"its desc",
+  "mails":["mails","mm","jjj","kjhkh","ll","lkjoıj","klkj"],
+  "medium":"Online",
+  "location":"Discord",
+  "link": "url",
+  "recurrence":"weekly",
+  "start_date":"2020-04-22 02:55",
+  "end_date":"2020-04-22 03:00",
+  "vote":5}
+
+  var data3 = {polls: []};
+  data3.polls.push(data2);
+  data3.polls.push(data)
+  ;
+  input = window.localStorage.getItem("edit");
+  input = JSON.parse(input); // the input format
+  
+   window.localStorage.removeItem("edit");
+
   $("#select1").on('change', function() {
     
     console.log($(this).val());
@@ -295,6 +326,7 @@ document.addEventListener('DOMContentLoaded', function() {
       loc.appendChild(innput);
       placeit.appendChild(loc);
       loadScript();
+
 
     }
     else if(choice == "2")
@@ -371,16 +403,120 @@ document.addEventListener('DOMContentLoaded', function() {
       loc2.appendChild(laber2);
       placeit.appendChild(loc2);
 
+
+
     }
      
 
 
 });
 
+   if(input.type == "poll") // if the incoming message is a poll
+   {
+      type = "poll";
+      initializer(input.data.polls[0]);
+   }
+   else
+   {
+
+    type = "meeting";
+    initializer(input.data);
+  }
+
+
 
 
  
 });
 
+
+function moveon(){  // Bu fonksiyon da dataları toplaman lazım !!
+
+  var mailler = mails; // tüm mailler
+  var Title = document.getElementById("title").value; // Meeting Title
+  var desc = document.getElementById("description").value; // Meeting Description
+  var recur = document.getElementById("recurring"); // Meeting Description
+  var location; // location of event
+  var link;  // link if online
+  var email; // put users mail here
+  var medium;
+
+  if(!Title){alert("Cannot Submit without title"); return;}
+  if(!desc){alert("Description is mandatory"); return;}
+  if($('#select1').val() == "1"){ location = document.getElementById("searchTextField").value; link = ""; medium="Offline"}
+  else if($('#select1').val() == "2"){ location = document.getElementById("autocomplete-input").value; link = document.getElementById("link").value; medium="Online";}
+  else{alert("Please Choose a meeting Medium");  return;}
+
+  if(recur.checked){
+    if(document.getElementById("DailyDaily").checked){recur = "daily";}
+    else if(document.getElementById("WeeklyWeekly").checked){recur = "weekly";}
+    else if(document.getElementById("MonthlyMonthly").checked){recur = "monthly";}
+    else{recur = "yearly";}
+  }
+  else{
+    recur = "single";
+  }
+  if(mails.length < 1){alert("You need AT LEAST one attendee"); return;}
+
+
+    let form = document.createElement('form');
+    form.method= 'POST'
+    var stuff2 = document.createElement("input"); 
+    if(type == "poll"){
+
+      for (var i =0;i<input.data.polls.length;i++)
+      {
+       var  data = { 
+          title: Title , 
+          description: desc, 
+          mails: mails,
+          medium:medium,
+          location: location, 
+          link: link,
+          recurrence: recur,
+          host: email, 
+          start_date: input.data.polls[i].start_date,
+          end_date: input.data.polls[i].end_date
+      }
+
+      input.polls[i] = data;
+    
+    }
+         
+      stuff = {data:input,type:"poll"};
+
+  }
+    else {
+    
+    stuff = {data:{ 
+              title: Title , 
+              description: desc, 
+              mails: mails,
+              medium:medium,
+              location: location, 
+              link: link,
+              recurrence: recur,
+              host: email,
+              start_date: input.data.start_date,
+              end_date: input.data.end_date
+             },
+              type:type
+            }
+
+}
+    stuff2.value=stuff;
+    
+    console.log(stuff);
+    form.appendChild(stuff2);
+    
+    cot.appendChild(form);
+
+  //  form.submit();
+    
+
+  
+
+  
+}
 
 
