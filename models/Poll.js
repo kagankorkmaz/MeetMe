@@ -14,6 +14,11 @@ const pollSchema = new Schema({
         default:''
     },
 
+    created:{
+        type: String,
+        default:''
+    },
+
     polls:{
         type: JSON,
         default:''

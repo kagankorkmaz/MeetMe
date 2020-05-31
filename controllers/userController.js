@@ -797,7 +797,8 @@ module.exports.getpolls = (req, res, next) => {
         for (item of pollsArr) {
             item.polls = JSON.parse(item.polls);
         }
-        
+        console.log(JSON.stringify(pollsArr.polls));
+        console.log(pollsArr[0].polls[0]);
         res.render('poll', { data: { pollsArr: JSON.stringify(pollsArr), idArr: idArr, user:req.user } });
     }
 
@@ -869,18 +870,18 @@ module.exports.postpolls = (req, res, next) => {
                 vote: myData.polls[high].vote
             })
 
-            const newToCalender ={
-                start_date: myData.polls[high].start_date,
-                end_date: myData.polls[high].end_date,
-                title: myData.polls[high].title
-            }
-
-            
             await newMeeting.save().then(() => {
                 console.log("DB save meeting Succesful");
                 req.flash("flashSuccess", "Succesfully Registered");
 
             }).catch(err => console.log(err));
+
+            const newToCalender ={
+                start_date: myData.polls[high].start_date,
+                end_date: myData.polls[high].end_date,
+                title: myData.polls[high].title,
+                _id : newMeeting._id
+            }
 
             //////////////// ADD TO USER MEETİNGs ////////
 
@@ -1049,62 +1050,72 @@ module.exports.getHosted = (req, res, next) => {
         
         // Getting meetings
         meetingsArr = [];
-        userMeeting = JSON.parse(req.user.meeting);
-        userMeetings = userMeeting.meeting;
-        for (meetingID of userMeetings) {
-            //Her bir pollID string olarak alınıyo
-            await Meeting.findOne({
-                _id: meetingID
-            }).then(Meeting => {
-                if (Meeting) {
-                    //console.log("Meeting found");
-                    meetingsArr.push(Meeting);
-                    //idArr.push(pollID);
-                }
-                else {
-                    //console.log("meeting not found")
-                }
-            }).catch(err => console.log(err));
-        }
-
-        for (item of meetingsArr){
-            if(req.user.email == item.host)
-                hostedMeetingsArr.push(item);
-        }
-        //Getting Polls
-        pollsArr = [];
-        idArr = [];
-        userPoll = JSON.parse(req.user.poll);
-        userPolls = userPoll.poll;
-        for (pollID of userPolls) {
-            //Her bir pollID string olarak alınıyo
-            await Poll.findOne({
-                _id: pollID
-            }).then(Poll => {
-                if (Poll) {
-                    //console.log("poll found");
-                    pollsArr.push(Poll);
-                    idArr.push(pollID);
-                }
-
-                else {
-                    //console.log("poll not found")
-                }
-            }).catch(err => console.log(err));
-        }
-
-        for (item of pollsArr) {
-            item.polls = JSON.parse(item.polls);
-        }
-
-        for(let i =0; i< pollsArr.length; i++){
-            if(req.user.email == pollsArr[i].polls[0].host){
-                hostedPollsArr.push(pollsArr[i])
-                hostedIdArr.push(idArr[i]);
+        var userMeetings = null;
+        if(req.user.meeting != ""){
+            userMeeting = JSON.parse(req.user.meeting);
+            userMeetings = userMeeting.meeting;
+            for (meetingID of userMeetings) {
+                //Her bir pollID string olarak alınıyo
+                await Meeting.findOne({
+                    _id: meetingID
+                }).then(Meeting => {
+                    if (Meeting) {
+                        //console.log("Meeting found");
+                        meetingsArr.push(Meeting);
+                        //idArr.push(pollID);
+                    }
+                    else {
+                        //console.log("meeting not found")
+                    }
+                }).catch(err => console.log(err));
+            }
+    
+            for (item of meetingsArr){
+                if(req.user.email == item.host)
+                    hostedMeetingsArr.push(item);
             }
         }
         
-        // console.log(hostedMeetingsArr);
+        
+        
+        //Getting Polls
+        pollsArr = [];
+        idArr = [];
+        if(req.user.polls != ""){
+            userPoll = JSON.parse(req.user.poll);
+            userPolls = userPoll.poll;
+            for (pollID of userPolls) {
+                //Her bir pollID string olarak alınıyo
+                await Poll.findOne({
+                    _id: pollID
+                }).then(Poll => {
+                    if (Poll) {
+                        //console.log("poll found");
+                        pollsArr.push(Poll);
+                        idArr.push(pollID);
+                    }
+    
+                    else {
+                        //console.log("poll not found")
+                    }
+                }).catch(err => console.log(err));
+            }
+    
+            for (item of pollsArr) {
+                item.polls = JSON.parse(item.polls);
+            }
+    
+            for(let i =0; i< pollsArr.length; i++){
+                if(req.user.email == pollsArr[i].polls[0].host){
+                    hostedPollsArr.push(pollsArr[i])
+                    hostedIdArr.push(idArr[i]);
+                }
+            }
+        }
+        
+       
+        
+        console.log(hostedMeetingsArr);
         // console.log(hostedPollsArr);
         // console.log(hostedIdArr);
         
@@ -1118,39 +1129,338 @@ module.exports.getHosted = (req, res, next) => {
         
         
 
-        async function updateTemp(){
-            var newCalender;
-            if(req.user.calender == "" || req.user.calender == "[]"){
-                newCalender= [];
-                newCalender.push({
-                        start_date: '2020-05-31 07:40',
-                        end_date: '2020-05-31 09:30',
-                        text: 'New event'})
-            }
-            else{
-                userCalender = JSON.parse(req.user.calender);
-                userCalender.push({
-                    start_date: '2020-05-31 05:40',
-                    end_date: '2020-05-31 07:30',
-                    text: 'New event'});
-                newCalender= userCalender;
+        // async function updateTemp(){
+        //     var newCalender;
+        //     if(req.user.calender == "" || req.user.calender == "[]"){
+        //         newCalender= [];
+        //         newCalender.push({
+        //                 start_date: '2020-05-31 07:40',
+        //                 end_date: '2020-05-31 09:30',
+        //                 text: 'New event'})
+        //     }
+        //     else{
+        //         userCalender = JSON.parse(req.user.calender);
+        //         userCalender.push({
+        //             start_date: '2020-05-31 05:40',
+        //             end_date: '2020-05-31 07:30',
+        //             text: 'New event'});
+        //         newCalender= userCalender;
 
-            }
-            let updatedValues = {
-                calender: JSON.stringify(newCalender)
-            };
+        //     }
+        //     let updatedValues = {
+        //         calender: JSON.stringify(newCalender)
+        //     };
 
-            await User.updateOne({email: req.user.email}, updatedValues)
-                .then(User => {
-                    if (!User) { return res.status(404).end(); }
+        //     await User.updateOne({email: req.user.email}, updatedValues)
+        //         .then(User => {
+        //             if (!User) { return res.status(404).end(); }
+        //         })
+        //         .catch(err => next(err));
+        // }
+
+        // updateTemp();
+        
+        res.render('hosted', { data: { pollsArr: JSON.stringify(hostedPollsArr), meetingsArr: JSON.stringify(hostedMeetingsArr) , idArr: JSON.stringify(hostedIdArr), user:req.user } });    }
+
+    main();
+
+};
+
+module.exports.postHostedSingle1 = (req, res, next) => {
+    myDataBase = JSON.parse(req.body.myData);
+    
+    async function updateMeeting(id, updatedValues){
+        await Meeting.updateOne({_id: id}, updatedValues)
+            .then(Meet => {
+                if (!Meet) { return res.status(404).end(); }
+            })
+            .catch(err => next(err));
+    }
+    
+    async function updateUserCalender(id,updatedMeeting,mails){
+        
+        async function toUserCalender(user, updatedValues){
+            console.log('e')
+            console.log(updatedValues);
+            console.log(user);
+            await User.updateOne({email:user.email}, updatedValues)
+                .then(x => {
+                    if (!x) { return res.status(404).end(); }
                 })
                 .catch(err => next(err));
         }
 
-        updateTemp();
-        
-        res.render('hosted', { data: { pollsArr: JSON.stringify(hostedPollsArr), meetingsArr: JSON.stringify(hostedMeetingsArr) , idArr: hostedIdArr, user:req.user } });    }
+        ;
+        for(item of mails){
+            await User.findOne({
+                email: item
+            }).then(user =>{
+                if(user){
+                    
+                    userCalender = JSON.parse(user.calender);
+                    var updatedValues;
+                    for(let i=0; i<userCalender.length; i++){
+                        if( ("_id" in userCalender[i] && userCalender[i]._id == id)){
+                            console.log('d');
+                            console.log(userCalender[i]);
+                            updatedMeeting.id = id;
+                            userCalender[i]=updatedMeeting;
+                            updatedValues = {calender: JSON.stringify(userCalender)}
+                            console.log(updatedValues);
+                            
+                            // User.updateOne({email:user.email}, updatedValues)
+                            //     .then(x => {
+                            //         if (!x) { return res.status(404).end(); }
+                            //     })
+                            //     .catch(err => next(err));
+                        }
+                    }
+                    console.log(updatedValues);
+                    toUserCalender(user, updatedValues);
 
-    main();
+                }
+            }).catch(err => console.log(err));
+        }
+    }
+
+    async function main() {
+        myData = JSON.parse(req.body.myData);
+        console.log(myData);
+        console.log("AAAAAA");
+        console.log(myData.data.polls[0]);
+        var mails;
+        if(myData.type == "meeting"){
+            mails = myData.data.mails;
+        }
+        else{
+            // console.log(myData.data.polls[0]);
+            // console.log(typeof myData.data.polls);
+
+            mails = myData.data.polls[0].mails;
+        }
+
+        // console.log(mails);
+
+
+        // CALCULATING BUSY TIMES
+        const { google } = require('googleapis');
+        const { OAuth2 } = google.auth;
+        var userCalendars = [];
+
+        for (email of mails) {
+            await User.findOne({
+                email: email
+            }).then(user => {
+                if (user) {
+                    listEvent2(oAuth2Client, user.refreshToken, user);
+                }
+            }).catch(err => console.log(err));
+        }
+        for (email of mails) {
+            await User.findOne({
+                email: email
+            }).then(user => {
+                if (user) {
+                    //console.log(user.name);
+                    //console.log(user.calender);
+                    userCalendars.push(user.calender)
+                    //console.log(user.name);
+                    //console.log(user.calender);
+                }
+            }).catch(err => console.log(err));
+        }
+
+        var datesGMT = [];
+        var currEv = new Date()
+        var endEv = new Date();
+        var i, k;
+        for (k = 0; k < userCalendars.length; k++) {
+            var JSON_array = [];
+            // console.log(userCalendars[k]);
+            // console.log(typeof(userCalendars[k]));
+
+            // console.log(JSON.stringify(userCalendars[k]));
+            // console.log(typeof(JSON.stringify(userCalendars[k])));
+            // EDITED BY KK
+            if(JSON.stringify(userCalendars[k]) != "[]"){
+                // console.log("NOT empty calender");
+                var JSON_array = JSON.parse(userCalendars[k]);
+            }
+            //
+           
+            for (i = 0; i < JSON_array.length; i++) {
+                currEv = new Date(JSON_array[i].start_date);
+                if (datesGMT.map(Number).indexOf(+currEv) == -1) {
+                    datesGMT.push(currEv);
+                }
+                currEv = new Date(JSON_array[i].end_date);
+                if (datesGMT.map(Number).indexOf(+currEv) == -1) {
+                    datesGMT.push(currEv);
+                }
+                endEv = new Date(JSON_array[i].end_date);
+                endEv.setSeconds(endEv.getSeconds() + 1);
+                if (datesGMT.map(Number).indexOf(+endEv) == -1) {
+                    datesGMT.push(endEv);
+                }
+            }
+        }
+
+        var date_sort_asc = function (date1, date2) {
+            if (date1 > date2) return 1;
+            if (date1 < date2) return -1;
+            return 0;
+        };
+
+        var date_sort_desc = function (date1, date2) {
+            if (date1 > date2) return -1;
+            if (date1 < date2) return 1;
+            return 0;
+        };
+
+        datesGMT.sort(date_sort_asc);
+
+        var beginDayTime = new Date(datesGMT[0]);
+        beginDayTime.setHours(0);
+        beginDayTime.setMinutes(0);
+        beginDayTime.setSeconds(0);
+        datesGMT.unshift(beginDayTime);
+        var endDayTime = new Date(datesGMT[datesGMT.length - 1]);
+        endDayTime.setHours(23);
+        endDayTime.setMinutes(59);
+        endDayTime.setSeconds(59);
+        datesGMT.push(endDayTime);
+
+        console.log(datesGMT);
+
+        var dict = {};
+        var j;
+        for (j = 0; j < datesGMT.length; j++) {
+            dict[datesGMT[j]] = j;
+        }
+        //console.log(dict);
+
+        var arr = Array(userCalendars.length).fill(null).map(() => Array(datesGMT.length).fill(0));
+
+        for (k = 0; k < userCalendars.length; k++) {
+            //var JSON_array = JSON.parse(userCalendars[k]);
+            var JSON_array = [];
+            if(JSON.stringify(userCalendars[k]) != "[]"){
+                // console.log("NOT empty calender");
+                var JSON_array = JSON.parse(userCalendars[k]);
+            }
+            
+            for (i = 0; i < JSON_array.length; i++) {
+                for (j = dict[new Date(JSON_array[i].start_date)]; j < dict[new Date(JSON_array[i].end_date)] + 1; j++) {
+                    arr[k][j] = 1;
+                }
+                //console.log(dict[new Date(JSON_array.events[i].end_date)]);
+            }
+        }
+
+        //console.log(arr);
+        var busyTimeIndex = [];
+        var u;
+        for (i = 0; i < arr[0].length; i++) {
+            for (j = 0; j < arr.length; j++) {
+                if (arr[j][i] === 1) {
+                    busyTimeIndex.push(i);
+                    break;
+                }
+            }
+        }
+
+        //console.log(busyTimeIndex);
+
+        var busyTime = {};
+        var slots = [];
+        busyTime.slots = slots;
+
+        var count;
+        console.log('Busy time slots are:');
+        for (i = 0; i < busyTimeIndex.length - 1; i++) {
+
+            count = i;
+            while (busyTimeIndex.includes(busyTimeIndex[i] + 1)) {
+                i = i + 1;
+            }
+
+            console.log(datesGMT[busyTimeIndex[count]] + ' - ' + datesGMT[busyTimeIndex[i]])
+
+            var slot = {
+                "start_date": datesGMT[busyTimeIndex[count]],
+                "end_date": datesGMT[busyTimeIndex[i]]
+            }
+
+            busyTime.slots.push(slot);
+        }
+
+
+
+        //console.log(JSON.stringify(busyTime));
+        //console.log()
+        var fs = require('fs');
+        
+        console.log(JSON.stringify(busyTime.slots));
+
+
+            res.render("edit2", {data: {
+                 busyTimes: JSON.stringify(busyTime.slots),
+                 baseData: JSON.stringify(myData),
+                 user: req.user
+            }})
+    }
+    async function main2(){
+        console.log("Main2")
+        myData = JSON.parse(req.body.myData);
+        console.log(myData);
+
+       let id= myData.data._id;
+       delete myData.data._id;
+
+       
+       
+       updateMeeting(id, myData.data)
+       updateUserCalender(id, myData.data, myData.data.mails);
+
+
+    }
+
+    async function main3(){
+        myData = JSON.parse(req.body.myData);
+        console.log(myData);
+
+        async function main(){
+            let updatedValues= {
+                voterCount:myData.data.votercount,
+                voters: myData.data.voters,
+                created: myData.data.created,
+                polls: JSON.stringify(myData.data.polls)
+            }
+            console.log(updatedValues);
+            Poll.updateOne({_id: myData.data._id}, updatedValues)
+            .then(Poll => {
+                if (!Poll) { return res.status(404).end(); }
+                else {
+                    console.log("poll buldu");
+                }
+                res.redirect('/profile/hosted');
+            })
+            .catch(err => next(err));
+            
+        }
+
+        main();
+    }
+    
+    if(myDataBase.dummyBool == 1){
+        main();
+    }
+    else if(myDataBase.dummyBool == 2 && myDataBase.type == "meeting"){
+        main2();
+    }
+    else if(myDataBase.dummyBool == 2 && myDataBase.type == "poll"){
+        main3();
+    }
+    
 
 };

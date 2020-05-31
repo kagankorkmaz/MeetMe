@@ -51,11 +51,19 @@ router.get('/meetings', userController.getmeetings);
 
 router.get('/mypoll', (req,res) =>{
     res.render('mypoll', {user:req.user});
-} )
+} );
 
 router.post('/mypoll', userController.postpolls);
 
 router.get('/hosted', userController.getHosted);
+
+router.get('/hostedSingle', (req,res) =>{
+    res.render('edit', {user:req.user});
+} );
+
+router.post('/hostedSingle', userController.postHostedSingle1);
+
+
 
 
 module.exports = router;

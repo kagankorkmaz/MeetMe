@@ -283,7 +283,8 @@ document.addEventListener('DOMContentLoaded', function() {
   ;
   input = window.localStorage.getItem("edit");
   input = JSON.parse(input); // the input format
-  
+  console.log(input);
+  console.log(input.data.polls[0].host);
    window.localStorage.removeItem("edit");
 
   $("#select1").on('change', function() {
@@ -438,8 +439,9 @@ function moveon(){  // Bu fonksiyon da dataları toplaman lazım !!
   var recur = document.getElementById("recurring"); // Meeting Description
   var location; // location of event
   var link;  // link if online
-  var email; // put users mail here
+  var email = input.data.host; // put users mail here
   var medium;
+  var _id = input.data._id;
 
   if(!Title){alert("Cannot Submit without title"); return;}
   if(!desc){alert("Description is mandatory"); return;}
@@ -474,16 +476,19 @@ function moveon(){  // Bu fonksiyon da dataları toplaman lazım !!
           location: location, 
           link: link,
           recurrence: recur,
-          host: email, 
+          host: input.data.polls[0].host, 
           start_date: input.data.polls[i].start_date,
-          end_date: input.data.polls[i].end_date
+          end_date: input.data.polls[i].end_date,
+          
       }
 
-      input.polls[i] = data;
+      input.data.polls[i] = data;
     
     }
          
-      stuff = {data:input,type:"poll"};
+      stuff = input;
+      stuff.dummyBool = 1;
+      console.log(stuff);
 
   }
     else {
@@ -498,20 +503,23 @@ function moveon(){  // Bu fonksiyon da dataları toplaman lazım !!
               recurrence: recur,
               host: email,
               start_date: input.data.start_date,
-              end_date: input.data.end_date
+              end_date: input.data.end_date,
+              _id : _id,
+              vote: input.data.vote
              },
-              type:type
+              type:type,
+              dummyBool: 1
             }
 
 }
-    stuff2.value=stuff;
-    
+    stuff2.value=JSON.stringify(stuff);
+    stuff2.name= "myData"
     console.log(stuff);
     form.appendChild(stuff2);
     
     cot.appendChild(form);
 
-  //  form.submit();
+    form.submit();
     
 
   

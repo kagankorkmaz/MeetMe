@@ -215,9 +215,11 @@ class meet{
           // console.log(poll);
           // formplace.appendChild(form);
           // //form.submit();
+          
           var output = {data:poll, type:"meeting"};
+          console.log(output);
           window.localStorage.setItem("edit",JSON.stringify(output));
-          document.location.href = "edit.html";
+          document.location.href = "/profile/hostedSingle";
         }
 
 }
@@ -294,7 +296,7 @@ class pend{
 
 
   let meddata = document.createElement("p");
-  if(poll.location)
+  if(poll.polls[0].location)
   {
   meddata.innerHTML = poll.polls[0].location;
   }
@@ -316,7 +318,7 @@ class pend{
 
 
   let linka = document.createElement("p");
-  if(poll.link)
+  if(poll.polls[0].link)
   {
      linka.innerHTML = poll.polls[0].link;
   }
@@ -567,7 +569,7 @@ edit(poll)
 
   var output = {data:poll, type:"poll"};
   window.localStorage.setItem("edit",JSON.stringify(output));
-  document.location.href = "edit.html";
+  document.location.href = "/profile/hostedSingle";
   
 }
 
@@ -611,48 +613,61 @@ function myFunction() {
 
 window.addEventListener("DOMContentLoaded",function() {
 
- var data =[  // cheduled meetings go here
-   {"title":"This is a meeting",
- "description":"its desc",
- "mails":["mails","mm","jjj","kjhkh","ll","lkjoıj","klkj"],
- "medium":"Offline",
- "location":"Antalya",
- "link": "",
- "recurrence":"single",
- "start_date":"2020-04-22 02:55",
- "end_date":"2020-04-22 03:00",
- "vote":5},
+  var pollsArr = document.getElementById("hosted").getAttribute("pollsArr");
+  var idArr = document.getElementById("hosted").getAttribute("idArr");
+  var meetingsArr = document.getElementById("hosted").getAttribute("meetingsArr");
+  var myUser = document.getElementById("hosted").getAttribute("user");
 
- {"title":"is a meeting",
- "description":"its desc",
- "mails":["mails","mm","jjj","kjhkh","ll","lkjoıj","klkj"],
- "medium":"Online",
- "location":"Discord",
- "link": "url",
- "recurrence":"weekly",
- "start_date":"2020-04-22 02:55",
- "end_date":"2020-04-22 03:00",
- "vote":5},
- {"title":"is a meeting",
- "description":"its desc",
- "mails":["mails","mm","jjj","kjhkh","ll","lkjoıj","klkj"],
- "medium":"Online",
- "location":"",
- "link": "",
- "recurrence":"single",
- "start_date":"2020-04-22 02:55",
- "end_date":"2020-04-22 03:00",
- "vote":5}
+  console.log(JSON.parse(meetingsArr)[0]);
+  console.log(JSON.parse(pollsArr));
+  console.log(JSON.parse(idArr));
 
-]
+  console.log(typeof JSON.parse(pollsArr)[0])
+
+//  var data =[  // cheduled meetings go here
+//    {"title":"This is a meeting",
+//  "description":"its desc",
+//  "mails":["mails","mm","jjj","kjhkh","ll","lkjoıj","klkj"],
+//  "medium":"Offline",
+//  "location":"Antalya",
+//  "link": "",
+//  "recurrence":"single",
+//  "start_date":"2020-04-22 02:55",
+//  "end_date":"2020-04-22 03:00",
+//  "vote":5},
+
+//  {"title":"is a meeting",
+//  "description":"its desc",
+//  "mails":["mails","mm","jjj","kjhkh","ll","lkjoıj","klkj"],
+//  "medium":"Online",
+//  "location":"Discord",
+//  "link": "url",
+//  "recurrence":"weekly",
+//  "start_date":"2020-04-22 02:55",
+//  "end_date":"2020-04-22 03:00",
+//  "vote":5},
+//  {"title":"is a meeting",
+//  "description":"its desc",
+//  "mails":["mails","mm","jjj","kjhkh","ll","lkjoıj","klkj"],
+//  "medium":"Online",
+//  "location":"",
+//  "link": "",
+//  "recurrence":"single",
+//  "start_date":"2020-04-22 02:55",
+//  "end_date":"2020-04-22 03:00",
+//  "vote":5}
+
+// ]
 
 
-var pollstufs = [
-  {"_id":{"$oid":"5ecad9ad3f83b534b3be3639"},"voterCount":{"$numberInt":"2"},"voters":{"$numberInt":"0"},"polls":"[{\"title\":\"huhu\",\"description\":\"juju\",\"mails\":[\"kagankorkmazz1998@gmail.com\",\"kagankorkmaz@sabanciuniv.edu\"],\"medium\":\"Offline\",\"location\":\"\",\"link\":\"\",\"recurrence\":\"single\",\"host\":\"kagankorkmaz@sabanciuniv.edu\",\"created\":\"2020-05-24T20:28:29.930Z\",\"start_date\":\"2020-05-22 02:05\",\"end_date\":\"2020-05-22 05:55\"},{\"title\":\"huhu\",\"description\":\"juju\",\"mails\":[\"kagankorkmazz1998@gmail.com\",\"kagankorkmaz@sabanciuniv.edu\"],\"medium\":\"Offline\",\"location\":\"\",\"link\":\"\",\"recurrence\":\"single\",\"host\":\"kagankorkmaz@sabanciuniv.edu\",\"created\":\"2020-05-24T20:28:29.930Z\",\"start_date\":\"2020-05-23 08:50\",\"end_date\":\"2020-05-23 11:45\"}]","__v":{"$numberInt":"0"}},
-  {"_id":{"$oid":"5ecad9df3f83b534b3be363a"},"voterCount":{"$numberInt":"2"},"voters":{"$numberInt":"0"},"polls":"[{\"title\":\"şıkşık\",\"description\":\"lplpl\",\"mails\":[\"kagankorkmazz1998@gmail.com\",\"kagankorkmaz@sabanciuniv.edu\"],\"medium\":\"Offline\",\"location\":\"\",\"link\":\"\",\"recurrence\":\"single\",\"host\":\"kagankorkmaz@sabanciuniv.edu\",\"created\":\"2020-05-24T20:32:31.116Z\",\"start_date\":\"2020-05-22 02:35\",\"end_date\":\"2020-05-22 07:25\"},{\"title\":\"şıkşık\",\"description\":\"lplpl\",\"mails\":[\"kagankorkmazz1998@gmail.com\",\"kagankorkmaz@sabanciuniv.edu\"],\"medium\":\"Offline\",\"location\":\"\",\"link\":\"\",\"recurrence\":\"single\",\"host\":\"kagankorkmaz@sabanciuniv.edu\",\"created\":\"2020-05-24T20:32:31.116Z\",\"start_date\":\"2020-05-22 08:45\",\"end_date\":\"2020-05-22 10:25\"}]","__v":{"$numberInt":"0"}},
-  {"_id":{"$oid":"5ecada13bfb6943505f547af"},"voterCount":{"$numberInt":"2"},"voters":{"$numberInt":"0"},"polls":"[{\"title\":\"uyyu\",\"description\":\"yutt\",\"mails\":[\"kagankorkmazz1998@gmail.com\",\"kagankorkmaz@sabanciuniv.edu\"],\"medium\":\"Offline\",\"location\":\"\",\"link\":\"\",\"recurrence\":\"single\",\"host\":\"kagankorkmaz@sabanciuniv.edu\",\"created\":\"2020-05-24T20:33:22.915Z\",\"start_date\":\"2020-05-22 01:40\",\"end_date\":\"2020-05-22 05:35\"},{\"title\":\"uyyu\",\"description\":\"yutt\",\"mails\":[\"kagankorkmazz1998@gmail.com\",\"kagankorkmaz@sabanciuniv.edu\"],\"medium\":\"Offline\",\"location\":\"\",\"link\":\"\",\"recurrence\":\"single\",\"host\":\"kagankorkmaz@sabanciuniv.edu\",\"created\":\"2020-05-24T20:33:22.915Z\",\"start_date\":\"2020-05-23 08:55\",\"end_date\":\"2020-05-23 10:25\"}]","__v":{"$numberInt":"0"}}
-] //pending polls go here
+// var pollstufs = [
+//   {"_id":{"$oid":"5ecad9ad3f83b534b3be3639"},"voterCount":{"$numberInt":"2"},"voters":{"$numberInt":"0"},"polls":"[{\"title\":\"huhu\",\"description\":\"juju\",\"mails\":[\"kagankorkmazz1998@gmail.com\",\"kagankorkmaz@sabanciuniv.edu\"],\"medium\":\"Offline\",\"location\":\"\",\"link\":\"\",\"recurrence\":\"single\",\"host\":\"kagankorkmaz@sabanciuniv.edu\",\"created\":\"2020-05-24T20:28:29.930Z\",\"start_date\":\"2020-05-22 02:05\",\"end_date\":\"2020-05-22 05:55\"},{\"title\":\"huhu\",\"description\":\"juju\",\"mails\":[\"kagankorkmazz1998@gmail.com\",\"kagankorkmaz@sabanciuniv.edu\"],\"medium\":\"Offline\",\"location\":\"\",\"link\":\"\",\"recurrence\":\"single\",\"host\":\"kagankorkmaz@sabanciuniv.edu\",\"created\":\"2020-05-24T20:28:29.930Z\",\"start_date\":\"2020-05-23 08:50\",\"end_date\":\"2020-05-23 11:45\"}]","__v":{"$numberInt":"0"}},
+//   {"_id":{"$oid":"5ecad9df3f83b534b3be363a"},"voterCount":{"$numberInt":"2"},"voters":{"$numberInt":"0"},"polls":"[{\"title\":\"şıkşık\",\"description\":\"lplpl\",\"mails\":[\"kagankorkmazz1998@gmail.com\",\"kagankorkmaz@sabanciuniv.edu\"],\"medium\":\"Offline\",\"location\":\"\",\"link\":\"\",\"recurrence\":\"single\",\"host\":\"kagankorkmaz@sabanciuniv.edu\",\"created\":\"2020-05-24T20:32:31.116Z\",\"start_date\":\"2020-05-22 02:35\",\"end_date\":\"2020-05-22 07:25\"},{\"title\":\"şıkşık\",\"description\":\"lplpl\",\"mails\":[\"kagankorkmazz1998@gmail.com\",\"kagankorkmaz@sabanciuniv.edu\"],\"medium\":\"Offline\",\"location\":\"\",\"link\":\"\",\"recurrence\":\"single\",\"host\":\"kagankorkmaz@sabanciuniv.edu\",\"created\":\"2020-05-24T20:32:31.116Z\",\"start_date\":\"2020-05-22 08:45\",\"end_date\":\"2020-05-22 10:25\"}]","__v":{"$numberInt":"0"}},
+//   {"_id":{"$oid":"5ecada13bfb6943505f547af"},"voterCount":{"$numberInt":"2"},"voters":{"$numberInt":"0"},"polls":"[{\"title\":\"uyyu\",\"description\":\"yutt\",\"mails\":[\"kagankorkmazz1998@gmail.com\",\"kagankorkmaz@sabanciuniv.edu\"],\"medium\":\"Offline\",\"location\":\"\",\"link\":\"\",\"recurrence\":\"single\",\"host\":\"kagankorkmaz@sabanciuniv.edu\",\"created\":\"2020-05-24T20:33:22.915Z\",\"start_date\":\"2020-05-22 01:40\",\"end_date\":\"2020-05-22 05:35\"},{\"title\":\"uyyu\",\"description\":\"yutt\",\"mails\":[\"kagankorkmazz1998@gmail.com\",\"kagankorkmaz@sabanciuniv.edu\"],\"medium\":\"Offline\",\"location\":\"\",\"link\":\"\",\"recurrence\":\"single\",\"host\":\"kagankorkmaz@sabanciuniv.edu\",\"created\":\"2020-05-24T20:33:22.915Z\",\"start_date\":\"2020-05-23 08:55\",\"end_date\":\"2020-05-23 10:25\"}]","__v":{"$numberInt":"0"}}
+// ] //pending polls go here
 
+var data= JSON.parse(meetingsArr);
+var pollstufs = JSON.parse(pollsArr);
 
 
 
@@ -673,7 +688,7 @@ Poll2.classList.add("expandable");
 for (var i=0;i<pollstufs.length;i++){
   
    
-  pollstufs[i].polls = JSON.parse(pollstufs[i].polls);
+  //pollstufs[i].polls = JSON.parse(pollstufs[i].polls);
   console.log(pollstufs[i].polls);
   new pend(pollstufs[i],Poll2)
 

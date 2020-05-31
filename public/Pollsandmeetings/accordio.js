@@ -356,9 +356,9 @@ window.addEventListener("DOMContentLoaded",function() {
   var Poll = document.createElement("ul");
   Poll.id = "mettmejim";
   Poll.classList.add("collapsible");
-  Poll.classList.add("expandable");
+  Poll.classList.add("expandable"); 
   
-  if(pollsArr){
+  if(pollsArr && pollsArr[0] != ""){
   for(var i=0; i<pollsArr.length;i++){
      new meet(pollsArr[i], Poll, calen, idArr[i]);
     }

@@ -90,7 +90,6 @@ window.addEventListener("DOMContentLoaded", function () {
         link: link,
         recurance: recur,
         host: email, // users email
-        created: new Date() ,
         start_date: Json_st[i].start_date,
         end_date: Json_st[i].end_date,
         vote: 0
@@ -99,7 +98,7 @@ window.addEventListener("DOMContentLoaded", function () {
 
 
     }
-    var finalpoll = {votercount: size, voters: 0, polls: POll, dummyBool: "2"}; //final poll information
+    var finalpoll = {votercount: size, voters: 0, polls: POll, created: new Date(), dummyBool: "2"}; //final poll information
 
     let form = document.createElement('form');
     form.method= 'POST'
