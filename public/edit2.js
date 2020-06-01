@@ -123,7 +123,11 @@ window.addEventListener("DOMContentLoaded", function () {
     let Json_st = JSON.parse(json_string);
     POll = [];
     var meeting;
-    if(input.type == "meeting")
+    if(Json_st.length < 1){
+      alert("You can not submit empty schedule.")
+    }
+    else{
+      if(input.type == "meeting")
     {
       if( Json_st.length > 1){
       alert("A meeting can only have one scheduled time, to create a poll, please create a new meeting!");
@@ -144,12 +148,15 @@ window.addEventListener("DOMContentLoaded", function () {
           vote:input.data.vote
          } 
       }
-
-      var finalpoll = {data: meeting, type: "meeting"}
+      
+      var finalpoll = {data: meeting, type: "meeting", dummyBool: 2}
     }
     else{
-      
-      for(i=0;i<Json_st.length;i++)   //create a meeting for eact input
+      if(Json_st.length < 2){
+        alert("A poll must have at least 2 options.")
+      }
+      else{
+        for(i=0;i<Json_st.length;i++)   //create a meeting for eact input
       {
         meeting ={
           title: Title , 
@@ -173,6 +180,8 @@ window.addEventListener("DOMContentLoaded", function () {
       // ID vuraya konacak //////////////////////////////////
       var finalpoll = { data:{ created: new Date(), _id:input.data._id , votercount: size, voters: 0, polls: POll}, type: "poll", dummyBool:2}; //final poll information
   
+      }
+      
       
     }
     
@@ -190,6 +199,8 @@ window.addEventListener("DOMContentLoaded", function () {
     form.submit();
 
     
+    
+    }
     
   }
 

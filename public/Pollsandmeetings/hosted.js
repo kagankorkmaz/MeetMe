@@ -347,6 +347,7 @@ class pend{
   
   
   Body.appendChild(att);
+  console.log(poll);
   console.log(poll.polls[0].mails);
   for(var i=0;i<poll.polls[0].mails.length;i++)
   {
@@ -375,7 +376,7 @@ class pend{
     stt.type = "radio";
     stt.name = "group1"
     let span = document.createElement("span");
-    span.innerHTML =  poll.polls[i].start_date + " -- " + poll.polls[i].end_date + "current vote: (" + poll.polls[i].vote  + ")";
+    span.innerHTML =  poll.polls[i].start_date + " -- " + poll.polls[i].end_date + "  current vote: (" + poll.polls[i].vote  + ")";
     span.style.fontFamily = "Roboto";
     span.style.fontWeight = "bold";
     
@@ -398,6 +399,7 @@ class pend{
   but.style.float = 'right';
    but.style.height = "50px";
 
+   but.addEventListener('click',() => this.evaluate(JSON.stringify(poll._id),poll));
 
    var done = document.createElement("i");
    done.classList.add('material-icons');
@@ -410,6 +412,8 @@ class pend{
    donee.innerText = "done";
    but.appendChild(done);
    but.appendChild(donee);
+
+  
 
   li.style.paddingTop = "20px";
   li.style.marginBottom = "40px";
@@ -456,36 +460,33 @@ Body.appendChild(li);
   
   
 
-  but.addEventListener('click',() => this.evaluate(JSON.stringify(poll._id),poll));
+  if(!this.is72hrs(poll.created)){
+    but.classList.add('disabled');
 
-  
-  
-
-}
-
-
-
-gopoll(poll,calen){
- 
-  data = {
-    poll:poll,
-    calen:calen
   }
 
-  let form = document.createElement('form');
-  form.method= 'POST'
-  var stuff2 = document.createElement("input"); 
-  stuff2.value = poll;
-  stuff2.name = "myData";
-
-  form.appendChild(stuff2);
-  var formplace=document.getElementById("tempform");
-
-  console.log(stuff2);
-  formplace.appendChild(form);
-  form.submit();
+  
+  
 
 }
+
+is72hrs(date){
+
+  var cr = Date.parse(date);
+  var now = Date.now();
+
+  var sth = now - cr;
+  
+  //Tek GÜne indirmek için 3e böleceğiz demoda
+  if(sth >= 259200000)
+  {
+    return true;
+  }
+  return false;
+}
+
+
+
 
 evaluate(id,poll){
   var b = -1;
@@ -506,12 +507,12 @@ evaluate(id,poll){
     alert("Please Choose at least one opiton!");
   }
   else{
-    var the_meeting = poll.polls[b];
+    var the_meeting ={data: poll.polls[b], pollId: id}
 
     let form = document.createElement('form');
     form.method= 'POST'
     var stuff2 = document.createElement("input"); 
-    stuff2.value = the_meeting;
+    stuff2.value = JSON.stringify(the_meeting);
     stuff2.name = "myData";
   
     form.appendChild(stuff2);
@@ -520,7 +521,7 @@ evaluate(id,poll){
     console.log("labadaba");
     console.log(the_meeting);
     formplace.appendChild(form);
-    //form.submit();
+    form.submit();
 
     
   }

@@ -32,7 +32,7 @@ router.get('/logout', (req,res) => {
 router.post('/editProfile', urlencodedParser, userController.postUserEdit);
 
 router.get('/calender', (req,res) => {
-    res.render('calender',{user:req.user});
+    res.render('new_calender',{user:req.user});
 })
 
 router.post('/calender', urlencodedParser, userController.postCalender);
@@ -56,6 +56,8 @@ router.get('/mypoll', (req,res) =>{
 router.post('/mypoll', userController.postpolls);
 
 router.get('/hosted', userController.getHosted);
+
+router.post('/hosted', userController.postHosted);
 
 router.get('/hostedSingle', (req,res) =>{
     res.render('edit', {user:req.user});

@@ -28,10 +28,11 @@
     <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
     <script src="https://kit.fontawesome.com/a81368914c.js"></script>
 
-    <script src="/Pollsandmeetings/meeting.js"></script>
     <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
 
-  
+    <link rel="stylesheet" href="/notif.css">
+    <link rel="stylesheet" href="/login_page/css/main.css">
+
        
   </head>
 
@@ -82,6 +83,7 @@
         </div>
       </div>
 
+      <div id="notify" style="position:absolute; margin-left: 1450px; width: 20px; margin-top: 0px; float: right;"></div>
 
       
     </header>
@@ -157,26 +159,27 @@
       </style>
   
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
- 
-    <div style="padding-left: 20%; padding-right: 20%;" id="meetings">
-     <!-- <ul class="collapsible expandable">
-    <li>
-      <div class="collapsible-header"><i class="material-icons">filter_drama</i>First</div>
-      <div class="collapsible-body">
-        <h5>Jİmjombob</h5>
-        <button class="contact100">Button</button>
+    <script src="/cal/codebase/dhtmlxscheduler.js" type="text/javascript" charset="utf-8"></script>
+    <!-- <script src="/calende.js" type="text/javascript" charset="utf-8"></script> -->
+    <script src="/cal/codebase/ext/dhtmlxscheduler_serialize.js" type="text/javascript" charset="utf-8"></script>
+    <link rel="stylesheet" href="/cal/codebase/dhtmlxscheduler_material.css"type="text/css">
+    <script src="/cal/codebase/ext/dhtmlxscheduler_quick_info.js" type="text/javascript" charset="utf-8"></script>
+    
+  
+    <div id="scheduler_here" class="dhx_cal_container dhx_scheduler_week" style="width:100%; height :80%" role="application">
+      <div class="dhx_cal_navline" style="width: 1920px; height: 59px; left: 0px; top: 0px;">
+        <div class="dhx_cal_prev_button" role="button" aria-label="Previous">&nbsp;</div>
+        <div class="dhx_cal_next_button" role="button" aria-label="Next">&nbsp;</div>
+        <div class="dhx_cal_today_button" aria-label="Today" role="button">Today</div>
+        <div class="dhx_cal_date" aria-label="1 Jan 2018 &amp;ndash; 7 Jan 2018">1 Jan 2018 – 7 Jan 2018</div>
+        <div class="dhx_cal_tab dhx_cal_tab_first day_tab" name="day_tab" style="right: auto; left: 16px;" aria-label="Day" role="button" aria-pressed="false">Day</div>
+        <div class="dhx_cal_tab week_tab active" name="week_tab" style="right: auto; left: 103px;" aria-label="Week" role="button" aria-pressed="true">Week</div>
+        <div class="dhx_cal_tab dhx_cal_tab_last month_tab" name="month_tab" style="right: auto; left: 192px;" aria-label="Month" role="button" aria-pressed="false">Month</div>
       </div>
-    </li>
-    <li>
-      <div class="collapsible-header"><i class="material-icons">place</i>Second</div>
-      <div class="collapsible-body"><span>Lorem ipsum dolor sit amet.</span></div>
-    </li>
-    <li>
-      <div class="collapsible-header"><i class="material-icons">whatshot</i>Third</div>
-      <div class="collapsible-body"><span>Lorem ipsum dolor sit amet.</span></div>
-    </li>
-  </ul>  -->
-    </div>
+      <div class="dhx_cal_scale_placeholder" style="display: block; width: 1920px; height: 21px; left: 0px; top: 60px;"></div><div class="dhx_cal_header" style="width: 1852px; height: 20px; left: 50px; top: 60px;"><div class="dhx_scale_bar" aria-label="Mon, January 1" style="width: 263px; height: 18px; left: 0px; top: 0px;">Mon, January 1</div><div class="dhx_scale_bar" aria-label="Tue, January 2" style="width: 263px; height: 18px; left: 264px; top: 0px;">Tue, January 2</div><div class="dhx_scale_bar" aria-label="Wed, January 3" style="width: 263px; height: 18px; left: 528px; top: 0px;">Wed, January 3</div><div class="dhx_scale_bar" aria-label="Thu, January 4" style="width: 264px; height: 18px; left: 792px; top: 0px;">Thu, January 4</div><div class="dhx_scale_bar" aria-label="Fri, January 5" style="width: 264px; height: 18px; left: 1057px; top: 0px;">Fri, January 5</div><div class="dhx_scale_bar" aria-label="Sat, January 6" style="width: 264px; height: 18px; left: 1322px; top: 0px;">Sat, January 6</div><div class="dhx_scale_bar" aria-label="Sun, January 7" style="width: 264px; height: 18px; left: 1587px; top: 0px;">Sun, January 7</div></div>
+      <div class="dhx_multi_day" style="visibility: visible; width: 1920px; height: 25px; left: 0px; top: 81px;"><div class="dhx_multi_day_icon_small" style="visibility: visible; width: 50px; height: 25px; left: 0px; top: 81px;"></div><div event_id="1261150506" class="dhx_cal_event_line dhx_cal_event_line_start dhx_cal_event_line_end" style="position:absolute;top:2px;left:52px;width:789px;;;" aria-label="Sister Act" aria-selected="false">Sister Act</div><div event_id="1261150511" class="dhx_cal_event_line dhx_cal_event_line_start" style="position:absolute;top:2px;left:1374px;width:527px;;;" aria-label="Dirty Dancing" aria-selected="false">Dirty Dancing</div></div><div class="dhx_cal_data" style="width: 1920px; height: 270px; left: 0px; top: 105px;"><div data-column-index="0" class="dhx_scale_holder " aria-label="1 Jan 2018" style="width: 263px; height: 1056px; left: 51px; top: 0px;"></div><div data-column-index="1" class="dhx_scale_holder " aria-label="2 Jan 2018" style="width: 263px; height: 1056px; left: 315px; top: 0px;"><div event_id="1261150507" class="dhx_cal_event" style="position:absolute; top:308px; left:1px; width:129px; height:88px;" aria-label="Cat On a Hot Tin Roof" aria-selected="false"><div class="dhx_event_move dhx_header" style=" width:129px;">&nbsp;</div><div class="dhx_event_move dhx_title" style="">07:00 - 09:00</div><div class="dhx_body" style=" width:129px; height:69px;">Cat On a Hot Tin Roof</div><div class="dhx_event_resize dhx_footer" style=" width:127px;"></div></div><div event_id="1261150508" class="dhx_cal_event" style="position:absolute; top:308px; left:132px; width:129px; height:88px;" aria-label="Grease" aria-selected="false"><div class="dhx_event_move dhx_header" style=" width:129px;">&nbsp;</div><div class="dhx_event_move dhx_title" style="">07:00 - 09:00</div><div class="dhx_body" style=" width:129px; height:69px;">Grease</div><div class="dhx_event_resize dhx_footer" style=" width:127px;"></div></div></div><div data-column-index="2" class="dhx_scale_holder " aria-label="3 Jan 2018" style="width: 263px; height: 1056px; left: 579px; top: 0px;"><div event_id="1261150509" class="dhx_cal_event" style="position:absolute; top:748px; left:1px; width:261px; height:88px;" aria-label="Ladbrokes.com World Darts Championship" aria-selected="false"><div class="dhx_event_move dhx_header" style=" width:261px;">&nbsp;</div><div class="dhx_event_move dhx_title" style="">17:00 - 19:00</div><div class="dhx_body" style=" width:261px; height:69px;">Ladbrokes.com World Darts Championship</div><div class="dhx_event_resize dhx_footer" style=" width:259px;"></div></div></div><div data-column-index="3" class="dhx_scale_holder " aria-label="4 Jan 2018" style="width: 264px; height: 1056px; left: 843px; top: 0px;"></div><div data-column-index="4" class="dhx_scale_holder " aria-label="5 Jan 2018" style="width: 264px; height: 1056px; left: 1108px; top: 0px;"><div event_id="1261150510" class="dhx_cal_event" style="position:absolute; top:616px; left:1px; width:262px; height:88px;" aria-label="Calendar Girls" aria-selected="false"><div class="dhx_event_move dhx_header" style=" width:262px;">&nbsp;</div><div class="dhx_event_move dhx_title" style="">14:00 - 16:00</div><div class="dhx_body" style=" width:262px; height:69px;">Calendar Girls</div><div class="dhx_event_resize dhx_footer" style=" width:260px;"></div></div></div><div data-column-index="5" class="dhx_scale_holder " aria-label="6 Jan 2018" style="width: 264px; height: 1056px; left: 1373px; top: 0px;"></div><div data-column-index="6" class="dhx_scale_holder " aria-label="7 Jan 2018" style="width: 264px; height: 1056px; left: 1638px; top: 0px;"><div event_id="1261150512" class="dhx_cal_event" style="position:absolute; top:660px; left:1px; width:262px; height:88px;" aria-label="Cirque du Soleil Varekai" aria-selected="false"><div class="dhx_event_move dhx_header" style=" width:262px;">&nbsp;</div><div class="dhx_event_move dhx_title" style="">15:00 - 17:00</div><div class="dhx_body" style=" width:262px; height:69px;">Cirque du Soleil Varekai</div><div class="dhx_event_resize dhx_footer" style=" width:260px;"></div></div></div><div class="dhx_scale_holder"><div class="dhx_scale_hour" aria-label="00:00" style="height: 44px; width: 50px;">00:00</div><div class="dhx_scale_hour" aria-label="01:00" style="height: 44px; width: 50px;">01:00</div><div class="dhx_scale_hour" aria-label="02:00" style="height: 44px; width: 50px;">02:00</div><div class="dhx_scale_hour" aria-label="03:00" style="height: 44px; width: 50px;">03:00</div><div class="dhx_scale_hour" aria-label="04:00" style="height: 44px; width: 50px;">04:00</div><div class="dhx_scale_hour" aria-label="05:00" style="height: 44px; width: 50px;">05:00</div><div class="dhx_scale_hour" aria-label="06:00" style="height: 44px; width: 50px;">06:00</div><div class="dhx_scale_hour" aria-label="07:00" style="height: 44px; width: 50px;">07:00</div><div class="dhx_scale_hour" aria-label="08:00" style="height: 44px; width: 50px;">08:00</div><div class="dhx_scale_hour" aria-label="09:00" style="height: 44px; width: 50px;">09:00</div><div class="dhx_scale_hour" aria-label="10:00" style="height: 44px; width: 50px;">10:00</div><div class="dhx_scale_hour" aria-label="11:00" style="height: 44px; width: 50px;">11:00</div><div class="dhx_scale_hour" aria-label="12:00" style="height: 44px; width: 50px;">12:00</div><div class="dhx_scale_hour" aria-label="13:00" style="height: 44px; width: 50px;">13:00</div><div class="dhx_scale_hour" aria-label="14:00" style="height: 44px; width: 50px;">14:00</div><div class="dhx_scale_hour" aria-label="15:00" style="height: 44px; width: 50px;">15:00</div><div class="dhx_scale_hour" aria-label="16:00" style="height: 44px; width: 50px;">16:00</div><div class="dhx_scale_hour" aria-label="17:00" style="height: 44px; width: 50px;">17:00</div><div class="dhx_scale_hour" aria-label="18:00" style="height: 44px; width: 50px;">18:00</div><div class="dhx_scale_hour" aria-label="19:00" style="height: 44px; width: 50px;">19:00</div><div class="dhx_scale_hour" aria-label="20:00" style="height: 44px; width: 50px;">20:00</div><div class="dhx_scale_hour" aria-label="21:00" style="height: 44px; width: 50px;">21:00</div><div class="dhx_scale_hour" aria-label="22:00" style="height: 44px; width: 50px;">22:00</div><div class="dhx_scale_hour" aria-label="23:00" style="height: 44px; width: 50px;">23:00</div></div></div>
+    <iframe class="scheduler_container_resize_watcher" tabindex="-1" role="none" aria-hidden="true"></iframe></div>
+ 
   
 
    
@@ -184,6 +187,7 @@
     <body>
       
       <!-- partial:index.partial.html -->
+      <li><button class="login100-form-btn" id='crpol' style="width: 100%; padding-bottom: 0px;">Save My Changes</button></li>
       <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
       <meta charset="UTF-8">
 
@@ -193,7 +197,7 @@
           <i class="material-icons nav__icon">person</i>
           <span class="nav__text">Profile</span>
         </a>
-        <a href="/profile/calender" class="nav__link" style="border-top-left-radius: 7px; border-top-right-radius: 7px;">
+        <a href="#" class="nav__link nav__link--active" style="border-top-left-radius: 7px; border-top-right-radius: 7px;">
           <svg class="bi bi-calendar-fill" width="1.5em" height="1.5em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
             <path d="M0 2a2 2 0 012-2h12a2 2 0 012 2H0z"/>
             <path fill-rule="evenodd" d="M0 3h16v11a2 2 0 01-2 2H2a2 2 0 01-2-2V3zm6.5 4a1 1 0 100-2 1 1 0 000 2zm4-1a1 1 0 11-2 0 1 1 0 012 0zm2 1a1 1 0 100-2 1 1 0 000 2zm-8 2a1 1 0 11-2 0 1 1 0 012 0zm2 1a1 1 0 100-2 1 1 0 000 2zm4-1a1 1 0 11-2 0 1 1 0 012 0zm2 1a1 1 0 100-2 1 1 0 000 2zm-8 2a1 1 0 11-2 0 1 1 0 012 0zm2 1a1 1 0 100-2 1 1 0 000 2zm4-1a1 1 0 11-2 0 1 1 0 012 0z" clip-rule="evenodd"/>
@@ -202,7 +206,7 @@
           <span class="nav__text">Calender</span>
         </a>
         
-        <a href="/profile/meetings" class="nav__link nav__link--active" style="border-top-left-radius: 7px; border-top-right-radius: 7px;">
+        <a href="/profile/meetings" class="nav__link " style="border-top-left-radius: 7px; border-top-right-radius: 7px;">
           <i class="material-icons nav__icon">devices</i>
           <span class="nav__text">Meetings</span>
         </a>
@@ -296,13 +300,15 @@
   <script src="/main_page/js/jquery.fancybox.min.js"></script>
   <script src="/main_page/js/jquery.sticky.js"></script>
   <script type="text/javascript" src="/Pollsandmeetings/materialize/js/materialize.js"></script>
+  <script src="/cal/codebase/ext/dhtmlxscheduler_readonly.js"></script>
 
 
 
   <script src="/main_page/js/main.js"></script>
-  <script id="meeto" meetingsArr="<%= data.meetingsArr %>" src="/Pollsandmeetings/meeting.js"></script>
+  <script src="/notification.js"></script>
 
   
+  <script id="calen" data-name="<%= user.meeting %>" data-name2="<%= user.calender %>" src="/calende.js"></script>
 
 
  

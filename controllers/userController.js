@@ -714,6 +714,38 @@ module.exports.postCalenderMeet = (req, res, next) => {
                     }
                 })
             }
+
+            //Adding to hostedPoll
+            console.log(req.user);
+            console.log(newPoll._id);
+            console.log(req.user.hostedPoll);
+            console.log(typeof req.user.hostedPoll);
+            var updatedValuesHost;
+            if(req.user.hostedPoll == ''){
+                console.log('a');
+                let newHostedPoll = [];
+                newHostedPoll.push(newPoll._id);
+                updatedValuesHost = {
+                    hostedPoll: JSON.stringify(newHostedPoll)
+                }
+            }
+            else{
+                console.log('b');
+                let newHostedPoll = JSON.parse(req.user.hostedPoll);
+                console.log(newHostedPoll);
+                newHostedPoll.push(newPoll._id);
+                updatedValuesHost = {
+                    hostedPoll: JSON.stringify(newHostedPoll)
+                }
+            }
+            console.log(updatedValuesHost);
+            await User.updateOne({email:req.user.email},updatedValuesHost)
+                .then(User => {
+                    if (!User) { return res.status(404).end(); }
+                })
+                    .catch(err => next(err));
+        
+
             res.redirect("/profile/polls");
         }
         savePoll();
@@ -797,8 +829,8 @@ module.exports.getpolls = (req, res, next) => {
         for (item of pollsArr) {
             item.polls = JSON.parse(item.polls);
         }
-        console.log(JSON.stringify(pollsArr.polls));
-        console.log(pollsArr[0].polls[0]);
+        // console.log(JSON.stringify(pollsArr.polls));
+        // console.log(pollsArr[0].polls[0]);
         res.render('poll', { data: { pollsArr: JSON.stringify(pollsArr), idArr: idArr, user:req.user } });
     }
 
@@ -877,9 +909,17 @@ module.exports.postpolls = (req, res, next) => {
             }).catch(err => console.log(err));
 
             const newToCalender ={
+                title: myData.polls[high].title,
+                description: myData.polls[high].description,
+                mails: myData.polls[high].mails,
+                medium: myData.polls[high].medium,
+                location: myData.polls[high].location,
+                link: myData.polls[high].link,
+                recurrance: myData.polls[high].recurrance,
+                host: myData.polls[high].host,
                 start_date: myData.polls[high].start_date,
                 end_date: myData.polls[high].end_date,
-                title: myData.polls[high].title,
+                vote: myData.polls[high].vote,
                 _id : newMeeting._id
             }
 
@@ -1081,9 +1121,9 @@ module.exports.getHosted = (req, res, next) => {
         //Getting Polls
         pollsArr = [];
         idArr = [];
-        if(req.user.polls != ""){
-            userPoll = JSON.parse(req.user.poll);
-            userPolls = userPoll.poll;
+        if(req.user.hostedPoll != ""){
+            userPolls = JSON.parse(req.user.hostedPoll);
+            // userPolls = userPoll.poll;
             for (pollID of userPolls) {
                 //Her bir pollID string olarak alınıyo
                 await Poll.findOne({
@@ -1096,7 +1136,7 @@ module.exports.getHosted = (req, res, next) => {
                     }
     
                     else {
-                        //console.log("poll not found")
+                        console.log("poll not found")
                     }
                 }).catch(err => console.log(err));
             }
@@ -1104,13 +1144,16 @@ module.exports.getHosted = (req, res, next) => {
             for (item of pollsArr) {
                 item.polls = JSON.parse(item.polls);
             }
+
+            hostedPollsArr= pollsArr;
+            hostedIdArr = idArr;
     
-            for(let i =0; i< pollsArr.length; i++){
-                if(req.user.email == pollsArr[i].polls[0].host){
-                    hostedPollsArr.push(pollsArr[i])
-                    hostedIdArr.push(idArr[i]);
-                }
-            }
+            // for(let i =0; i< pollsArr.length; i++){
+            //     if(req.user.email == pollsArr[i].polls[0].host){
+            //         hostedPollsArr.push(pollsArr[i])
+            //         hostedIdArr.push(idArr[i]);
+            //     }
+            // }
         }
         
        
@@ -1159,7 +1202,7 @@ module.exports.getHosted = (req, res, next) => {
         // }
 
         // updateTemp();
-        
+        console.log()
         res.render('hosted', { data: { pollsArr: JSON.stringify(hostedPollsArr), meetingsArr: JSON.stringify(hostedMeetingsArr) , idArr: JSON.stringify(hostedIdArr), user:req.user } });    }
 
     main();
@@ -1168,8 +1211,11 @@ module.exports.getHosted = (req, res, next) => {
 
 module.exports.postHostedSingle1 = (req, res, next) => {
     myDataBase = JSON.parse(req.body.myData);
-    
+    //console.log(myDataBase);
     async function updateMeeting(id, updatedValues){
+        console.log("BURASI UPDATE MEETING")
+        console.log(id);
+        console.log(updatedValues);
         await Meeting.updateOne({_id: id}, updatedValues)
             .then(Meet => {
                 if (!Meet) { return res.status(404).end(); }
@@ -1180,7 +1226,7 @@ module.exports.postHostedSingle1 = (req, res, next) => {
     async function updateUserCalender(id,updatedMeeting,mails){
         
         async function toUserCalender(user, updatedValues){
-            console.log('e')
+            console.log('BURASI TO USER CALENDER')
             console.log(updatedValues);
             console.log(user);
             await User.updateOne({email:user.email}, updatedValues)
@@ -1190,20 +1236,21 @@ module.exports.postHostedSingle1 = (req, res, next) => {
                 .catch(err => next(err));
         }
 
-        ;
+        
         for(item of mails){
             await User.findOne({
                 email: item
             }).then(user =>{
                 if(user){
-                    
+                    console.log('a');
                     userCalender = JSON.parse(user.calender);
                     var updatedValues;
+                    console.log(userCalender);
                     for(let i=0; i<userCalender.length; i++){
                         if( ("_id" in userCalender[i] && userCalender[i]._id == id)){
                             console.log('d');
                             console.log(userCalender[i]);
-                            updatedMeeting.id = id;
+                            updatedMeeting._id = id;
                             userCalender[i]=updatedMeeting;
                             updatedValues = {calender: JSON.stringify(userCalender)}
                             console.log(updatedValues);
@@ -1227,7 +1274,7 @@ module.exports.postHostedSingle1 = (req, res, next) => {
         myData = JSON.parse(req.body.myData);
         console.log(myData);
         console.log("AAAAAA");
-        console.log(myData.data.polls[0]);
+        //console.log(myData.data.polls[0]);
         var mails;
         if(myData.type == "meeting"){
             mails = myData.data.mails;
@@ -1410,7 +1457,8 @@ module.exports.postHostedSingle1 = (req, res, next) => {
             }})
     }
     async function main2(){
-        console.log("Main2")
+        console.log("Main2'ye GELEN DATA PARSELANMIŞ HALİ")
+
         myData = JSON.parse(req.body.myData);
         console.log(myData);
 
@@ -1419,8 +1467,9 @@ module.exports.postHostedSingle1 = (req, res, next) => {
 
        
        
-       updateMeeting(id, myData.data)
-       updateUserCalender(id, myData.data, myData.data.mails);
+       await updateMeeting(id, myData.data)
+       await updateUserCalender(id, myData.data, myData.data.mails);
+       res.redirect('/profile/hosted');
 
 
     }
@@ -1464,3 +1513,136 @@ module.exports.postHostedSingle1 = (req, res, next) => {
     
 
 };
+
+module.exports.postHosted = (req, res, next) =>{
+    console.log(JSON.parse(req.body.myData).data);
+    console.log(JSON.parse(req.body.myData).pollId);
+    async function main(){
+        myNewMeeting = JSON.parse(req.body.myData).data;
+        deleteID = JSON.parse(req.body.myData).pollId;
+        deleteID = JSON.parse(deleteID);
+
+        const newMeeting = new Meeting({
+            title: myNewMeeting.title,
+            description: myNewMeeting.description,
+            mails: myNewMeeting.mails,
+            medium: myNewMeeting.medium,
+            location: myNewMeeting.location,
+            link: myNewMeeting.link,
+            recurrance: myNewMeeting.recurrance,
+            host: myNewMeeting.host,
+            start_date: myNewMeeting.start_date,
+            end_date: myNewMeeting.end_date,
+            vote: myNewMeeting.vote
+        })
+
+        await newMeeting.save().then(() => {
+            console.log("DB save meeting Succesful");
+            req.flash("flashSuccess", "Succesfully Registered");
+
+        }).catch(err => console.log(err));
+
+        const newToCalender = {
+            title: myNewMeeting.title,
+            description: myNewMeeting.description,
+            mails: myNewMeeting.mails,
+            medium: myNewMeeting.medium,
+            location: myNewMeeting.location,
+            link: myNewMeeting.link,
+            recurrance: myNewMeeting.recurrance,
+            host: myNewMeeting.host,
+            start_date: myNewMeeting.start_date,
+            end_date: myNewMeeting.end_date,
+            vote: myNewMeeting.vote,
+            _id : newMeeting._id
+        }
+
+        for(email of myNewMeeting.mails){
+            let arrM = [];
+                arrM.push(newMeeting._id);
+
+                arrM2 = { meeting: arrM };
+
+                await User.findOne({ email: email }).then(myUser => {
+                    if (!myUser) {
+                        return res.status(404).end();
+                    }
+
+                    else {
+                        var userMeeting = myUser.meeting;
+                        if (userMeeting == "") {
+                            async function updateBosMeeting() {
+                                var updatedValues = {
+                                    meeting: JSON.stringify(arrM2)
+                                }
+                                await User.updateOne({ email: myUser.email }, updatedValues).then(User => {
+                                    if (!User) { return res.status(404).end(); }
+                                })
+                                    .catch(err => next(err));
+                            }
+                            updateBosMeeting();
+                        }
+                        else {
+                            async function updateDoluMeeting() {
+                                var userMeeting2 = JSON.parse(userMeeting);
+                                userMeeting2 = userMeeting2.meeting;
+
+                                for (item of userMeeting2) {
+                                    arrM2.meeting.push(item);
+                                    arrM2.meeting = [...new Set(arrM2.meeting)];
+                                }
+
+                                updatedValues2 = {
+                                    meeting: JSON.stringify(arrM2)
+                                }
+                                await User.updateOne({ email: myUser.email }, updatedValues2).then(User => {
+                                    if (!User) { return res.status(404).end(); }
+                                })
+                                    .catch(err => next(err));
+                            }
+                            updateDoluMeeting();
+                        }
+
+                        async function updateCalender(){
+                            var newCalender;
+                            if(myUser.calender == "" || myUser.calender == "[]"){
+                                newCalender= [];
+                                newCalender.push(newToCalender)
+                            }
+                            else{
+                                userCalender = JSON.parse(myUser.calender);
+                                userCalender.push(newToCalender);
+                                newCalender= userCalender;
+                
+                            }
+                            let updatedValues = {
+                                calender: JSON.stringify(newCalender)
+                            };
+                
+                            await User.updateOne({email: myUser.email}, updatedValues)
+                                .then(User => {
+                                    if (!User) { return res.status(404).end(); }
+                                })
+                                .catch(err => next(err));
+                        }
+                        updateCalender();
+                        mail(myUser.email, 1);
+                    }
+                })
+        }
+
+        await Poll.deleteOne({ _id: deleteID }, function (err, result) {
+            if (err) {
+                console.log("Error on deleting from Polls");
+            }
+            else {
+                //console.log("Deleting from polls Successfull")
+            }
+        });
+
+        res.redirect('/profile/hosted');
+        
+
+    }
+    main();
+}

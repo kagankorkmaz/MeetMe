@@ -1,7 +1,7 @@
 /*
 
 @license
-dhtmlxScheduler v.5.3.6 Professional Evaluation
+dhtmlxScheduler v.5.3.7 Professional Evaluation
 
 This software is covered by DHTMLX Evaluation License. Contact sales@dhtmlx.com to get Commercial or Enterprise license. Usage without proper license is prohibited.
 

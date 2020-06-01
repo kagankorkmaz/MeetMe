@@ -152,7 +152,7 @@ class meet{
             stt.id = myId + i;
             stt.type = "checkbox";
             let span = document.createElement("span");
-            span.innerHTML =  poll.polls[i].start_date + " -- " + poll.polls[i].end_date;
+            span.innerHTML =  poll.polls[i].start_date + " -- " + poll.polls[i].end_date + "(Current Vote: " + poll.polls[i].vote + ")";
             span.style.fontFamily = "Roboto";
             span.style.fontWeight = "bold";
             

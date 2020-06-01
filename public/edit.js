@@ -284,7 +284,7 @@ document.addEventListener('DOMContentLoaded', function() {
   input = window.localStorage.getItem("edit");
   input = JSON.parse(input); // the input format
   console.log(input);
-  console.log(input.data.polls[0].host);
+  //console.log(input.data.polls[0].host);
    window.localStorage.removeItem("edit");
 
   $("#select1").on('change', function() {

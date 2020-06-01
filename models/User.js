@@ -104,7 +104,18 @@ const userSchema = new Schema({
     meeting: {
         type: String,
         default: ''
+    },
+
+    hostedMeeting: {
+        type: String,
+        default: ''
+    },
+
+    hostedPoll: {
+        type: String,
+        default: ''
     }
+
 
 
 
