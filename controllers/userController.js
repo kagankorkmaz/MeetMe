@@ -1328,7 +1328,7 @@ module.exports.getmeetings = (req, res, next) => {
         }
 
 
-        res.render('meet', { data: { meetingsArr: JSON.stringify(meetingsArr), user:req.user } });
+        res.render('meet', { data: { meetingsArr: JSON.stringify(meetingsArr) }, user:req.user});
     }
 
     main();
