@@ -205,72 +205,31 @@ function myFunction() {
 
 window.addEventListener("DOMContentLoaded",function() {
 
-//  var data =[
-//    {"title":"This is a meeting",
-//  "description":"its desc",
-//  "mails":["mails","mm","jjj","kjhkh","ll","lkjoıj","klkj"],
-//  "medium":"Offline",
-//  "location":"Antalya",
-//  "link": "",
-//  "recurance":"single",
-//  "start_date":"2020-04-22 02:55",
-//  "end_date":"2020-04-22 03:00",
-//  "vote":5},
-
-//  {"title":"is a meeting",
-//  "description":"its desc",
-//  "mails":["mails","mm","jjj","kjhkh","ll","lkjoıj","klkj"],
-//  "medium":"Online",
-//  "location":"Discord",
-//  "link": "url",
-//  "recurance":"weekly",
-//  "start_date":"2020-04-22 02:55",
-//  "end_date":"2020-04-22 03:00",
-//  "vote":5},
-//  {"title":"is a meeting",
-//  "description":"its desc",
-//  "mails":["mails","mm","jjj","kjhkh","ll","lkjoıj","klkj"],
-//  "medium":"Online",
-//  "location":"",
-//  "link": "",
-//  "recurance":"single",
-//  "start_date":"2020-04-22 02:55",
-//  "end_date":"2020-04-22 03:00",
-//  "vote":5}
-
-// ]
 
 var data = document.getElementById("meeto").getAttribute("meetingsArr");
 data = JSON.parse(data);
 
 
-if (!data[0]) {
-  var noMEs = document.createElement("h2");
-  var createLink = document.createElement("button");
-  createLink.href = "/profile/addcalender";
-  createLink.style.fontFamily = "Raleway-Bold";
 
-  createLink.innerHTML = "Create a Meeting.";
-  noMEs.innerHTML = "You Dont have any meetings yet, You can create via Create a Meeting or You can see your meeting requests from the polls tab. ";
 
-  noMEs.style.fontFamily = "Raleway-Bold";
 
-  var mother = document.getElementById("meetings");
-
-  mother.appendChild(noMEs);
-  //mother.appendChild(createLink);
-  mother.style.paddingBottom = "20px";
-}
-
-else{
   var Poll = document.createElement("ul");
   Poll.id = "mettmejim";
   Poll.classList.add("collapsible");
   Poll.classList.add("expandable");
   
-  for(var i=0;i<data.length;i++){
-     new meet(data[i], Poll);
+  if(data && data[0] != "")
+  {
+    for(var i=0;i<data.length;i++){
+      new meet(data[i], Poll);
+   }
   }
+  else{
+    var noMEs = document.createElement("h2");
+    noMEs.innerHTML = "You Dont have any Polls";
+    noMes.style.fontFamily= "Raleway-Bold";
+  }
+ 
     
   
   var mother = document.getElementById("meetings");
@@ -282,7 +241,7 @@ else{
   var instance = M.Collapsible.init(elem, {
     accordion: false
   });
-}
+
 
 });
 

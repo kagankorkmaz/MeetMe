@@ -114,6 +114,10 @@ const userSchema = new Schema({
     hostedPoll: {
         type: String,
         default: ''
+    },
+    notification: {
+        type: String,
+        default: ''
     }
 
 

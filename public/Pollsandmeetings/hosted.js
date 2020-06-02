@@ -478,7 +478,8 @@ is72hrs(date){
   var sth = now - cr;
   
   //Tek GÜne indirmek için 3e böleceğiz demoda
-  if(sth >= 259200000)
+  // 3 gün 259200000
+  if(sth >= 0)
   {
     return true;
   }

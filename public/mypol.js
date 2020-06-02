@@ -117,8 +117,8 @@ class mypol{
         console.log(mydate);
         scheduler.init('scheduler_here', new Date(mydate), "week");
         
-        var stuff;
-        stuff = JSON.parse(data.calen);
+        var stuff = [];
+        if(data && data.calen){stuff = JSON.parse(data.calen);}
         console.log(stuff);
         data = data.polls
         for(var i=0;i< stuff.length;i++){

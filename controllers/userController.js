@@ -15,6 +15,8 @@ const { OAuth2 } = google.auth
 require('../authentication/passport/local');
 // MAILER
 const mailComposer = require('nodemailer/lib/mail-composer');
+const cron = require('node-cron');
+
 const readline = require('readline');
 const fs = require('fs');
 //MAILER
@@ -115,30 +117,174 @@ class CreateMail {
     }
 }
 
-function mail(recipients, condition) {
-    const oAuth2Client = new OAuth2( //bunu dışardan mı alsak
-        '805012118741-vvgvhls19vs9d10boh9k156qe6k08h3e.apps.googleusercontent.com',
-        'IvdjL5wmHFDPNFa4YXElPPLJ'
-    )
+function reminderTimer(title, recipients, reminderNumber){
 
-    refreshtoken = '1//04GUdlB-716d6CgYIARAAGAQSNwF-L9IrRpaqFxMPR_eyRyucfqCSW2vEL_ueA-qamcQ5lR7A4GG5H5-oHt3iL6DwUDsfWaHYwiI';
+    const curr = new Date();
+    var rem1 = new Date();
+    var rem2 = new Date();
+    
+    //rem1.setHours(curr.getHours() + 48);
+    //rem2.setHours(curr.getHours + 49)
+    rem1.setSeconds(curr.getSeconds() + 20);
+    rem2.setMinutes(curr.getMinutes() + 1);
 
-    oAuth2Client.setCredentials({ refresh_token: refreshtoken });
+    const cronExp1 = String(rem1.getSeconds()) + ' ' + String(rem1.getMinutes()) + ' ' + String(rem1.getHours()) + ' ' +String(rem1.getDate()) + ' ' + String(rem1.getMonth() + 1) + ' ' + '*';
+    const cronExp2 = String(rem2.getSeconds()) + ' ' + String(rem2.getMinutes()) + ' ' + String(rem2.getHours()) + ' ' +String(rem2.getDate()) + ' ' + String(rem2.getMonth() + 1) + ' ' + '*';
 
-    if (condition == 0) {
-        var subject = "Vote to Set a Meeting!";
-        var mailBody = "A new poll has been opened! Vote to set the meeting time.";
+    if (reminderNumber==1) {
+        const remind1 = cron.schedule(cronExp1, () => {
+            console.log('First reminder sent');
+            reminderMail(title,recipients,1)
+            remind1.destroy();
+             }, {
+            scheduled: true,
+            timezone: 'Europe/Istanbul'
+              });
     }
-    if (condition == 1) {
-        var subject = "New Meeting in Your Calendar!";
-        var mailBody = "You have a new meeting in your calendar. Check details.";
+        
+    if (reminderNumber==2) {
+        const remind2 = cron.schedule(cronExp2, () => {
+            console.log('Second reminder sent');
+            reminderMail(title,recipients,2)
+            remind2.destroy();
+             }, {
+            scheduled: true
+              }); 
     }
+      
+    //remind1.start();
+    //remind2.start();
 
-    var obj = new CreateMail(oAuth2Client, recipients, subject, mailBody, 'mail');
-    //'mail' is the task, if not passed it will save the message as draft.
-    obj.makeBody();
-    //This will send the mail to the recipent.
 }
+
+function reminderMail(title,recipients,reminderNumber){
+	const oAuth2Client = new OAuth2( //bunu dışardan mı alsak
+	  '805012118741-vvgvhls19vs9d10boh9k156qe6k08h3e.apps.googleusercontent.com',
+	  'IvdjL5wmHFDPNFa4YXElPPLJ'
+	)
+	
+	refreshtoken='1//04GUdlB-716d6CgYIARAAGAQSNwF-L9IrRpaqFxMPR_eyRyucfqCSW2vEL_ueA-qamcQ5lR7A4GG5H5-oHt3iL6DwUDsfWaHYwiI';
+	  
+	oAuth2Client.setCredentials({refresh_token: refreshtoken});
+	
+	if(reminderNumber==1){
+	var subject="A Waiting Poll to Vote!";
+	var mailBody="You have a waiting poll for the meeting called " + title + ". The voting will terminate in 1 day.";
+	}
+
+	if(reminderNumber==2){
+	var subject="Last 12 Hours to Vote!";
+	var mailBody="You have a waiting poll for the meeting called " + title + ". The voting will terminate in 12 hours.";
+	}
+	
+	var obj = new CreateMail(oAuth2Client, recipients, subject, mailBody, 'mail');
+	//'mail' is the task, if not passed it will save the message as draft.
+	obj.makeBody();
+	//This will send the mail to the recipent.
+	
+}
+
+function mail(title,recipients,condition){
+    const oAuth2Client = new OAuth2( //bunu dışardan mı alsak
+      '805012118741-vvgvhls19vs9d10boh9k156qe6k08h3e.apps.googleusercontent.com',
+      'IvdjL5wmHFDPNFa4YXElPPLJ'
+    )
+    
+    refreshtoken='1//04GUdlB-716d6CgYIARAAGAQSNwF-L9IrRpaqFxMPR_eyRyucfqCSW2vEL_ueA-qamcQ5lR7A4GG5H5-oHt3iL6DwUDsfWaHYwiI';
+      
+    oAuth2Client.setCredentials({refresh_token: refreshtoken});
+    
+    async function addToNotifications(email, condition, title){
+        async function updateNotification(email, updatedValues){
+            await User.updateOne({email: email}, updatedValues)
+                .then(myUser =>{ 
+                    if (!myUser) { return res.status(404).end(); }
+                }).catch(err => console.log(err));
+        }
+        
+        await User.findOne({
+            email:email
+        }).then(user => {
+            if(user){
+                newNotification=[]
+                if(user.notification==""){
+                    newNotification.push({
+                        title: title,
+                        type: condition
+                    })
+                }
+                else{
+                    let userNotification = JSON.parse(user.notification);
+                    userNotification.push({
+                        title: title,
+                        type: condition
+                    })
+                    newNotification = userNotification;
+                }
+                let updatedValues = {
+                    notification: JSON.stringify(newNotification)
+                }
+                updateNotification(email, updatedValues);
+            }
+        }).catch(err => console.log(err));
+    }
+    
+    addToNotifications(recipients, condition, title);
+
+    if (condition=="meeting") {
+        var subject="New Meeting in Your Calendar!";
+        var mailBody= "A new meeting called " + title + " has been set. Check your calendar for details.";
+    
+        var obj = new CreateMail(oAuth2Client, recipients, subject, mailBody, 'mail');
+        //'mail' is the task, if not passed it will save the message as draft.
+        obj.makeBody();
+        //This will send the mail to the recipent.
+    }
+    
+    if (condition=="poll") {
+        var subject="Vote to Set a Meeting!";
+        var mailBody="A poll for " + title + " has been opened! Vote to set the meeting time.";
+    
+        var obj = new CreateMail(oAuth2Client, recipients, subject, mailBody, 'mail');
+        obj.makeBody();
+    
+        reminderTimer(title,recipients,1);
+        reminderTimer(title,recipients,2);
+    }
+    
+    if (condition=="resched_meeting") {
+        var subject="Updated Meeting!";
+        var mailBody= "The meeting called " + title + " has been updated. Check your calendar for details.";
+    
+        var obj = new CreateMail(oAuth2Client, recipients, subject, mailBody, 'mail');
+        obj.makeBody();
+    }
+    
+    if (condition=="resched_poll") {
+        var subject="Rescheduled Poll!";
+        var mailBody="The poll for " + title + " has been rescheduled! Vote to set the meeting time.";
+    
+        var obj = new CreateMail(oAuth2Client, recipients, subject, mailBody, 'mail');
+        obj.makeBody();
+    }
+
+    if(condition == "finalized_poll"){
+        var subject="Finalized Poll!";
+        var mailBody="The poll for " + title + " has been finalized by the host! Check your calendar for details.";
+    
+        var obj = new CreateMail(oAuth2Client, recipients, subject, mailBody, 'mail');
+        obj.makeBody();
+    }
+    
+    //var obj = new CreateMail(oAuth2Client, recipients, subject, mailBody, 'mail');
+    //'mail' is the task, if not passed it will save the message as draft.
+    
+    //obj.makeBody();
+    //This will send the mail to the recipent.
+    
+    }
+
+
 
 async function updateDatabase2(mergedCalender, myUser) {
 
@@ -710,7 +856,9 @@ module.exports.postCalenderMeet = (req, res, next) => {
                             }
                             updateDolu();
                         }
-                        mail(myUser.email, 0);
+                        console.log("AA");
+                        console.log(myData.polls[0].title)
+                        mail(myData.polls[0].title, myUser.email, "poll");
                     }
                 })
             }
@@ -994,7 +1142,7 @@ module.exports.postpolls = (req, res, next) => {
                                 .catch(err => next(err));
                         }
                         updateCalender();
-                        mail(myUser.email, 1);
+                        mail(myData.polls[high].title, myUser.email, "meeting");
                     }
                 })
             }
@@ -1075,7 +1223,7 @@ module.exports.getmeetings = (req, res, next) => {
         }
 
 
-        res.render('meet', { data: { meetingsArr: JSON.stringify(meetingsArr) } });
+        res.render('meet', { data: { meetingsArr: JSON.stringify(meetingsArr), user:req.user } });
     }
 
     main();
@@ -1263,10 +1411,15 @@ module.exports.postHostedSingle1 = (req, res, next) => {
                         }
                     }
                     console.log(updatedValues);
+                    console.log("AAAAAA");
+                    console.log(updatedMeeting);
                     toUserCalender(user, updatedValues);
+                    mail(updatedMeeting.title, user.email, "resched_meeting" )
 
                 }
             }).catch(err => console.log(err));
+            
+            
         }
     }
 
@@ -1492,9 +1645,15 @@ module.exports.postHostedSingle1 = (req, res, next) => {
                 else {
                     console.log("poll buldu");
                 }
+                console.log("XXXXX");
+                console.log(myData.data.polls);
+                for(email of myData.data.polls[0].mails){
+                    mail(myData.data.polls[0].title, email, "resched_poll" )
+                }
                 res.redirect('/profile/hosted');
             })
             .catch(err => next(err));
+            
             
         }
 
@@ -1626,7 +1785,7 @@ module.exports.postHosted = (req, res, next) =>{
                                 .catch(err => next(err));
                         }
                         updateCalender();
-                        mail(myUser.email, 1);
+                        mail(myNewMeeting.title, myUser.email, "finalized_poll");
                     }
                 })
         }
@@ -1645,4 +1804,31 @@ module.exports.postHosted = (req, res, next) =>{
 
     }
     main();
+}
+
+module.exports.postNotification = (req,res,next) => {
+    
+    async function main(){
+        var newNotification = JSON.parse(req.body.myData).data;
+        var href = JSON.parse(req.body.myData).href;
+    
+        console.log(newNotification);
+        console.log(typeof newNotification);
+        console.log(href);
+    
+        let updatedValues = {
+            notification: JSON.stringify(newNotification)
+        }
+    
+        await User.updateOne({ email: req.user.email }, updatedValues)
+        .then(User => {
+            if (!User) { return res.status(404).end(); }
+            res.redirect(href);
+        })
+        .catch(err => next(err));
+    }
+
+    main();
+    
+  
 }

@@ -30,6 +30,7 @@
 
     <script id="accordio" pollsArr="<%= data.pollsArr %>" idArr="<%= data.idArr %>" calender="<%= user.calender %>"  src="/Pollsandmeetings/accordio.js"></script>
     <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/notif.css">
 
   
        
@@ -68,20 +69,25 @@
                   </ul>
                 </li>
                 <li><a href="/#contact-section" class="nav-link">Contact</a></li>
-                <li><a class="input1001" style="width: 110%;"  href="/profile/addcalender">Create a Meeting</a></li>
+
+                <li><a class="input1001" style="width: 110%;"  href="/profile/addcalender">Create a Calendar</a></li>
 
             <li><a class="input1001" style="width: 110%;"  href="/logout">Logout</a></li>
+
               </ul>
               
             </nav>
+
           </div>
 
 
           <div class="d-inline-block d-xl-none ml-md-0 mr-auto py-3" style="position: relative; top: 3px;"><a href="#" class="site-menu-toggle js-menu-toggle text-black"><span class="icon-menu h3"></span></a></div>
 
         </div>
+
       </div>
 
+      <div id="notify" style="position:absolute; margin-left: 1450px; width: 20px; margin-top: 0px; float: right;"></div>
 
       
     </header>
@@ -311,7 +317,8 @@
 
   <script src="/main_page/js/main.js"></script>
 
-  
+  <script id="notification" notification="<%= user.notification %>" src="/notification.js"></script>
+
 
 
  

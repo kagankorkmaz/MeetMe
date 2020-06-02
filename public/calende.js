@@ -41,9 +41,16 @@
             ];
 
             var calender = document.getElementById("calen").getAttribute("data-name2");
-            var myMeeting = JSON.parse(document.getElementById("calen").getAttribute("data-name"));
+            
+            var myMeeting = document.getElementById("calen").getAttribute("data-name");
+            if(myMeeting == "" || !myMeeting){
+              myMeeting = {meeting: []};
+            }
+            else{
+              myMeeting = JSON.parse(myMeeting);
+            }
         
-        var stuff;
+        var stuff = [];
         scheduler.attachEvent("onBeforeLightbox", function(event_id) {
           scheduler.resetLightbox();
           var ev = scheduler.getEvent(event_id);
@@ -60,13 +67,10 @@
 
        
         //myUser = JSON.parse(myUser);
-        
-        console.log(myMeeting.meeting)
-        console.log(typeof myMeeting.meeting)
-          console.log(calender);
-          stuff = JSON.parse(calender);
-          console.log(stuff);
-          console.log(stuff[1]);
+       
+          
+          if(calender){stuff = JSON.parse(calender);}
+          
 
           for(var i = 0; i< stuff.length;i++)
           {

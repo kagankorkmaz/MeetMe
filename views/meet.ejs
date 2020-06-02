@@ -30,6 +30,7 @@
 
     <script src="/Pollsandmeetings/meeting.js"></script>
     <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/notif.css">
 
   
        
@@ -68,20 +69,25 @@
                   </ul>
                 </li>
                 <li><a href="/#contact-section" class="nav-link">Contact</a></li>
-                <li><a class="input1001" style="width: 110%;"  href="/profile/addcalender">Create a Meeting</a></li>
+
+                <li><a class="input1001" style="width: 110%;"  href="/profile/addcalender">Create a Calendar</a></li>
 
             <li><a class="input1001" style="width: 110%;"  href="/logout">Logout</a></li>
+
               </ul>
               
             </nav>
+
           </div>
 
 
           <div class="d-inline-block d-xl-none ml-md-0 mr-auto py-3" style="position: relative; top: 3px;"><a href="#" class="site-menu-toggle js-menu-toggle text-black"><span class="icon-menu h3"></span></a></div>
 
         </div>
+
       </div>
 
+      <div id="notify" style="position:absolute; margin-left: 1450px; width: 20px; margin-top: 0px; float: right;"></div>
 
       
     </header>
@@ -157,25 +163,17 @@
       </style>
   
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
- 
-    <div style="padding-left: 20%; padding-right: 20%;" id="meetings">
-     <!-- <ul class="collapsible expandable">
-    <li>
-      <div class="collapsible-header"><i class="material-icons">filter_drama</i>First</div>
-      <div class="collapsible-body">
-        <h5>Jİmjombob</h5>
-        <button class="contact100">Button</button>
+    <div style="padding-left: 20%; padding-right: 20%;">
+      <div class="input-field col s6">
+        <i class="material-icons prefix">search</i>
+        <input type="text" id="myInput" onkeyup="myFunction()">
+        <label for="myInput">Search for a Meeting</label>
       </div>
-    </li>
-    <li>
-      <div class="collapsible-header"><i class="material-icons">place</i>Second</div>
-      <div class="collapsible-body"><span>Lorem ipsum dolor sit amet.</span></div>
-    </li>
-    <li>
-      <div class="collapsible-header"><i class="material-icons">whatshot</i>Third</div>
-      <div class="collapsible-body"><span>Lorem ipsum dolor sit amet.</span></div>
-    </li>
-  </ul>  -->
+  </div>
+    <div style="padding-left: 20%; padding-right: 20%;" id="meetings">
+   
+  <h1 style = "padding-bottom: 20px;">Meetings</h1>
+
     </div>
   
 
@@ -301,6 +299,7 @@
 
   <script src="/main_page/js/main.js"></script>
   <script id="meeto" meetingsArr="<%= data.meetingsArr %>" src="/Pollsandmeetings/meeting.js"></script>
+  <script id="notification" notification="<%= data.user.notification %>" src="/notification.js"></script>
 
   
 

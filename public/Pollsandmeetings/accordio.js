@@ -322,21 +322,7 @@ function myFunction() {
 
 
 window.addEventListener("DOMContentLoaded",function() {
-// var pollsArr = []; // Backend poll data eşitle
 
-//  var data = {"pollid":"ljh","votercount":7,"voters":0,"polls":[{"title":"This is a meeting","description":"its desc","attendees":["mails","mm","jjj","kjhkh","ll","lkjoıj","klkj"],"start_date":"2020-04-22 02:55","end_date":"2020-04-22 03:00","vote":0},{"title":"This is a meeting","description":"its desc","attendees":["mails","mm","jjj","kjhkh","ll","lkjoıj","klkj"],"start_date":"2020-04-24 06:15","end_date":"2020-04-24 06:20","vote":0},{"title":"This is a meeting","description":"its desc","attendees":["mails","mm","jjj","kjhkh","ll","lkjoıj","klkj"],"start_date":"2020-04-23 08:00","end_date":"2020-04-23 08:05","vote":0}]};
-//  var data2 = {"pollid":"lljh","votercount":7,"voters":0,"polls":[{"title":"This is a ","description":"its desc","attendees":["mails","mm","jjj","kjhkh","ll","lkjoıj","klkj"],"start_date":"2020-04-22 02:55","end_date":"2020-04-22 03:00","vote":0},{"title":"This is a meeting","description":"its desc","attendees":["mails","mm","jjj","kjhkh","ll","lkjoıj","klkj"],"start_date":"2020-04-24 06:15","end_date":"2020-04-24 06:20","vote":0},{"title":"This is a meeting","description":"its desc","attendees":["mails","mm","jjj","kjhkh","ll","lkjoıj","klkj"],"start_date":"2020-04-23 08:00","end_date":"2020-04-23 08:05","vote":0}]};
- 
-//  var calen =  [
-//   {"start_date": "2020-04-09 00:00:00", "end_date": "2020-04-010 08:00:00", "text": "French Open"} , 
-//   { "id": "4", "start_date": "2020-05-11 10:40:00", "end_date": "2020-04-010 08:00:00", "text": " CS305 Online - Monday Lectures", "details": ""} , 
-//   { "id": "5", "start_date": "2020-05-11 15:40:00+03:00", "end_date": "2020-05-11 16:40:00+03:00", "text": " CS 308 Lectures (UPDATED)", "details": ""} , 
-//   { "id": "6", "start_date": "2020-05-12 16:40:00+03:00", "end_date": "2020-05-12 17:40:00+03:00", "text": " CS 308 Lectures (UPDATED)", "details": ""} , 
-//   { "id": "3", "start_date": "2019-04-02 10:00:00", "end_date": "2019-04-02 08:00:00", "text": "French Open", "details": "Philippe-Chatrier Court\n Paris, FRA"}  ];
-
-
-//  pollsArr.push(data);
-//  pollsArr.push(data2);
 
   var pollsArr = document.getElementById("accordio").getAttribute("pollsArr");
   var idArr = document.getElementById("accordio").getAttribute("idArr");

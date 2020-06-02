@@ -65,6 +65,15 @@ router.get('/hostedSingle', (req,res) =>{
 
 router.post('/hostedSingle', userController.postHostedSingle1);
 
+router.get('/dummyNotification', (req,res) =>{
+    res.render('dummyNotification', {user:req.user});
+} );
+
+router.post('/dummyNotification', userController.postNotification);
+
+
+
+
 
 
 
