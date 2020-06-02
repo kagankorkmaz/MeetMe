@@ -282,8 +282,84 @@ function mail(title,recipients,condition){
     //obj.makeBody();
     //This will send the mail to the recipent.
     
-    }
+}
 
+
+function writeToGCalSingle(user,event1){
+    
+    console.log(user);
+    console.log(event1);
+    
+    if(user.refreshToken != '')
+    {
+        var oAuth2Client = new OAuth2( //bunu dışardan mı alsak
+            '805012118741-vvgvhls19vs9d10boh9k156qe6k08h3e.apps.googleusercontent.com',
+            'IvdjL5wmHFDPNFa4YXElPPLJ'
+        )
+        
+        oAuth2Client.setCredentials({
+        refresh_token: user.refreshToken,
+        })
+        const calendar = google.calendar({ version: 'v3', auth: oAuth2Client })
+        var rc;
+        var s = new Date(event1.start_date);
+        var e =new Date(event1.end_date);
+       
+        
+        
+    
+        
+        
+        
+        
+        var att=[]
+        if (event1.mails!="")
+        {event1.mails.forEach(myFunction);
+        
+        function myFunction(item, index) {
+        var str2={"email": ""}
+        str2.email=item;
+        att.push(str2)
+        }
+        }
+        const event = {
+        id:event1._id,
+        summary: event1.title,
+        location: event1.location,
+        description: event1.description+"\n"+event1.link,
+        colorId: 1,
+        creator: {
+            email: event1.host,
+        },
+        attendees:att,
+        start: {
+            dateTime: s,
+            timeZone: 'Europe/Istanbul',
+        
+        },
+        end: {
+            dateTime: e,
+            timeZone: 'Europe/Istanbul',
+        },
+        }
+        
+        
+        return calendar.events.insert(
+                { calendarId: 'primary', resource: event },
+                err => {
+                // Check for errors and log them if they exist.
+                if (err) return console.error('Error Creating Calender Event:', err)
+                // Else log that the event was created.
+                return console.log('Calendar event successfully created.')
+                }
+            )
+        
+            // If event array is not empty log that we are busy.
+            return console.log(`Sorry I'm busy...`)
+        }
+    
+    
+    }
 
 
 async function updateDatabase2(mergedCalender, myUser) {
@@ -1170,6 +1246,7 @@ module.exports.postpolls = (req, res, next) => {
                                 .catch(err => next(err));
                         }
                         updateCalender();
+                        writeToGCalSingle(myUser, newToCalender);
                         mail(myData.polls[high].title, myUser.email, "meeting");
                     }
                 })
