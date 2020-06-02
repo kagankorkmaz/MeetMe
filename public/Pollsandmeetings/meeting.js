@@ -202,6 +202,24 @@ function myFunction() {
   }
 }
 
+function timeCheck(date){
+  
+  var cr = Date.parse(date);
+  var now = Date.now();
+  
+  var sth = now - cr;
+
+  console.log(sth);
+  
+  //Tek GÜne indirmek için 3e böleceğiz demoda
+  // 3 gün 259200000
+  if(sth <= 0)
+  {
+    return true;
+  }
+  return false;
+}
+
 
 window.addEventListener("DOMContentLoaded",function() {
 
@@ -220,8 +238,12 @@ data = JSON.parse(data);
   
   if(data && data[0] != "")
   {
+
     for(var i=0;i<data.length;i++){
-      new meet(data[i], Poll);
+      if(timeCheck(data[i].end_date)){
+        new meet(data[i], Poll);
+      }
+      
    }
   }
   else{

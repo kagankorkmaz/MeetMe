@@ -796,6 +796,7 @@ module.exports.postCalenderMeet = (req, res, next) => {
             const newPoll = new Poll({
                 voterCount: myData.votercount,
                 voters: myData.voters,
+                created: myData.created,
                 polls: JSON.stringify(myData.polls)
             })
 

@@ -471,15 +471,19 @@ Body.appendChild(li);
 }
 
 is72hrs(date){
-
+  console.log(date);
+  console.log(typeof date);
   var cr = Date.parse(date);
   var now = Date.now();
-
+  console.log(cr);
+  console.log(now);
   var sth = now - cr;
+
+  console.log(sth);
   
   //Tek GÜne indirmek için 3e böleceğiz demoda
   // 3 gün 259200000
-  if(sth >= 0)
+  if(sth >= 300000)
   {
     return true;
   }

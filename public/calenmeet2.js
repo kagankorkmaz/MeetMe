@@ -98,7 +98,7 @@ window.addEventListener("DOMContentLoaded", function () {
 
 
     }
-    var finalpoll = {votercount: size, voters: 0, polls: POll, created: new Date(), dummyBool: "2"}; //final poll information
+    var finalpoll = {votercount: size, voters: 0, polls: POll, created: new Date().toString(), dummyBool: "2"}; //final poll information
 
     let form = document.createElement('form');
     form.method= 'POST'
@@ -117,7 +117,9 @@ window.addEventListener("DOMContentLoaded", function () {
 
       var formplace = document.getElementById("tempform");
 
+      
       console.log(finalpoll);
+      
       formplace.appendChild(form);
       form.submit();
     }
