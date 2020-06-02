@@ -167,7 +167,7 @@ class meet{
           var polpage = document.createElement("button");
           polpage.classList.add("input1001");
           let spp = document.createElement("span");
-          spp.innerHTML = "Referance your calender";
+          spp.innerHTML = "Reference your calender";
           polpage.appendChild(spp);
 
           li2.style.paddingTop = "10px";

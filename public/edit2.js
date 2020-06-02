@@ -1,7 +1,10 @@
 
-
-
-
+function timeCheck(date){
+  if(Date.parse(date) < Date.now()){
+    return false;
+  }
+  return true;
+}
 
 window.addEventListener("DOMContentLoaded", function () {
   scheduler.config.lightbox.sections=[
@@ -123,6 +126,7 @@ window.addEventListener("DOMContentLoaded", function () {
     let Json_st = JSON.parse(json_string);
     POll = [];
     var meeting;
+    var myBool = true;
     if(Json_st.length < 1){
       alert("You can not submit empty schedule.")
     }
@@ -133,20 +137,26 @@ window.addEventListener("DOMContentLoaded", function () {
       alert("A meeting can only have one scheduled time, to create a poll, please create a new meeting!");
       }
       else{
-        meeting ={
-          title: Title , 
-          description: desc, 
-          mails: mails,
-          medium: medium,
-          location: location, 
-          link: link,
-          recurrence: recur,
-          host: email, // users email
-          start_date: Json_st[0].start_date,
-          end_date: Json_st[0].end_date,
-          _id :_id,
-          vote:input.data.vote
-         } 
+        if(timeCheck(Json_st[0].start_date)){
+          meeting ={
+            title: Title , 
+            description: desc, 
+            mails: mails,
+            medium: medium,
+            location: location, 
+            link: link,
+            recurrence: recur,
+            host: email, // users email
+            start_date: Json_st[0].start_date,
+            end_date: Json_st[0].end_date,
+            _id :_id,
+            vote:input.data.vote
+           } 
+        }
+        else{
+          myBool = false;
+        }
+       
       }
       
       var finalpoll = {data: meeting, type: "meeting", dummyBool: 2}
@@ -158,21 +168,28 @@ window.addEventListener("DOMContentLoaded", function () {
       else{
         for(i=0;i<Json_st.length;i++)   //create a meeting for eact input
       {
-        meeting ={
-          title: Title , 
-          description: desc, 
-          mails: mails,
-          medium: medium,
-          location: location, 
-          link: link,
-          recurrence: recur,
-          host: email, // users email
+        if(timeCheck(Json_st[i].start_date)){
+          meeting ={
+            title: Title , 
+            description: desc, 
+            mails: mails,
+            medium: medium,
+            location: location, 
+            link: link,
+            recurrence: recur,
+            host: email, // users email
+  
+            start_date: Json_st[i].start_date,
+            end_date: Json_st[i].end_date,
+            vote:0
+           } 
+          POll.push(meeting);
+        }
+        else{
+          myBool = false;
+        }
 
-          start_date: Json_st[i].start_date,
-          end_date: Json_st[i].end_date,
-          vote:0
-         } 
-        POll.push(meeting);
+       
   
   
         
@@ -184,8 +201,8 @@ window.addEventListener("DOMContentLoaded", function () {
       
       
     }
-    
-    let form = document.createElement('form');
+    if(myBool){
+      let form = document.createElement('form');
     form.method= 'POST'
     var stuff2 = document.createElement("input"); 
     stuff2.value = JSON.stringify(finalpoll);
@@ -197,6 +214,12 @@ window.addEventListener("DOMContentLoaded", function () {
     console.log(finalpoll);
     formplace.appendChild(form);
     form.submit();
+    }
+
+    else{
+      alert("You are not a time traveller. You can not set a meeting in the past.");
+    }
+    
 
     
     

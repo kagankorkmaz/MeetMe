@@ -252,7 +252,7 @@ initpop(){
 	  console.log(barr);
 
 	  count = 0;
-	 for(var i=0;i<data.length;i++)
+	 for(var i=data.length-1; i>=0;i--)
 	 {
 	   if(count <= 3){barr.appendChild(jim[data[i].type](data[i].title,i, data));}
 

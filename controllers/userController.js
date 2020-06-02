@@ -1736,6 +1736,67 @@ module.exports.postHostedSingle1 = (req, res, next) => {
         myData = JSON.parse(req.body.myData);
         console.log(myData);
 
+        async function addToUserPolls(id, mails){
+            console.log("----------------------------------------");
+            console.log(id);
+            console.log(mails);
+            console.log("----------------------------------------");
+            mails = mails.mails;
+            for(email of mails){
+                let arr = [];
+                arr.push(id);
+
+                arr2 = { poll: arr };
+
+                await User.findOne({ email: email }).then(myUser => {
+                    if (!myUser) {
+                        return res.status(404).end();
+                    }
+
+                    else {
+                        var userPoll = myUser.poll;
+
+                        if (userPoll == "") {
+                            async function updateBos() {
+                                var updatedValues = {
+                                    poll: JSON.stringify(arr2)
+                                }
+                                await User.updateOne({ email: myUser.email }, updatedValues).then(User => {
+                                    if (!User) { return res.status(404).end(); }
+                                })
+                                    .catch(err => next(err));
+                            }
+
+                            updateBos();
+                        }
+
+                        else {
+                            async function updateDolu() {
+                                var userPoll2 = JSON.parse(userPoll);
+                                userPoll2 = userPoll2.poll;
+                                for (item of userPoll2) {
+                                    arr2.poll.push(item);
+                                    arr2.poll = [...new Set(arr2.poll)];
+                                }
+                                updatedValues2 = {
+                                    poll: JSON.stringify(arr2)
+                                }
+                                await User.updateOne({ email: myUser.email }, updatedValues2).then(User => {
+                                    if (!User) { return res.status(404).end(); }
+                                })
+                                    .catch(err => next(err));
+                            }
+                            updateDolu();
+                        }
+                        // console.log("AA");
+                        // console.log(myData.polls[0].title)
+                        //mail(myData.polls[0].title, myUser.email, "poll");
+                    }
+                })
+            }
+
+        }
+
         async function main(){
             let updatedValues= {
                 voterCount:myData.data.votercount,
@@ -1758,7 +1819,7 @@ module.exports.postHostedSingle1 = (req, res, next) => {
                 res.redirect('/profile/hosted');
             })
             .catch(err => next(err));
-            
+            addToUserPolls(myData.data._id, myData.data.polls[0]);
             
         }
 

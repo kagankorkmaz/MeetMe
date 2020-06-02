@@ -28,49 +28,21 @@ class item{
     itembox.classList.add('item');
     itembox.style.paddingTop = '20px';
     
-    let editButton = document.createElement('a');
-    let ed = document.createElement("i");
-    ed.classList.add('material-icons');
-    ed.classList.add('right');
-    ed.innerHTML = "edit";
-    editButton.classList.add('editButton');
-    editButton.classList.add('waves-effect');
-    editButton.classList.add('waves-light');
-    editButton.classList.add('btn-small');
-    // editButton.style.add('width: 20%; float: right;');
-    editButton.style.float = 'right';
-    editButton.style.color = 'white';
-    editButton.innerHTML = "edit";
-    editButton.appendChild(ed); 
+    
+    
 
     
 
   
 
-    let removeButton = document.createElement('a');
-    let rem = document.createElement("i");
-    rem.classList.add('material-icons');
-    rem.classList.add('right');
-    rem.innerHTML = "delete";
-    removeButton.classList.add('removeButton');
-    removeButton.classList.add('waves-effect');
-    removeButton.classList.add('waves-light');
-    removeButton.classList.add('btn-small');
-    //removeButton.style.add('width: 20%; float: right;');
-    removeButton.style.float = 'right';
-    removeButton.style.color = 'white';
-    removeButton.innerHTML = "remove"
-    removeButton.appendChild(rem); 
-    removeButton.style.marginRight = "10px"
+    
 
     
     document.getElementById("cont").appendChild(itembox);
     itembox.appendChild(input);
-    itembox.appendChild(editButton);
-    itembox.appendChild(removeButton);
+    
 
-    editButton.addEventListener('click',() => this.edit(input,ed,editButton));
-    removeButton.addEventListener('click', () => this.remove(itembox,input));
+    
 
   }
 
@@ -102,9 +74,7 @@ class item{
 
 }
 
-const addbutt = document.getElementById("add");
-if(addbutt.disabled)
-{addbutt.disabled = !addbutt.disabled;}
+
 
 function check(){
   if(inputt.value != ""){
@@ -245,7 +215,6 @@ for (var i=0;i<dmails.length;i++)
 
 }
 
-addbutt.addEventListener('click', check);
 var cot = document.getElementById("nextstp");
 
 cot.addEventListener('click' , moveon);
