@@ -344,12 +344,39 @@ async function listEvent2(oAuth2Client, refreshtoken, myUser) {
 
                 ///////////
                 var summary = "";
-
+                console.log(event);
                 if (event.summary) {
-                    item = { "start_date": start, "end_date": end, "text": event.summary };
+                    item = { 
+                    start_date: start,
+                    end_date: end,
+                    text: event.summary,
+                    description :"",
+                    medium : "",
+                    location : "",
+                    link : "",
+                    host : "",
+                    mails : "",
+                    recurrence : "",
+                    vote : "",
+                    _id: event.id
+                };
                 }
                 else {
-                    item = { "start_date": start, "end_date": end, "text": "No title from Google" };
+                    item = { 
+                    start_date: start,
+                    end_date: end,
+                    text: "No title from Google",
+                    description :"",
+                    medium : "",
+                    location : "",
+                    link : "",
+                    host : "",
+                    mails : "",
+                    recurrence : "",
+                    vote : "",
+                    _id: event.id
+                
+                };
                 }
 
                 //console.log("item");
