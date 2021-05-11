@@ -22,7 +22,7 @@
     "express-session": "^1.17.0",
     "googleapis": "^39.2.0",
     "jade": "^1.11.0",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.21",
     "mongoose": "^5.9.6",
     "node-cron": "^2.0.3",
     "nodemailer": "^6.4.6",
